@@ -1,0 +1,50 @@
+/* Additional CSS to handle dropdown visibility */
+.dropdown-menu {
+    display: none;
+    border-radius: 0.75rem; /* Matching the border radius of the card */
+    overflow: hidden; /* Ensure contents do not overflow */
+}
+/* Styles for the burger menu and the close icon */
+.menu-icon {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  width: 24px;
+  height: 24px;
+}
+.menu-icon div {
+  width: 100%;
+  height: 2px;
+  background-color: black;
+  transition: transform 0.3s, opacity 0.3s;
+}
+.menu-icon.open div:nth-child(1) {
+  transform: rotate(45deg) translate(5px, 5px);
+}
+.menu-icon.open div:nth-child(2) {
+  opacity: 0;
+}
+.menu-icon.open div:nth-child(3) {
+  transform: rotate(-45deg) translate(5px, -5px);
+}
+/* for screen max-width 391px */
+@media ( max-width: 391px ) {
+  .profile-pic-position {
+    margin-bottom: 10px;
+  }
+}
+@media ( max-width: 391px ) {
+  .profile-pic {
+    width: 80px;
+    height: 80px;
+    border-width: 0;
+  }
+}
+@media ( max-width: 391px ) {
+  .identity {
+    padding-left: 0;
+    margin-left: 0;
+    padding-left: 24px;
+    left: 0;
+  }
+}
