@@ -3,15 +3,23 @@
   "version": "1.0.0",
   "main": ".eleventy.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "eleventy",
-    "serve": "eleventy --serve"
+    "build:css": "postcss site/assets/css/styles.css -o _site/assets/css/styles.css",
+    "watch:css": "postcss site/assets/css/styles.css -o _site/assets/css/styles.css --watch",
+    "build": "npm run build:css && eleventy",
+    "serve": "npm run build:css && eleventy --serve",
+    "watch": "npm run watch:css & eleventy --watch"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "description": "",
   "devDependencies": {
-    "@11ty/eleventy": "^2.0.1"
+    "@11ty/eleventy": "^2.0.1",
+    "postcss-cli": "^11.0.0"
+  },
+  "dependencies": {
+    "autoprefixer": "^10.4.19",
+    "postcss": "^8.4.39",
+    "tailwindcss": "^3.4.4"
   }
 }
