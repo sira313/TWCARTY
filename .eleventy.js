@@ -1,4 +1,6 @@
 module.exports = function(eleventyConfig) {
+  // tailwind
+  eleventyConfig.addWatchTarget("tailwind.config.js");
   // root url
   eleventyConfig.addGlobalData("rootURL", "https://twcarty.netlify.app");
   // Passthrough copy untuk menyalin file statis ke output
