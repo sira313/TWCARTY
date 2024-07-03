@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "main": ".eleventy.js",
   "scripts": {
-    "build:css": "npx tailwindcss -i site/assets/css/styles.css -o _site/assets/css/style.css --minify",
-    "watch:css": "npx tailwindcss -i site/assets/css/styles.css -o _site/assets/css/style.css --watch",
+    "build:css": "npx tailwindcss -i styles.css -o _site/assets/css/style.css --minify",
+    "watch:css": "npx tailwindcss -i styles.css -o _site/assets/css/style.css --watch",
     "build": "pnpm run build:css && eleventy",
     "serve": "pnpm run build:css && eleventy --serve",
     "watch": "pnpm run watch:css & eleventy --watch"
