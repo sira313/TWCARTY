@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="description" content="{{ description }}">
+  <meta name="keyword" content="{{ keyword }}">
+  <meta name="author" content="{{ author }}">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/x-icon" href="{{ rootURL }}/assets/index/favicon.ico">
+  <title>{{ title }}</title>
+  <meta property="og:title" content="{{ title }}">
+  {% if cover %}
+    <meta property="og:image" content="{{ rootURL }}{{ cover }}">
+  {% else %}
+    <meta property="og:image" content="{{ rootURL }}/assets/index/cover.webp">
+  {% endif %}
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="{{ title }}">
+  <meta name="twitter:description" id="twitter-description" content="{{ description }}">
+  {% if cover %}
+    <meta name="twitter:image" content="{{ rootURL }}{{ cover }}">
+  {% else %}
+    <meta name="twitter:image" content="{{ rootURL }}/assets/index/cover.webp">
+  {% endif %}
+  <link rel="stylesheet" href="/assets/css/styles.css">
+  <meta name="view-transition" content="same-origin">
+</head>
+<body>
+  <div class="prose prose-lg">
+    {{ content }}
+  </div>
+</body>
