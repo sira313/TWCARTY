@@ -1,3 +1,13 @@
+---
+layout: base.html
+title: Apoxicam
+description: Hello Friend
+keyword: apoxicam
+author: Aris Pratama
+cover: /site/assets/index/cover.webp
+profile: /site/assets/index/profile.webp
+---
+
 ## HELLO FRIEND
 Hello friend?
 
