@@ -5,37 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Apoxicam</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <style>
-    /* Additional CSS to handle dropdown visibility */
-    .dropdown-menu {
-      display: none;
-      border-radius: 0.75rem; /* Matching the border radius of the card */
-      overflow: hidden; /* Ensure contents do not overflow */
-    }
-    /* Styles for the burger menu and the close icon */
-    .menu-icon {
-      display: flex;
-      flex-direction: column;
-      justify-content: space-around;
-      width: 24px;
-      height: 24px;
-    }
-    .menu-icon div {
-      width: 100%;
-      height: 2px;
-      background-color: black;
-      transition: transform 0.3s, opacity 0.3s;
-    }
-    .menu-icon.open div:nth-child(1) {
-      transform: rotate(45deg) translate(5px, 5px);
-    }
-    .menu-icon.open div:nth-child(2) {
-      opacity: 0;
-    }
-    .menu-icon.open div:nth-child(3) {
-      transform: rotate(-45deg) translate(5px, -5px);
-    }
-  </style>
+  <link rel="stylesheet" href="/style.css">
 </head>
 <body class="bg-gray-100">
 
@@ -48,18 +18,25 @@
         <div class="relative">
           <img class="w-full object-cover" src="https://apoxi.cam/asset/index/cover.webp" alt="Placeholder Image">
           <!-- Profile Pic -->
-          <div class="absolute bottom-0 left-6 -mb-14 flex items-center">
-            <div class="w-24 h-24 rounded-lg overflow-hidden border-4 border-white">
+          <div class="absolute bottom-0 left-6 -mb-14 flex items-center profile-pic-position">
+            <div class="w-24 h-24 rounded-lg overflow-hidden border-4 border-white profile-pic">
               <img src="https://apoxi.cam/asset/index/profile.webp" alt="Profile Picture">
             </div>
           </div>
           <!-- Name and Username -->
-          <div class="absolute bottom-0 left-20 ml-10 pl-3 -mb-14 items-center">
+          <div class="absolute bottom-0 left-20 ml-10 pl-3 -mb-14 items-center identity">
             <h1 class="text-2xl font-semibold text-gray-800">Aris Pratama</h1>
             <p class="text-sm text-gray-600">@apoxicam</p>
           </div>
-          <!-- Dropdown Menu -->
+          <!-- Navbar -->
           <div class="absolute bottom-0 right-6 -mb-12 flex items-center dropdown">
+            <!-- Search -->
+            <button class="p-2 hover:bg-gray-100">
+              <div class="search">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-search"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+              </div>
+            </button>
+            <!-- Dropdown menu -->
             <button class="p-2 hover:bg-gray-100" id="menuButton">
               <div class="menu-icon">
                 <div></div>
