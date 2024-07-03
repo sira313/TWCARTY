@@ -3,11 +3,11 @@
   "version": "1.0.0",
   "main": ".eleventy.js",
   "scripts": {
-    "build:css": "postcss site/assets/css/styles.css -o _site/assets/css/styles.css --minify",
-    "watch:css": "postcss site/assets/css/styles.css -o _site/assets/css/styles.css --watch",
-    "build": "npm run build:css && eleventy",
-    "serve": "npm run build:css && eleventy --serve",
-    "watch": "npm run watch:css & eleventy --watch"
+    "build:css": "npx tailwindcss -i site/assets/css/styles.css -o _site/assets/css/style.css --minify",
+    "watch:css": "npx tailwindcss -i site/assets/css/styles.css -o _site/assets/css/style.css --watch",
+    "build": "pnpm run build:css && eleventy",
+    "serve": "pnpm run build:css && eleventy --serve",
+    "watch": "pnpm run watch:css & eleventy --watch"
   },
   "keywords": [],
   "author": "",
@@ -15,7 +15,8 @@
   "description": "",
   "devDependencies": {
     "@11ty/eleventy": "^2.0.1",
-    "postcss-cli": "^11.0.0"
+    "postcss-cli": "^11.0.0",
+    "wait-on": "^7.2.0"
   },
   "dependencies": {
     "@tailwindcss/typography": "^0.5.13",

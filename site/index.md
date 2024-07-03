@@ -1,25 +1,15 @@
 ---
-layout: base.html
-title: Apoxicam
-description: Hello Friend
-keyword: apoxicam
-author: Aris Pratama
+layout: index.html
+title: Mr. Robot
+description: Fix Computer with Smile
+keyword: Mr. Robot
+author: Elliot A.
 cover: /assets/index/cover.webp
 profile: /assets/index/profile.webp
 ---
 
-## HELLO FRIEND
-Hello friend?
+### HELLO FRIEND
 
-That's lame
+Hello friend? That's lame. Maybe i should give you a name. But that's slippery slope. You're only in my head
 
-Maybe i should give you a name
-
-But that's slippery slope
-
-You're only in my head
-
-We have to remember that
-
-[BLOG](/blog)
-[PHOTOS](/photos)
+>We have to remember that

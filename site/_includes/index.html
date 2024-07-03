@@ -1,0 +1,105 @@
+---
+layout: base.html
+---
+<section class="bg-gray-200 flex items-center justify-center sm:py-0 md:py-10">
+  <!-- Card -->
+  <div class="max-w-screen-md text-left sm:p-0 md:p-6">
+    <div class="bg-white sm:shadow-0 md:shadow-xl sm:rounded-none md:rounded-xl overflow-hidden relative">
+      <!-- Cover -->
+      <div class="relative">
+        <img class="w-full object-cover" src="{{ cover }}" alt="Cover">
+        <!-- Profile Pic -->
+        <div class="absolute bottom-0 left-6 -mb-14 flex items-center profile-pic-position">
+          <div class="w-24 h-24 rounded-lg overflow-hidden border-4 border-white profile-pic">
+            <img src="{{ profile }} " alt="Profile Pic">
+          </div>
+        </div>
+        <!-- Name and Username -->
+        <div class="absolute bottom-0 left-20 ml-10 pl-3 -mb-14 items-center identity">
+          <h1 class="text-2xl font-semibold text-gray-800">{{ author }}</h1>
+          <p class="text-sm text-gray-600">@{{ title }}</p>
+        </div>
+        <!-- Navbar -->
+        <div class="absolute bottom-0 right-6 -mb-12 flex items-center dropdown">
+          <!-- Search -->
+          <button class="p-2 hover:bg-gray-100">
+            <div class="search">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-search"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+            </div>
+          </button>
+          <!-- Dropdown menu -->
+          <button class="p-2 hover:bg-gray-100" id="menuButton">
+            <div class="menu-icon">
+              <div></div>
+              <div></div>
+              <div></div>
+            </div>
+          </button>
+          <div class="dropdown-menu absolute right-0 top-12 w-40 bg-white border border-gray-200 rounded-lg shadow-lg" id="dropdownMenu">
+            <a href="/photos" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Photos</a>
+            <a href="/blog" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Blog</a>
+          </div>
+        </div>
+      </div>
+      <!-- Content -->
+      <div class="p-6 mt-14 prose prose-gray">
+        {{ content }}
+      </div>
+      <!-- Footer credit -->
+      <div class="text-center py-4 border-t">
+        <p class="text-gray-600">© 2024 <a href="https://apoxi.cam/">Apoxicam</a>.<br>All rights reserved.</p>
+      </div>
+    </div>
+  </div>
+</section>
+<script>
+  document.getElementById('menuButton').addEventListener('click', function() {
+    const dropdownMenu = document.getElementById('dropdownMenu');
+    const menuIcon = this.querySelector('.menu-icon');
+    const isOpen = dropdownMenu.style.display === 'block';
+    
+    dropdownMenu.style.display = isOpen ? 'none' : 'block';
+    menuIcon.classList.toggle('open', !isOpen);
+  });
+
+  // Optional: Close the dropdown menu if the user clicks outside of it
+  window.addEventListener('click', function(e) {
+    const menuButton = document.getElementById('menuButton');
+    const dropdownMenu = document.getElementById('dropdownMenu');
+    if (!menuButton.contains(e.target) && !dropdownMenu.contains(e.target)) {
+      dropdownMenu.style.display = 'none';
+      menuButton.querySelector('.menu-icon').classList.remove('open');
+    }
+  });
+</script>
+<style>
+  /* Additional CSS to handle dropdown visibility */
+  .dropdown-menu {
+      display: none;
+      border-radius: 0.75rem; /* Matching the border radius of the card */
+      overflow: hidden; /* Ensure contents do not overflow */
+  }
+  /* Styles for the burger menu and the close icon */
+  .menu-icon {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    width: 24px;
+    height: 24px;
+  }
+  .menu-icon div {
+    width: 100%;
+    height: 2px;
+    background-color: black;
+    transition: transform 0.3s, opacity 0.3s;
+  }
+  .menu-icon.open div:nth-child(1) {
+    transform: rotate(45deg) translate(5px, 5px);
+  }
+  .menu-icon.open div:nth-child(2) {
+    opacity: 0;
+  }
+  .menu-icon.open div:nth-child(3) {
+    transform: rotate(-45deg) translate(5px, -5px);
+  }
+</style>
