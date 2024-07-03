@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": ".eleventy.js",
   "scripts": {
-    "build:css": "postcss site/assets/css/styles.css -o _site/assets/css/styles.css",
+    "build:css": "postcss site/assets/css/styles.css -o _site/assets/css/styles.css --minify",
     "watch:css": "postcss site/assets/css/styles.css -o _site/assets/css/styles.css --watch",
     "build": "npm run build:css && eleventy",
     "serve": "npm run build:css && eleventy --serve",
