@@ -4,17 +4,20 @@ layout: base.html
 <div class="card xsm:rounded-none ssm:rounded-xl bg-base-100 shadow-xl ssm:w-full md:w-10/12">
   <!-- cover -->
   <figure>
-    <img
-      src="{{ cover }}"
-      alt="cover" />
+    <img src="{{ cover }}" alt="cover" />
   </figure>
   <!-- profile pic -->
-  <div class="relative xsm:-mt-16 ssm:-mt-10 md:-mt-12 flex pl-8">
+  <div class="relative xsm:-mt-16 ssm:-mt-8 md:-mt-10 flex pl-8 items-center">
     <div class="avatar">
       <div class="xsm:w-14 xsm:shadow-xl ssm:w-20 md:w-24 mask mask-squircle">
         <img src="{{ profile }}" alt="Avatar">
       </div>
     </div>
+  </div>
+  <!-- name and username -->
+  <div class="relative xsm:pl-8 xsm:pt-4 ssm:pt-2 ssm:-mt-14 ssm:ml-24 md:ml-28">
+    <div class="text-lg font-bold">{{ title }}</div>
+    <div class="text-sm text-gray-500">{{ author }}</div>
   </div>
   <div class="card-body">
     <div class="w-full">
