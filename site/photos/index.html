@@ -80,11 +80,22 @@ cover: /assets/index/cover.webp
 		</div>
 	</div>
 	<!-- content -->
-  <div class="card-body pt-4 tn:pt-8">
-    <div class="w-full">
-      <div class="prose md:prose-lg">
-        {{ content }}
-      </div>
+  <div class="card-body p-0">
+		<!-- photos grid -->
+		<div class="container mx-auto p-0">
+			<div class="grid grid-cols-2 sm:grid-cols-3 gap-0.5">
+				{% for photos in collections.photos reversed %}
+				<!-- link to post -->
+				<a href="{{ photos.url }}">
+					<!-- thumbnail -->
+					<div class="aspect-w-1 aspect-h-1">
+			  		<div class="bg-white overflow-hidden">
+							<img src="{{ photos.data.thumbnail}}" alt="Image" class="w-full h-full object-cover">
+			  		</div>
+					</div>
+				</a>
+				{% endfor %}
+			</div>
     </div>
   </div>
 	<div class="dark:border-t dark:border-gray-700 border-t border-gray-300"></div>
