@@ -6,7 +6,17 @@ module.exports = function(eleventyConfig) {
   // Passthrough copy untuk menyalin file statis ke output
   eleventyConfig.addPassthroughCopy("site/assets");
 
-  // Atur direktori input dan output
+  // Collection post blog
+	eleventyConfig.addCollection("posts", function (collectionApi) {
+		return collectionApi.getFilteredByGlob("site/blog/**/*.md");
+	});
+
+	// Collection post photos
+	eleventyConfig.addCollection("photos", function (collectionApi) {
+		return collectionApi.getFilteredByGlob("site/photos/**/*.md");
+	});
+
+  // Input output dir
   return {
     dir: {
       input: "site",
