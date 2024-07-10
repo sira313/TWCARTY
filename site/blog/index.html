@@ -1,0 +1,95 @@
+---
+title: Mr.Robot Blog
+description: Hello friend? That's lame. Maybe i should give you a name. But that's slippery slope. You're only in my head. We have to remember that.
+layout: base.html
+cover: /assets/index/cover.webp
+---
+
+<div class="card rounded-none sm:rounded-xl bg-base-100 shadow-xl tn:w-full md:w-10/12">
+	<!-- cover -->
+  <figure>
+    <img src="{{ cover }}" alt="cover" />
+  </figure>
+	<!-- navbar -->
+	<div class="navbar bg-base-100">
+		<div class="navbar-start">
+			<!-- back home -->
+			<a href="/" class="btn btn-ghost btn-circle">
+				<svg
+				  xmlns="http://www.w3.org/2000/svg"
+				  class="h-5 w-5"
+				  fill="none"
+				  viewBox="0 0 24 24"
+				  stroke="currentColor">
+				  <path
+				    stroke-linecap="round"
+				    stroke-linejoin="round"
+				    stroke-width="2"
+				    d="M3 9.75L12 4l9 5.75V20a2 2 0 01-2 2H5a2 2 0 01-2-2V9.75z" />
+				  <path
+				    stroke-linecap="round"
+				    stroke-linejoin="round"
+				    stroke-width="2"
+				    d="M9 22V12h6v10" />
+				</svg>
+			</a>
+		</div>
+		<div class="navbar-center">
+			<div class="text-md font-bold">{{ title }}</div>
+		</div>
+		<div class="navbar-end">
+			<!-- search -->
+			<button class="btn btn-ghost btn-circle">
+				<svg
+					xmlns="http://www.w3.org/2000/svg"
+					class="h-5 w-5"
+					fill="none"
+					viewBox="0 0 24 24"
+					stroke="currentColor">
+					<path
+						stroke-linecap="round"
+						stroke-linejoin="round"
+						stroke-width="2"
+						d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+				</svg>
+			</button>
+			<!-- categories -->
+			<div class="dropdown dropdown-end">
+				<div tabindex="0" role="button" class="btn btn-ghost btn-circle">
+					<svg
+						xmlns="http://www.w3.org/2000/svg"
+						class="h-5 w-5"
+						fill="none"
+						viewBox="0 0 24 24"
+						stroke="currentColor">
+						<path
+							stroke-linecap="round"
+							stroke-linejoin="round"
+							stroke-width="2"
+							d="M4 6h16M4 12h16M4 18h7" />
+					</svg>
+				</div>
+				<ul
+					tabindex="0"
+					class="menu menu-md dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow-xl">
+					<li><a>Category 1</a></li>
+					<li><a>Category 2</a></li>
+					<li><a>Category 3</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+	<!-- content -->
+  <div class="card-body pt-4 tn:pt-8">
+    <div class="w-full">
+      <div class="prose md:prose-lg">
+        {{ content }}
+      </div>
+    </div>
+  </div>
+	<div class="dark:border-t dark:border-gray-700 border-t border-gray-300"></div>
+	<!-- Footer credit -->
+  <div class="text-center py-4">
+    <p class="text-gray-400">© 2024 <a href="https://apoxi.cam/">Apoxicam</a>.<br>All rights reserved.</p>
+  </div>
+</div>
