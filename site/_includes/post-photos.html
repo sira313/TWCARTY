@@ -1,0 +1,28 @@
+---
+layout: base.html
+---
+<div class="card rounded-none sm:rounded-xl bg-base-100 shadow-xl tn:w-full md:w-10/12">
+  <!-- card -->
+  <div class="grid sm:grid-cols-2 gap-0">
+    <!-- the image -->
+    <div class="sm:aspect-w-1 sm:aspect-h-1">
+      <div class="rounded-none sm:rounded-l-xl overflow-hidden bg-white">
+        {% for image in cover %}
+        <img src="{{ cover }}" alt="cover" class="w-full h-full object-contain" />
+        {% endfor %}
+      </div>
+    </div>
+    <!-- the description -->
+    <div>
+      <div class="card-body">
+        <p class="text-md font-bold">{{ title | default: "My Photos" }}</p>
+        <p class="text-sm">{{ date | date: "%a, %d %b %Y" }}</p>
+        <div class="w-full">
+          <div class="prose md:prose-lg">
+            {{ content }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
