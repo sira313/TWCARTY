@@ -1,10 +1,10 @@
 ---
 layout: base.html
 ---
-<div class="card rounded-none sm:rounded-xl bg-base-100 shadow-xl w-full md:max-w-3xl mx-auto sm:card-side max-h-[500px] flex">
+<div class="card rounded-none sm:rounded-xl bg-base-100 shadow-xl w-full md:max-w-3xl mx-auto sm:card-side sm:max-h-[500px] sm:min-h-[500px] flex">
   <!-- cover -->
   <div class="sm:w-1/2 flex items-center justify-center bg-white rounded-none sm:rounded-l-xl overflow-hidden">
-    <div class="aspect-w-1 aspect-h-1 w-full">
+    <div class="sm:aspect-w-1 sm:aspect-h-1 w-full">
       <img
         src="{{ cover }}"
         alt="Cover"
@@ -15,7 +15,7 @@ layout: base.html
   <!-- description -->
   <div class="sm:w-1/2 card-body flex-grow flex flex-col overflow-hidden">
     <h2 class="card-title">{{ title }}</h2>
-    <div class="overflow-y-auto flex-grow">
+    <div class="sm:overflow-y-auto flex-grow">
       <div class="prose md:prose-lg">
         {{ content }}
       </div>
