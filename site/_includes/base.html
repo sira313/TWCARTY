@@ -29,6 +29,7 @@
   <div class="sm:container m-0 p-0 sm:mx-auto sm:p-4 md:p-10">
     {{ content }}
   </div>
+  <!-- search modal -->
   <dialog id="search" class="modal">
     <div class="modal-box">
       <h3 class="text-lg font-bold">Hello!</h3>
@@ -38,4 +39,40 @@
       <button>close</button>
     </form>
   </dialog>
+  <!-- share modal -->
+  <dialog id="share" class="modal">
+    <div class="modal-box">
+      <div class="flex items-center">
+        <input
+          type="text"
+          id="share-url"
+          value="{{ rootURL }}{{ page.url }}"
+          class="input input-bordered w-full mr-4"
+          disabled/>
+        <button 
+          class="btn btn-primary ml-2" 
+          onclick="copyToClipboard()">
+          Copy
+        </button>
+      </div>
+    </div>
+    <form method="dialog" class="modal-backdrop">
+      <button>close</button>
+    </form>
+  </dialog>
+  <!-- script copy to clipboard -->
+  <script>
+    function copyToClipboard() {
+      const urlInput = document.getElementById('share-url');
+      urlInput.select();
+      urlInput.setSelectionRange(0, 99999); // For mobile devices
+      navigator.clipboard.writeText(urlInput.value)
+        .then(() => {
+          alert('URL copied to clipboard');
+        })
+        .catch(err => {
+          console.error('Failed to copy: ', err);
+        });
+    }
+  </script>
 </body>
