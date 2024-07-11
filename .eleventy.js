@@ -1,6 +1,10 @@
 const { execSync } = require('child_process')
+const eleventyPluginFilesMinifier = require("@sherby/eleventy-plugin-files-minifier");
 
 module.exports = function(eleventyConfig) {
+  // minifier
+  eleventyConfig.addPlugin(eleventyPluginFilesMinifier);
+  
   // pagefind
   eleventyConfig.on('eleventy.after', () => {
 		execSync(`npx -y pagefind --site _site --output-subdir _pagefind`, { encoding: 'utf-8' })
