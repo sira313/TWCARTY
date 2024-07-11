@@ -1,0 +1,120 @@
+---
+layout: base.html
+---
+<div class="card rounded-none sm:rounded-xl bg-base-100 shadow-xl w-full md:max-w-3xl mx-auto">
+  <!-- top navbar -->
+  <div class="navbar bg-base-100 rounded-t-xl px-4">
+    <div class="navbar-start">
+      <!-- back to posts -->
+      <a href="../" class="btn btn-ghost btn-circle">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-5 w-5"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor">
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M3 3h7v7H3V3zM14 3h7v7h-7V3zM3 14h7v7H3v-7zM14 14h7v7h-7v-7z" />
+        </svg>
+      </a>
+      <!-- back home -->
+      <a href="/" class="btn btn-ghost btn-circle">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-5 w-5"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor">
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+          <polyline
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            points="9 22 9 12 15 12 15 22" />
+        </svg>
+      </a>
+    </div>
+    <div class="navbar-end">
+      <!-- share -->
+      <button class="btn btn-ghost btn-circle" onclick="share.showModal()">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="18" cy="5" r="3" />
+          <circle cx="6" cy="12" r="3" />
+          <circle cx="18" cy="19" r="3" />
+          <line x1="8.59" y1="13.51" x2="15.42" y2="17.49" />
+          <line x1="15.41" y1="6.51" x2="8.59" y2="10.49" />
+        </svg>                                  
+      </button>
+    </div>
+  </div>
+  <div class="dark:border-t dark:border-gray-700 border-t border-gray-300"></div>
+  <!-- content -->
+  <div class="card-body pt-4 tn:pt-8">
+    <div class="w-full">
+      <div class="prose md:prose-lg">
+        <h3>{{ title }}</h3>
+        <div class="text-sm m-0">{{ date | date: "%a, %d %b %Y" }}</div>
+        {{ content }}
+      </div>
+    </div>
+  </div>
+  <div class="dark:border-t dark:border-gray-700 border-t border-gray-300"></div>
+  <!-- bottom navbar -->
+  {%- if collections.posts %}
+	{%- assign previousPost = collections.posts | getPreviousCollectionItem %}
+	{%- assign nextPost = collections.posts | getNextCollectionItem %}
+	{%- if nextPost or previousPost %}
+  <div class="card-action navbar bg-base-100 rounded-b-xl px-4">
+    <div class="navbar-start">
+      <!-- next post -->
+      {%- if nextPost %}
+      <a href="{{ nextPhotos.url }}" class="btn btn-ghost btn-circle">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-5 w-5"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor">
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+        </svg>
+      </a>
+      {% endif %}
+    </div>
+    <!-- credit license -->
+    <div class="navbar-center py-4">
+      <p class="text-gray-400">© 2024 <a class="hover:text-gray-500" href="https://apoxi.cam/">Apoxicam</a>.<br>All rights reserved.</p>
+    </div>
+    <div class="navbar-end">
+      <!-- prev post -->
+      {%- if previousPost %}
+      <a href="{{ previousPhotos.url }}" class="btn btn-ghost btn-circle">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-5 w-5"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor">
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M14 5l7 7m0 0l-7 7m7-7H3" />
+        </svg>
+      </a>
+      {% endif %}
+    </div>
+  </div>
+  {% endif %}
+  {% endif %}
+</div>
