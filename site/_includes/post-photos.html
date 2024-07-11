@@ -1,0 +1,27 @@
+---
+layout: base.html
+---
+<div class="card rounded-none sm:rounded-xl bg-base-100 shadow-xl w-full md:max-w-3xl mx-auto sm:card-side sm:max-h-[500px] sm:min-h-[500px] flex">
+  <!-- cover -->
+  <div class="sm:w-1/2 flex items-center justify-center bg-white rounded-none sm:rounded-l-xl overflow-hidden">
+    <div class="sm:aspect-w-1 sm:aspect-h-1 w-full">
+      <img
+        src="{{ cover }}"
+        alt="Cover"
+        class="object-contain h-full w-full"
+      />
+    </div>
+  </div>
+  <!-- description -->
+  <div class="sm:w-1/2 card-body flex-grow flex flex-col overflow-hidden">
+    <h2 class="card-title">{{ title }}</h2>
+    <div class="sm:overflow-y-auto flex-grow">
+      <div class="prose md:prose-lg">
+        {{ content }}
+      </div>
+    </div>
+    <div class="card-actions justify-end mt-auto">
+      <button class="btn btn-primary">Watch</button>
+    </div>
+  </div>
+</div>
