@@ -1,8 +1,14 @@
 ---
-title: Photos
-description: Hello friend? That's lame. Maybe i should give you a name. But that's slippery slope. You're only in my head. We have to remember that.
-layout: base.html
 cover: /assets/index/cover.webp
+pagination:
+  data: collections.blogTags
+  size: 1
+  alias: tag
+  addAllPagesToCollections: true
+layout: base.html
+permalink: /blog/tag/{{tag | slugify }}/index.html
+eleventyComputed:
+  title: "{{ tag }}"
 ---
 
 <div class="card rounded-none sm:rounded-xl bg-base-100 shadow-xl w-full md:max-w-3xl mx-auto">
@@ -11,27 +17,27 @@ cover: /assets/index/cover.webp
     <img src="{{ cover }}" alt="cover" />
   </figure>
 	<!-- navbar -->
-	<div class="navbar bg-base-100">
+	<div class="navbar bg-base-100 px-4">
 		<div class="navbar-start">
 			<!-- back home -->
 			<a href="/" class="btn btn-ghost btn-circle">
 				<svg
-				  xmlns="http://www.w3.org/2000/svg"
-				  class="h-5 w-5"
-				  fill="none"
-				  viewBox="0 0 24 24"
-				  stroke="currentColor">
-				  <path
-				    stroke-linecap="round"
-				    stroke-linejoin="round"
-				    stroke-width="2"
-				    d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
-				  <polyline
-				    stroke-linecap="round"
-				    stroke-linejoin="round"
-				    stroke-width="2"
-				    points="9 22 9 12 15 12 15 22" />
-				</svg>
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-5 w-5"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor">
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+          <polyline
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            points="9 22 9 12 15 12 15 22" />
+        </svg>
 			</a>
 		</div>
 		<div class="navbar-center">
@@ -115,8 +121,8 @@ cover: /assets/index/cover.webp
 				<ul
 					tabindex="0"
 					class="menu menu-md dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow-xl">
-					{% for tag in collections.photosTags %}	
-					<li><a href="/photos/tag/{{ tag | slugify }}">{{ tag }}</a></li>
+					{% for tag in collections.blogTags %}
+					<li><a href="/blog/tag/{{ tag | slugify }}">{{ tag }}</a></li>
 					{% endfor %}
 				</ul>
 			</div>
@@ -124,19 +130,19 @@ cover: /assets/index/cover.webp
 	</div>
 	<div class="dark:border-t dark:border-gray-700 border-t border-gray-300"></div>
 	<!-- content -->
-	<div class="grid grid-cols-3 gap-0.5">
-		{% for photos in collections.photos reversed %}
-		<!-- link to post -->
-		<a href="{{ photos.url }}">
-			<!-- thumbnail -->
-			<div class="aspect-w-1 aspect-h-1">
-	  		<div class="bg-white overflow-hidden">
-					<img src="{{ photos.data.thumbnail}}" alt="Image" class="w-full h-full object-cover">
-	  		</div>
-			</div>
-		</a>
-		{% endfor %}
-	</div>
+  <div class="card-body pt-4 tn:pt-8">
+		<div class="w-full">
+			<ul>
+				{% for post in collections[tag] reversed %}
+				<li class="mb-4">
+					<p class="text-xl font-bold mb-2 hover:text-gray-500"><a href="{{ post.url }}">{{ post.data.title }}</a></p>
+					<p class="text-md">{{ post.data.description }}</a></p>
+					<p class="text-sm">{{ post.data.date | date: "%a, %d %b %Y" }}</p>
+				</li>
+				{% endfor %}
+			</ul>
+		</div>
+  </div>
 	<div class="dark:border-t dark:border-gray-700 border-t border-gray-300"></div>
 	<!-- Footer credit -->
   <div class="text-center py-4">
