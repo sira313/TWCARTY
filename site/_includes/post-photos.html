@@ -1,28 +1,27 @@
 ---
 layout: base.html
 ---
-<div class="card rounded-none sm:rounded-xl bg-base-100 shadow-xl tn:w-full md:w-10/12">
-  <!-- card -->
-  <div class="grid sm:grid-cols-2 gap-0">
-    <!-- the image -->
-    <div class="sm:aspect-w-1 sm:aspect-h-1">
-      <div class="rounded-none sm:rounded-l-xl overflow-hidden bg-white">
-        {% for image in cover %}
-        <img src="{{ cover }}" alt="cover" class="w-full h-full object-contain" />
-        {% endfor %}
+<div class="card rounded-none sm:rounded-xl bg-base-100 shadow-xl w-full md:max-w-3xl mx-auto sm:card-side max-h-[500px] flex">
+  <!-- cover -->
+  <div class="sm:w-1/2 flex items-center justify-center bg-white rounded-none sm:rounded-l-xl overflow-hidden">
+    <div class="aspect-w-1 aspect-h-1 w-full">
+      <img
+        src="{{ cover }}"
+        alt="Cover"
+        class="object-contain h-full w-full"
+      />
+    </div>
+  </div>
+  <!-- description -->
+  <div class="sm:w-1/2 card-body flex-grow flex flex-col overflow-hidden">
+    <h2 class="card-title">{{ title }}</h2>
+    <div class="overflow-y-auto flex-grow">
+      <div class="prose md:prose-lg">
+        {{ content }}
       </div>
     </div>
-    <!-- the description -->
-    <div>
-      <div class="card-body">
-        <p class="text-xl font-bold">{{ title | default: "My Photos" }}</p>
-        <p class="text-sm">{{ date | date: "%a, %d %b %Y" }}</p>
-        <div class="w-full">
-          <div class="prose md:prose-lg">
-            {{ content }}
-          </div>
-        </div>
-      </div>
+    <div class="card-actions justify-end mt-auto">
+      <button class="btn btn-primary">Watch</button>
     </div>
   </div>
 </div>
