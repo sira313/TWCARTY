@@ -1,19 +1,16 @@
 ---
 layout: index.html
-title: Mr.Robot
-description: Fix Computer with Smile
-keyword: Mr. Robot
-author: Elliot A.
+title: JohnDoe
+description: Eleventy starter for photographer/artist
+keyword: photography, camera, blog
+author: Eleventy Card
 cover: /assets/index/cover.webp
 profile: /assets/index/profile.webp
 ---
 
-#### HELLO FRIEND
-
-Hello friend? That's lame. Maybe i should give you a name. But that's slippery slope. You're only in my head. We have to remember that.
-
-#### QUESTION
-
-It's one thing to question your mind. It's another to question your eyes and ears. But then again, isn't it all the same? Our senses just mediocre inputs for our brain? Sure, we rely on them, trust they accurately portray the real world around us. But what if the haunting truth is they can't? That what we perceive isn't the real world at all, but just our mind's best guess? That all we really have is a garbled reality, a fuzzy picture we will never truly make out?
-
->See me, Elliot Alderson
+#### Hello World
+I used Eleventy to create this website because I find it the easiest Static Site Generator (SSG) to understand, especially with its support for using `*.html` for layout. I chose Bulma as the CSS framework because its simple tutorials matched my level as a beginner.  As for the icons, I opted for Feathericons simply because I like that it's open source.
+The source code of this starter is available on GitHub, just check the navbar.
+>I apologize for any shortcomings as I am not a coder by background.
+#### Eleventy
+Eleventy is a popular Static Site Generator (SSG) tool used by web developers to build websites. It allows developers to create websites from various template languages, including HTML, Markdown, and others. Eleventy is known for its simplicity and flexibility, making it a favorite among developers who prefer a straightforward approach to building static websites.
