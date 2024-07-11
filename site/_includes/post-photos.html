@@ -34,52 +34,23 @@ layout: base.html
         </a>
       </div>
       <div class="navbar-end">
-        <!-- search -->
-        <button class="btn btn-ghost btn-circle" onclick="search.showModal()">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            class="h-5 w-5"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor">
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-          </svg>
+        <!-- share -->
+        <button class="btn btn-ghost btn-circle">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="18" cy="5" r="3" />
+            <circle cx="6" cy="12" r="3" />
+            <circle cx="18" cy="19" r="3" />
+            <line x1="8.59" y1="13.51" x2="15.42" y2="17.49" />
+            <line x1="15.41" y1="6.51" x2="8.59" y2="10.49" />
+          </svg>                                  
         </button>
-        <!-- categories -->
-        <div class="dropdown dropdown-end">
-          <div tabindex="0" role="button" class="btn btn-ghost btn-circle">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="h-5 w-5"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor">
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M4 6h16M4 12h16M4 18h7" />
-            </svg>
-          </div>
-          <ul
-            tabindex="0"
-            class="menu menu-md dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow-xl">
-            <li><a>Category 1</a></li>
-            <li><a>Category 2</a></li>
-            <li><a>Category 3</a></li>
-          </ul>
-        </div>
       </div>
     </div>
     <!-- content -->
     <div class="card-body pt-0 pb-0 sm:overflow-y-auto flex-grow">
-      <p class="text-lg font-bold">{{ title }}</p>
-      <p class="text-sm font-bold">{{ date | date: "%a, %d %b %Y" }}</p>
       <div class="prose md:prose-lg">
+        <h3>{{ title }}</h3>
+        <div class="text-sm m-0">{{ date | date: "%a, %d %b %Y" }}</div>
         {{ content }}
       </div>
     </div>
