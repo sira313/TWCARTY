@@ -24,16 +24,36 @@
   {% endif %}
   <link rel="stylesheet" href="/assets/css/style.css">
   <meta name="view-transition" content="same-origin">
+  <link href="/_pagefind/pagefind-ui.css" rel="stylesheet">
+  <style>
+    :root {
+        --pagefind-ui-primary: #3b82f6;
+        --pagefind-ui-text: #313336;
+        --pagefind-ui-background: #ffffff;
+        --pagefind-ui-border: #c7cdd8;
+        --pagefind-ui-tag: #10b981;
+    }
+    @media (prefers-color-scheme: dark) {
+        :root {
+            --pagefind-ui-primary: #3b82f6;
+            --pagefind-ui-text: #a5a7af;
+            --pagefind-ui-background: #111827;
+            --pagefind-ui-border: #374151;
+            --pagefind-ui-tag: #10b981;
+        }
+    }
+</style>
 </head>
-<body class="bg-base-200">
+<body class="bg-base-200" data-pagefind-body>
   <div class="sm:container m-0 p-0 sm:mx-auto sm:p-4 md:p-10">
     {{ content }}
   </div>
   <!-- search modal -->
-  <dialog id="search" class="modal">
+  <dialog id="searchme" class="modal">
     <div class="modal-box">
-      <h3 class="text-lg font-bold">Hello!</h3>
-      <p class="py-4">Press ESC key or click outside to close.<br>Search feature under construction</p>
+      <div class="w-full">
+        <div id="search" class="search"></div>
+      </div>
     </div>
     <form method="dialog" class="modal-backdrop">
       <button>close</button>
@@ -60,6 +80,8 @@
       <button>close</button>
     </form>
   </dialog>
+  <!-- pagefind script -->
+  <script src="/_pagefind/pagefind-ui.js" onload="new PagefindUI({ element: '#search', showImages: false });"></script>
   <!-- script copy to clipboard -->
   <script>
     function copyToClipboard() {
