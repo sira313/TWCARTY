@@ -96,5 +96,21 @@
           console.error('Failed to copy: ', err);
         });
     }
+
+    function sharePost() {      
+      if (!navigator.share) {
+        // use modal if native share not compatible
+        share.showModal()
+        return
+      }
+
+      navigator.share({
+        title: document.title,
+        url: location.href
+      }).catch((e) => {
+        console.warn(`Failed to use native share API. `, e);
+        share.showModal(); // fallback custom modal
+      });
+    }
   </script>
 </body>
