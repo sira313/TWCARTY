@@ -3,7 +3,7 @@ layout: base.html
 ---
 <div class="card rounded-none sm:rounded-xl bg-base-100 shadow-xl w-full md:max-w-3xl mx-auto sm:card-side sm:max-h-[500px] sm:min-h-[500px] flex">
   <!-- cover -->
-  <div class="sm:w-1/2 flex items-center justify-center bg-white rounded-none sm:rounded-l-xl overflow-hidden">
+  <div class="sm:w-1/2 flex items-center justify-center bg-black rounded-none sm:rounded-l-xl overflow-hidden">
     <div class="w-full">
       <img
         src="{{ cover }}"
@@ -55,7 +55,7 @@ layout: base.html
       </div>
       <div class="navbar-end">
         <!-- share -->
-        <button class="btn btn-ghost btn-circle">
+        <button class="btn btn-ghost btn-circle" onclick="share.showModal()">
           <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <circle cx="18" cy="5" r="3" />
             <circle cx="6" cy="12" r="3" />
@@ -66,19 +66,26 @@ layout: base.html
         </button>
       </div>
     </div>
+    <div class="dark:border-t dark:border-gray-700 border-t border-gray-300"></div>
     <!-- content -->
-    <div class="card-body pt-0 pb-0 sm:overflow-y-auto flex-grow">
+    <div class="card-body sm:overflow-y-auto flex-grow">
       <div class="prose md:prose-lg">
         <h3>{{ title }}</h3>
         <div class="text-sm m-0">{{ date | date: "%a, %d %b %Y" }}</div>
         {{ content }}
       </div>
     </div>
+    <div class="dark:border-t dark:border-gray-700 border-t border-gray-300"></div>
     <!-- bottom navbar -->
+    {%- if collections.photos %}
+    {%- assign previousPhotos = collections.photos | getPreviousCollectionItem %}
+    {%- assign nextPhotos = collections.photos | getNextCollectionItem %}
+    {%- if nextPhotos or previousPhotos %}
     <div class="card-action navbar bg-base-100 rounded-b-xl px-4">
       <div class="navbar-start">
         <!-- next post -->
-        <a href="#" class="btn btn-ghost btn-circle">
+        {%- if nextPhotos %}
+        <a href="{{ nextPhotos.url }}" class="btn btn-ghost btn-circle">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             class="h-5 w-5"
@@ -92,14 +99,16 @@ layout: base.html
               d="M10 19l-7-7m0 0l7-7m-7 7h18" />
           </svg>
         </a>
+        {% endif %}
       </div>
-      <!-- Footer -->
+      <!-- credit license -->
       <div class="navbar-center">
-        <div class="text-md font-bold">CC-BY-NC-ND</div>
+        <a class="text-md font-bold" href="https://creativecommons.org/licenses/by-nc-nd/4.0/">CC BY-NC-ND 4.0</a>
       </div>
       <div class="navbar-end">
         <!-- prev post -->
-        <button class="btn btn-ghost btn-circle">
+        {%- if previousPhotos %}
+        <a href="{{ previousPhotos.url }}" class="btn btn-ghost btn-circle">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             class="h-5 w-5"
@@ -112,8 +121,11 @@ layout: base.html
               stroke-width="2"
               d="M14 5l7 7m0 0l-7 7m7-7H3" />
           </svg>
-        </button>
+        </a>
+        {% endif %}
       </div>
     </div>
+    {% endif %}
+		{% endif %}
   </div>
 </div>
