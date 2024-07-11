@@ -1,8 +1,14 @@
 ---
-title: Photos
-description: Hello friend? That's lame. Maybe i should give you a name. But that's slippery slope. You're only in my head. We have to remember that.
-layout: base.html
 cover: /assets/index/cover.webp
+pagination:
+  data: collections.photosTags
+  size: 1
+  alias: tag
+  addAllPagesToCollections: true
+layout: base.html
+permalink: /photos/tag/{{tag | slugify }}/index.html
+eleventyComputed:
+  title: "{{ tag }}"
 ---
 
 <div class="card rounded-none sm:rounded-xl bg-base-100 shadow-xl w-full md:max-w-3xl mx-auto">
@@ -125,7 +131,7 @@ cover: /assets/index/cover.webp
 	<div class="dark:border-t dark:border-gray-700 border-t border-gray-300"></div>
 	<!-- content -->
 	<div class="grid grid-cols-3 gap-0.5">
-		{% for photos in collections.photos reversed %}
+		{% for photos in collections[tag] reversed %}
 		<!-- link to post -->
 		<a href="{{ photos.url }}">
 			<!-- thumbnail -->
