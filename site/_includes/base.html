@@ -109,7 +109,10 @@
         url: location.href
       }).catch((e) => {
         console.warn(`Failed to use native share API. `, e);
-        share.showModal(); // fallback custom modal
+        if (e.name !== 'AbortError') {
+          // fallback custom modal only if not aborted by user
+          share.showModal();
+        }
       });
     }
   </script>
