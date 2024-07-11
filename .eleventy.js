@@ -1,4 +1,11 @@
+const { execSync } = require('child_process')
+
 module.exports = function(eleventyConfig) {
+  // pagefind
+  eleventyConfig.on('eleventy.after', () => {
+		execSync(`npx -y pagefind --site _site --output-subdir _pagefind`, { encoding: 'utf-8' })
+	})
+
   // tailwind
   eleventyConfig.addWatchTarget("tailwind.config.js");
 
