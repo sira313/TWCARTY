@@ -5,12 +5,16 @@ layout: base.html
   <div class="card rounded-none sm:rounded-xl bg-base-100 shadow-xl w-full md:max-w-3xl mx-auto sm:card-side sm:max-h-[500px] sm:min-h-[500px] flex">
     <!-- cover -->
     <div class="sm:w-1/2 flex items-center justify-center bg-black rounded-none sm:rounded-l-xl overflow-hidden">
-      <div class="w-full">
-        <img
-          src="{{ cover }}"
-          alt="Cover"
-          class="object-contain h-full w-full"
-        />
+      <div class="carousel">
+        {% for image in cover %}
+          <div class="carousel-item w-full">
+            <img
+              src="{{image.url}}"
+              alt="Cover"
+              class="object-contain"
+            />
+          </div>
+        {% endfor %}
       </div>
     </div>
     <!-- description -->

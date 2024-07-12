@@ -1,12 +1,14 @@
 ---
 layout: post-photos.html
-title: Kupu-kupu
+title: Photo In hac habitasse platea dictumst
 description: In hac habitasse platea dictumst. Nunc hendrerit ultrices lectus, sed facilisis nisi lacinia quis. Nunc nulla libero, consequat at arcu sit amet, sollicitudin placerat nisl. Praesent mollis nulla maximus nisl tristique, ac tempor enim cursus
-keyword: Butterfly, photo
-cover: /assets/photos/kupu-kupu.jpg
-thumbnail: /assets/photos/thumbnail/kupu-kupu.jpg
-date: 2024-04-24
-tags: Hewan
+keyword: Cursus, eget
+cover: 
+  - url: /assets/photos/motor.jpg
+  - url: /assets/photos/chick.jpg
+thumbnail: /assets/photos/thumbnail/motor.jpg
+date: 2024-04-25
+tags: Kendaraan
 ---
 Pellentesque eget est consequat orci lacinia posuere. Sed risus est, consequat at pretium vel, placerat ac neque. Fusce vitae consectetur lorem, sed fermentum tellus. Aenean tristique arcu ullamcorper, feugiat orci sit amet, viverra dui. Proin ipsum enim, cursus ac augue vitae, semper blandit sapien. Sed finibus cursus nisi ac pharetra. Vivamus quis ipsum at sapien vestibulum tincidunt. Maecenas quis libero et neque elementum scelerisque. Aenean dapibus dui ut fermentum rhoncus. Interdum et malesuada fames ac ante ipsum primis in faucibus. Nulla lacinia gravida nulla id iaculis.
 

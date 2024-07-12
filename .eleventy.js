@@ -4,15 +4,7 @@ const lazyImagesPlugin = require('eleventy-plugin-lazyimages');
 
 module.exports = function(eleventyConfig) {
   // lazyimages
-  eleventyConfig.addPlugin(lazyImagesPlugin, {
-    transformImgPath: (imgPath) => {
-      // /assets/ to ./site/assets
-      if (imgPath.startsWith('/assets/')) {
-        return `./site${imgPath}`;
-      }
-      return imgPath;
-    }
-  });
+  eleventyConfig.addPlugin(lazyImagesPlugin);
 
   // minifier
   eleventyConfig.addPlugin(eleventyPluginFilesMinifier);
@@ -29,31 +21,21 @@ module.exports = function(eleventyConfig) {
   eleventyConfig.addGlobalData("rootURL", "https://twcarty.netlify.app");
 
   // Passthrough copy untuk menyalin file statis ke output
-  eleventyConfig.addPassthroughCopy("site/assets");
+  eleventyConfig.addPassthroughCopy("assets");
 
   // Collection post blog
   eleventyConfig.addCollection("posts", function(collectionApi) {
-    return collectionApi.getFilteredByGlob("site/blog/**/*.md");
+    return collectionApi.getFilteredByGlob("blog/**/*.md");
   });
 
   // Collection post photos
   eleventyConfig.addCollection("photos", function(collectionApi) {
-    return collectionApi.getFilteredByGlob("site/photos/**/*.md");
+    return collectionApi.getFilteredByGlob("photos/**/*.md");
   });
 
   // Collection tags
   eleventyConfig.addCollection("blogTags", getTags("blog"));
   eleventyConfig.addCollection("photosTags", getTags("photos"));
-
-  // Input output dir
-  return {
-    dir: {
-      input: "site",
-      includes: "_includes",
-      data: "_data",
-      output: "_site"
-    }
-  };
 
   /**
    * @param {'blog'|'photos'} type
