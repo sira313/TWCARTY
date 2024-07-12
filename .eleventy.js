@@ -3,9 +3,15 @@ const eleventyPluginFilesMinifier = require("@sherby/eleventy-plugin-files-minif
 const lazyImagesPlugin = require('eleventy-plugin-lazyimages');
 
 module.exports = function(eleventyConfig) {
-  // lazyload
+  // lazyimages
   eleventyConfig.addPlugin(lazyImagesPlugin, {
-    transformImgPath: (imgPath) => imgPath.replace('/assets/', './_site/assets/'),
+    transformImgPath: (imgPath) => {
+      // /assets/ to ./site/assets
+      if (imgPath.startsWith('/assets/')) {
+        return `./site${imgPath}`;
+      }
+      return imgPath;
+    }
   });
 
   // minifier
