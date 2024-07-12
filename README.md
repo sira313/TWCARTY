@@ -35,7 +35,7 @@ There are 2 menus (for indexing post, not a single page) we created by default:
 So if you wanted to create another one, maybe [this tutorial](https://www.youtube.com/watch?v=kzf9A9tkkl4) will help.
 #### Layout
 There are 3 layouts in [/_includes](/_includes/):
-- [/_includes/layout.html](/_includes/layout.html) is the main layout called in other layout frontmatter.
+- [/_includes/base.html](/_includes/base.html) is the main layout called in other layout frontmatter.
 - [/_includes/post-blog.html](/_includes/post-blog.html) is for blog post layout.
 - [/_includes/post-photos.html](/_includes/post-photos.html) is photos post layout.
 #### Index
