@@ -1,4 +1,4 @@
-## Eleventy Card
+## TWCARTY
 #### A starter project for photographer/artist showing their work and blog randomly
 #### [twcarty.netlify.app](https://twcarty.netlify.app/) 
 [![Netlify Status](https://api.netlify.com/api/v1/badges/5ed3a8c6-b9ef-4ecd-86d8-1ef8ab1f6c9d/deploy-status)](https://app.netlify.com/sites/twcarty/deploys)
