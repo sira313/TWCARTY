@@ -1,7 +1,13 @@
 const { execSync } = require('child_process')
 const eleventyPluginFilesMinifier = require("@sherby/eleventy-plugin-files-minifier");
+const lazyImagesPlugin = require('eleventy-plugin-lazyimages');
 
 module.exports = function(eleventyConfig) {
+  // lazyload
+  eleventyConfig.addPlugin(lazyImagesPlugin, {
+    transformImgPath: (imgPath) => imgPath.replace('/assets/', './_site/assets/'),
+  });
+
   // minifier
   eleventyConfig.addPlugin(eleventyPluginFilesMinifier);
   
