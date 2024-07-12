@@ -1,131 +1,133 @@
 ---
 layout: base.html
 ---
-<div class="card rounded-none sm:rounded-xl bg-base-100 shadow-xl w-full md:max-w-3xl mx-auto sm:card-side sm:max-h-[500px] sm:min-h-[500px] flex">
-  <!-- cover -->
-  <div class="sm:w-1/2 flex items-center justify-center bg-black rounded-none sm:rounded-l-xl overflow-hidden">
-    <div class="w-full">
-      <img
-        src="{{ cover }}"
-        alt="Cover"
-        class="object-contain h-full w-full"
-      />
-    </div>
-  </div>
-  <!-- description -->
-  <div class="sm:w-1/2 flex-grow flex flex-col overflow-hidden">
-    <!-- top navbar -->
-    <div class="navbar bg-base-100 rounded-t-xl px-4">
-      <div class="navbar-start">
-        <!-- back to posts -->
-        <a href="../" class="btn btn-ghost btn-circle">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            class="h-5 w-5"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor">
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M3 3h7v7H3V3zM14 3h7v7h-7V3zM3 14h7v7H3v-7zM14 14h7v7h-7v-7z" />
-          </svg>
-        </a>
-        <!-- back home -->
-			  <a href="/" class="btn btn-ghost btn-circle">
-			  	<svg
-            xmlns="http://www.w3.org/2000/svg"
-            class="h-5 w-5"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor">
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
-            <polyline
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              points="9 22 9 12 15 12 15 22" />
-          </svg>
-			  </a>
-      </div>
-      <div class="navbar-end">
-        <!-- share -->
-        <button class="btn btn-ghost btn-circle" onclick="sharePost()">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="18" cy="5" r="3" />
-            <circle cx="6" cy="12" r="3" />
-            <circle cx="18" cy="19" r="3" />
-            <line x1="8.59" y1="13.51" x2="15.42" y2="17.49" />
-            <line x1="15.41" y1="6.51" x2="8.59" y2="10.49" />
-          </svg>                                  
-        </button>
+<div class="sm:container m-0 p-0 sm:mx-auto sm:px-4 md:px-10">
+  <div class="card rounded-none sm:rounded-xl bg-base-100 shadow-xl w-full md:max-w-3xl mx-auto sm:card-side sm:max-h-[500px] sm:min-h-[500px] flex">
+    <!-- cover -->
+    <div class="sm:w-1/2 flex items-center justify-center bg-black rounded-none sm:rounded-l-xl overflow-hidden">
+      <div class="w-full">
+        <img
+          src="{{ cover }}"
+          alt="Cover"
+          class="object-contain h-full w-full"
+        />
       </div>
     </div>
-    <div class="dark:border-t dark:border-gray-700 border-t border-gray-300"></div>
-    <!-- content -->
-    <div class="card-body sm:overflow-y-auto flex-grow">
-      <div class="prose md:prose-lg">
-        <h3>{{ title }}</h3>
-        <div class="text-sm m-0">{{ date | date: "%a, %d %b %Y" }}</div>
-        {{ content }}
+    <!-- description -->
+    <div class="sm:w-1/2 flex-grow flex flex-col overflow-hidden">
+      <!-- top navbar -->
+      <div class="navbar bg-base-100 rounded-t-xl px-4">
+        <div class="navbar-start">
+          <!-- back to posts -->
+          <a href="../" class="btn btn-ghost btn-circle">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-5 w-5"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor">
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M3 3h7v7H3V3zM14 3h7v7h-7V3zM3 14h7v7H3v-7zM14 14h7v7h-7v-7z" />
+            </svg>
+          </a>
+          <!-- back home -->
+  			  <a href="/" class="btn btn-ghost btn-circle">
+  			  	<svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-5 w-5"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor">
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+              <polyline
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                points="9 22 9 12 15 12 15 22" />
+            </svg>
+  			  </a>
+        </div>
+        <div class="navbar-end">
+          <!-- share -->
+          <button class="btn btn-ghost btn-circle" onclick="sharePost()">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="18" cy="5" r="3" />
+              <circle cx="6" cy="12" r="3" />
+              <circle cx="18" cy="19" r="3" />
+              <line x1="8.59" y1="13.51" x2="15.42" y2="17.49" />
+              <line x1="15.41" y1="6.51" x2="8.59" y2="10.49" />
+            </svg>                                  
+          </button>
+        </div>
       </div>
+      <div class="dark:border-t dark:border-gray-700 border-t border-gray-300"></div>
+      <!-- content -->
+      <div class="card-body sm:overflow-y-auto flex-grow">
+        <div class="prose md:prose-lg">
+          <h3>{{ title }}</h3>
+          <div class="text-sm m-0">{{ date | date: "%a, %d %b %Y" }}</div>
+          {{ content }}
+        </div>
+      </div>
+      <div class="dark:border-t dark:border-gray-700 border-t border-gray-300"></div>
+      <!-- bottom navbar -->
+      {%- if collections.photos %}
+      {%- assign previousPhotos = collections.photos | getPreviousCollectionItem %}
+      {%- assign nextPhotos = collections.photos | getNextCollectionItem %}
+      {%- if nextPhotos or previousPhotos %}
+      <div class="card-action navbar bg-base-100 rounded-b-xl px-4">
+        <div class="navbar-start">
+          <!-- next post -->
+          {%- if nextPhotos %}
+          <a href="{{ nextPhotos.url }}" class="btn btn-ghost btn-circle">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-5 w-5"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor">
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+            </svg>
+          </a>
+          {% endif %}
+        </div>
+        <!-- credit license -->
+        <div class="navbar-center">
+          <a class="text-md font-bold" href="https://creativecommons.org/licenses/by-nc-nd/4.0/">CC BY-NC-ND 4.0</a>
+        </div>
+        <div class="navbar-end">
+          <!-- prev post -->
+          {%- if previousPhotos %}
+          <a href="{{ previousPhotos.url }}" class="btn btn-ghost btn-circle">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-5 w-5"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor">
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M14 5l7 7m0 0l-7 7m7-7H3" />
+            </svg>
+          </a>
+          {% endif %}
+        </div>
+      </div>
+      {% endif %}
+  		{% endif %}
     </div>
-    <div class="dark:border-t dark:border-gray-700 border-t border-gray-300"></div>
-    <!-- bottom navbar -->
-    {%- if collections.photos %}
-    {%- assign previousPhotos = collections.photos | getPreviousCollectionItem %}
-    {%- assign nextPhotos = collections.photos | getNextCollectionItem %}
-    {%- if nextPhotos or previousPhotos %}
-    <div class="card-action navbar bg-base-100 rounded-b-xl px-4">
-      <div class="navbar-start">
-        <!-- next post -->
-        {%- if nextPhotos %}
-        <a href="{{ nextPhotos.url }}" class="btn btn-ghost btn-circle">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            class="h-5 w-5"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor">
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-          </svg>
-        </a>
-        {% endif %}
-      </div>
-      <!-- credit license -->
-      <div class="navbar-center">
-        <a class="text-md font-bold" href="https://creativecommons.org/licenses/by-nc-nd/4.0/">CC BY-NC-ND 4.0</a>
-      </div>
-      <div class="navbar-end">
-        <!-- prev post -->
-        {%- if previousPhotos %}
-        <a href="{{ previousPhotos.url }}" class="btn btn-ghost btn-circle">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            class="h-5 w-5"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor">
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M14 5l7 7m0 0l-7 7m7-7H3" />
-          </svg>
-        </a>
-        {% endif %}
-      </div>
-    </div>
-    {% endif %}
-		{% endif %}
   </div>
 </div>
