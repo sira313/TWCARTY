@@ -1,11 +1,6 @@
 ## TWCARTY
 #### A starter project for photographer/artist showing their work and blog randomly
-#### [twcarty.netlify.app](https://twcarty.netlify.app/) 
-[![Netlify Status](https://api.netlify.com/api/v1/badges/5ed3a8c6-b9ef-4ecd-86d8-1ef8ab1f6c9d/deploy-status)](https://app.netlify.com/sites/twcarty/deploys)
-
-Powered by 
-
-[![Eleventy](https://a11ybadges.com/badge?logo=eleventy)](https://www.11ty.dev/)![TailwindCSS](https://img.shields.io/badge/tailwindcss-%2338B2AC.svg?style=for-the-badge&logo=tailwind-css&logoColor=white)![DaisyUI](https://img.shields.io/badge/daisyui-5A0EF8?style=for-the-badge&logo=daisyui&logoColor=white)
+[![twcarty.netlify.app](https://img.shields.io/badge/LIVE-twcarty.netlify.app-blue?style=for-the-badge)](https://twcarty.netlify.app/) [![Netlify Status](https://img.shields.io/badge/deploy-passing-green?style=for-the-badge)](https://app.netlify.com/sites/twcarty/deploys) [![Eleventy](https://a11ybadges.com/badge/?logo=eleventy)](https://www.11ty.dev/)![TailwindCSS](https://img.shields.io/badge/tailwindcss-%2338B2AC.svg?style=for-the-badge&logo=tailwind-css&logoColor=white)![DaisyUI](https://img.shields.io/badge/daisyui-5A0EF8?style=for-the-badge&logo=daisyui&logoColor=white)
 
 ---
 
