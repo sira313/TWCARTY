@@ -57,6 +57,6 @@ And if you wanted to create a post in `/photos` you just need to
 pnpm mkpost -p Your post title
 ```
 #### Asset
-All assets are in [/asset](/asset/) directory and called in the frontmatter.
+All assets are in [/assets](/assets/) directory and called in the frontmatter.
 #### Tips
 Better use [Squoosh](https://squoosh.app/) to convert your pics to webp
