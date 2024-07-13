@@ -5,6 +5,8 @@
 ---
 
 ### Basic Info
+Better use Linux
+
 Clone this repo
 ```
 git clone https://github.com/sira313/twcarty
