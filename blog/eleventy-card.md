@@ -36,16 +36,16 @@ There are 2 menus (for indexing posts, not single pages) created by default:
 If you want to create another one, this [tutorial](https://www.youtube.com/watch?v=kzf9A9tkkl4) might help.
 
 #### Layout
-There are 3 layouts in [/_includes](/_includes/):
-- [/_includes/layout.html](/_includes/layout.html) is the main layout referenced in other layout frontmatter.
-- [/_includes/post-blog.html](/_includes/post-blog.html) is for blog post layout.
-- [/_includes/post-photos.html](/_includes/post-photos.html) is for photos post layout.
+There are 3 layouts in `/_includes`:
+- `/_includes/layout.html` is the main layout referenced in other layout frontmatter.
+- `/_includes/post-blog.html` is for blog post layout.
+- `/_includes/post-photos.html` is for photos post layout.
 
 #### Index
 There are 3 indexes in this project:
-- [/index.md](/index.md) where you describe your business.
-- [/photos/index.html](/photos/index.html) is the index of all your photos.
-- [/blog/index.html](/blog/index.html) is the index of your blog.
+- `/index.md` where you describe your business.
+- `photos/index.html` is the index of all your photos.
+- `/blog/index.html` is the index of your blog.
 
 #### Post
 We created a JavaScript script to make posting automatic, so you don't need to do it manually. [Thanks to my friend](https://github.com/mustofa-id).
@@ -62,7 +62,7 @@ pnpm mkpost -p "Your post title"
 ```
 
 #### Assets
-All assets are in the [/assets](/assets/) directory and referenced in the frontmatter.
+All assets are in the `/assets` directory and referenced in the frontmatter.
 
 #### Tips
 It's better to use [Squoosh](https://squoosh.app/) to convert your images to webp.
