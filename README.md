@@ -21,6 +21,14 @@ Run to your localhost
 ```
 pnpm build && pnpm serve
 ```
+Modify your language first in [/_include/base.html](/_include/base.html)
+```
+<html lang="en">
+```
+Then your root url in [/.eleventy.js](.eleventy.js)
+```
+eleventyConfig.addGlobalData("rootURL", "https://twcarty.netlify.app");
+```
 
 #### Menu
 There are 2 menus (for indexing post, not a single page) we created by default:
