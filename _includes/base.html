@@ -27,25 +27,25 @@
   <link href="/_pagefind/pagefind-ui.css" rel="stylesheet">
   <style>
     :root {
-        --pagefind-ui-primary: #3b82f6;
-        --pagefind-ui-text: #313336;
-        --pagefind-ui-background: #ffffff;
-        --pagefind-ui-border: #c7cdd8;
-        --pagefind-ui-tag: #10b981;
+      --pagefind-ui-primary: oklch(var(--n));
+      --pagefind-ui-text: #313336;
+      --pagefind-ui-background: oklch(var(--nc));
+      --pagefind-ui-border: oklch(var(--b2));
+      --pagefind-ui-tag: oklch(var(--p));
     }
     @media (prefers-color-scheme: dark) {
-        :root {
-            --pagefind-ui-primary: #3b82f6;
-            --pagefind-ui-text: #a5a7af;
-            --pagefind-ui-background: #111827;
-            --pagefind-ui-border: #374151;
-            --pagefind-ui-tag: #10b981;
-        }
+      :root {
+        --pagefind-ui-primary: oklch(var(--nc));
+        --pagefind-ui-text: oklch(var(--nc));
+        --pagefind-ui-background: oklch(var(--b3));
+        --pagefind-ui-border: oklch(var(--b3));
+        --pagefind-ui-tag: oklch(var(--p));
+      }
     }
-</style>
+  </style>
 </head>
 <body class="bg-base-200" data-pagefind-body>
-  <div class="sm:hero sm:min-h-screen">
+  <div class="sm:hero min-h-screen">
     {{ content }}
   </div>
   <!-- search modal -->

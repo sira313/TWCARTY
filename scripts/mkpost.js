@@ -60,7 +60,7 @@ title: ${title.toLowerCase().replace(/(?:^|\s)\w/g, (m) => m.toUpperCase())}
 description: TODO
 keyword: TODO
 cover: TODO
-thumbnail: /asset/photos/thumbnail/
+thumbnail: /assets/photos/thumbnail/
 date: ${new Date().toISOString().split("T")[0]}
 tags: TODO
 ---
