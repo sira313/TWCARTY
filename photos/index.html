@@ -5,7 +5,7 @@ layout: base.html
 cover: /assets/index/cover.webp
 ---
 <div class="sm:container m-0 p-0 sm:mx-auto sm:p-4 md:p-10">
-	<div class="card rounded-none sm:rounded-xl bg-base-100 shadow-xl w-full md:max-w-3xl mx-auto">
+	<div class="card rounded-none sm:rounded-xl bg-base-100 shadow-xl w-full md:max-w-3xl mx-auto min-h-screen sm:min-h-min flex flex-col sm:flex-none">
 		<!-- cover -->
 	  <figure>
 	    <img src="{{ cover }}" alt="cover" />
@@ -14,7 +14,7 @@ cover: /assets/index/cover.webp
 		<div class="navbar bg-base-100">
 			<div class="navbar-start">
 				<!-- back home -->
-				<a href="/" class="btn btn-ghost btn-circle">
+				<a aria-label="home" href="/" class="btn btn-ghost btn-circle">
 					<svg
 					  xmlns="http://www.w3.org/2000/svg"
 					  class="h-5 w-5"
@@ -39,7 +39,7 @@ cover: /assets/index/cover.webp
 			</div>
 			<div class="navbar-end">
 				<!-- search -->
-				<button class="btn btn-ghost btn-circle" onclick="searchme.showModal()">
+				<button aria-label="search" class="btn btn-ghost btn-circle" onclick="searchme.showModal()">
 					<svg
 						xmlns="http://www.w3.org/2000/svg"
 						class="h-5 w-5"
@@ -55,7 +55,7 @@ cover: /assets/index/cover.webp
 				</button>
 				<!-- categories -->
 				<div class="dropdown dropdown-end">
-					<div tabindex="0" role="button" class="btn btn-ghost btn-circle">
+					<div aria-label="categories" tabindex="0" role="button" class="btn btn-ghost btn-circle">
 						<svg
 						  xmlns="http://www.w3.org/2000/svg"
 						  class="h-5 w-5"
@@ -122,25 +122,25 @@ cover: /assets/index/cover.webp
 				</div>
 			</div>
 		</div>
-		<div class="dark:border-t dark:border-gray-700 border-t border-gray-300"></div>
+    <div class="border-t border-base-300"></div>
 		<!-- content -->
-		<div class="grid grid-cols-3 gap-0.5">
-			{% for photos in collections.photos reversed %}
-			<!-- link to post -->
-			<a href="{{ photos.url }}">
-				<!-- thumbnail -->
-				<div class="aspect-w-1 aspect-h-1">
-		  		<div class="bg-white overflow-hidden">
-						<img src="{{ photos.data.thumbnail}}" alt="Image" class="w-full h-full object-cover">
-		  		</div>
-				</div>
-			</a>
-			{% endfor %}
+		<div class="flex-grow">
+			<div class="grid grid-cols-3 gap-0.5">
+				{% for photos in collections.photos reversed %}
+				<!-- link to post -->
+				<a href="{{ photos.url }}">
+					<!-- thumbnail -->
+			  	<div class="bg-white overflow-hidden">
+						<img src="{{ photos.data.thumbnail}}" alt="Image" class="aspect-square w-full h-full object-cover">
+			  	</div>
+				</a>
+				{% endfor %}
+			</div>
 		</div>
-		<div class="dark:border-t dark:border-gray-700 border-t border-gray-300"></div>
+    <div class="border-t border-base-300"></div>
 		<!-- Footer credit -->
 	  <div class="text-center py-4">
-	    <p class="text-gray-400">© 2024 <a class="hover:text-gray-500" href="https://apoxi.cam/">Apoxicam</a>.<br>All rights reserved.</p>
+      <p>© 2024 <a class="link link-hover" href="https://apoxi.cam/">Apoxicam</a>.<br>All rights reserved.</p>
 	  </div>
 	</div>
 </div>
