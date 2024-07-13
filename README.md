@@ -21,7 +21,7 @@ Run to your localhost
 ```
 pnpm build && pnpm serve
 ```
-Modify your language first in [/_include/base.html](/_include/base.html)
+Modify your language first in [/_includes/base.html](/_includes/base.html)
 ```
 <html lang="en">
 ```
