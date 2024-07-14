@@ -137,7 +137,7 @@ eleventyComputed:
 						{% for post in collections[tag] reversed %}
 						<li class="mb-4">
 							<p class="text-xl font-bold mb-2"><a class="link link-hover" href="{{ post.url }}">{{ post.data.title }}</a></p>
-							<p class="text-md">{{ post.data.description }}</a></p>
+							<p class="text-md mb-2">{{ post.data.description }}</a></p>
 							<p class="text-sm">{{ post.data.date | date: "%a, %d %b %Y" }}</p>
 						</li>
 						{% endfor %}
