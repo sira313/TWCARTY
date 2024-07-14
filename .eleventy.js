@@ -20,7 +20,7 @@ module.exports = function(eleventyConfig) {
   // root url
   eleventyConfig.addGlobalData("rootURL", "https://twcarty.netlify.app");
 
-  // Passthrough copy untuk menyalin file statis ke output
+  // Passthrough copy asset
   eleventyConfig.addPassthroughCopy("assets");
 
   // Collection post blog
