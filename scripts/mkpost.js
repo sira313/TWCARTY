@@ -15,20 +15,20 @@ const title = process.argv.slice(3).join(" ");
 
 // check if type value is passed
 if (!type) {
-	console.error(`⚠ type is required. Either use '-b' or '-p'.\n`);
-	process.exit(1);
+    console.error(`⚠ type is required. Either use '-b' or '-p'.\n`);
+    process.exit(1);
 }
 
 // check title value passed
 if (!title) {
-	console.error(`⚠ title is required\n`);
-	process.exit(1);
+    console.error(`⚠ title is required\n`);
+    process.exit(1);
 }
 
 // check type value
 if (!["-b", "-p"].includes(type)) {
-	console.error(`⚠ type must be '-b' for blog or '-p' for photo\n`);
-	process.exit(1);
+    console.error(`⚠ type must be '-b' for blog or '-p' for photo\n`);
+    process.exit(1);
 }
 
 // map post directories with post type
@@ -47,26 +47,45 @@ const post_file = resolve(post_dirs[type], slug + ".md");
 
 // check if post file already exists
 if (existsSync(post_file)) {
-	console.error(
-		`⚠ post with slug "${slug}" already exists in "${post_dirs[type]}".\n`
-	);
-	process.exit(1);
+    console.error(
+        `⚠ post with slug "${slug}" already exists in "${post_dirs[type]}".\n`
+    );
+    process.exit(1);
 }
 
-// format frontmatter
-const frontmatter = `---
+// format frontmatter based on type
+let frontmatter = '';
+if (type === '-b') {
+    frontmatter = `---
 layout: ${post_layouts[type]}
 title: ${title.toLowerCase().replace(/(?:^|\s)\w/g, (m) => m.toUpperCase())}
 description: TODO
 keyword: TODO
-cover: TODO
-thumbnail: /assets/photos/thumbnail/
+cover: /assets/blog/
 date: ${new Date().toISOString().split("T")[0]}
-tags: TODO
+tags:
+ - TODO
 ---
 
 # TODO
 `;
+} else if (type === '-p') {
+    frontmatter = `---
+layout: ${post_layouts[type]}
+title: ${title.toLowerCase().replace(/(?:^|\s)\w/g, (m) => m.toUpperCase())}
+description: TODO
+keyword: TODO
+cover:
+  - url: /assets/photos/
+thumbnail: /assets/photos/thumbnail/
+date: ${new Date().toISOString().split("T")[0]}
+tags:
+  - TODO
+---
+
+# TODO
+`;
+}
 
 // write frontmatter to a post file
 writeFileSync(post_file, frontmatter);
