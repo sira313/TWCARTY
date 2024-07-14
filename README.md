@@ -37,7 +37,19 @@ There are 2 menus (for indexing post, not a single page) we created by default:
 - Photos
 - Blog
 
-So if you wanted to create another one, maybe [this tutorial](https://www.youtube.com/watch?v=kzf9A9tkkl4) will help.
+So if you wanted to create another one, maybe [this tutorial](https://www.youtube.com/watch?v=kzf9A9tkkl4) will help. And don't forget to add you new page to collection in [/.eleventy.js](/.eleventy.js)
+```
+// Collection post blog
+  eleventyConfig.addCollection("posts", function(collectionApi) {
+    return collectionApi.getFilteredByGlob("blog/**/*.md");
+  });
+
+// Collection post photos
+  eleventyConfig.addCollection("photos", function(collectionApi) {
+    return collectionApi.getFilteredByGlob("photos/**/*.md");
+  });
+```
+
 #### Layout
 There are 3 layouts in [/_includes](/_includes/):
 - [/_includes/base.html](/_includes/base.html) is the main layout called in other layout frontmatter.
