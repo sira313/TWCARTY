@@ -32,7 +32,8 @@ Modify your language first in [/_includes/base.html](/_includes/base.html)
 <html lang="en">
 ```
 Then your root url in [/.eleventy.js](.eleventy.js)
-```
+```javascript
+// root url for share button
 eleventyConfig.addGlobalData("rootURL", "https://twcarty.netlify.app");
 ```
 
@@ -42,7 +43,7 @@ There are 2 menus (for indexing post, not a single page) we created by default:
 - Blog
 
 So if you wanted to create another one, maybe [this tutorial](https://www.youtube.com/watch?v=kzf9A9tkkl4) will help. And don't forget to add you new page to collection in [/.eleventy.js](/.eleventy.js)
-```
+```javascript
 // Collection post blog
   eleventyConfig.addCollection("posts", function(collectionApi) {
     return collectionApi.getFilteredByGlob("blog/**/*.md");
