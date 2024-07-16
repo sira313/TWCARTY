@@ -7,6 +7,7 @@
 - Auto minify html, css, and js
 - Lazy load images
 - Using DaisyUI
+- Carousel post gallery
 
 ### Basic Info
 Better use Linux
