@@ -43,7 +43,7 @@ There are 2 menus (for indexing post, not a single page) we created by default:
 - Photos
 - Blog
 
-So if you wanted to create another one, maybe [this tutorial](https://www.youtube.com/watch?v=kzf9A9tkkl4) will help. And don't forget to add you new page to collection in [/.eleventy.js](/.eleventy.js)
+So if you wanted to create another one, maybe [this tutorial](https://www.youtube.com/watch?v=kzf9A9tkkl4) will help. And don't forget to add your new page to collection in [/.eleventy.js](/.eleventy.js)
 ```javascript
 // Collection post blog
   eleventyConfig.addCollection("posts", function(collectionApi) {
