@@ -4,6 +4,7 @@
 [![apoxi.cam](https://img.shields.io/badge/SAMPLE-apoxi.cam-blue?style=for-the-badge)](https://apoxi.cam/)
 
 Powered by:
+
 [![Eleventy](https://img.shields.io/badge/Eleventy-000000?style=for-the-badge&logo=eleventy&logoColor=white)](https://www.11ty.dev/)[![TailwindCSS](https://img.shields.io/badge/tailwindcss-%2338B2AC.svg?style=for-the-badge&logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)[![DaisyUI](https://img.shields.io/badge/daisyui-5A0EF8?style=for-the-badge&logo=daisyui&logoColor=white)](https://daisyui.com/)
 
 ---
