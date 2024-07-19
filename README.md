@@ -33,11 +33,11 @@ Run to your localhost
 ```
 pnpm build && pnpm serve
 ```
-Modify your language first in [/_includes/base.html](/_includes/base.html)
+Modify your language first in [/_includes/base.html](https://github.com/sira313/TWCARTY/blob/4a69eaa27e836443707ecb1e1a10fea311a42cba/_includes/base.html#L2)
 ```
 <html lang="en">
 ```
-Then your root url in [/.eleventy.js](.eleventy.js)
+Then your root url in [/.eleventy.js](https://github.com/sira313/TWCARTY/blob/4a69eaa27e836443707ecb1e1a10fea311a42cba/.eleventy.js#L21)
 ```javascript
 // root url for share button
 eleventyConfig.addGlobalData("rootURL", "https://twcarty.netlify.app");
@@ -48,7 +48,7 @@ There are 2 menus (for indexing post, not a single page) we created by default:
 - Photos
 - Blog
 
-So if you wanted to create another one, maybe [this tutorial](https://www.youtube.com/watch?v=kzf9A9tkkl4) will help. And don't forget to add your new page to collection in [/.eleventy.js](/.eleventy.js)
+So if you wanted to create another one, maybe [this tutorial](https://www.youtube.com/watch?v=kzf9A9tkkl4) will help. And don't forget to add your new page to collection in [/.eleventy.js](https://github.com/sira313/TWCARTY/blob/4a69eaa27e836443707ecb1e1a10fea311a42cba/.eleventy.js#L32)
 ```javascript
 // Collection post blog
   eleventyConfig.addCollection("posts", function(collectionApi) {
