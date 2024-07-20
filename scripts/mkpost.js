@@ -33,7 +33,7 @@ if (!["-b", "-p"].includes(type)) {
 
 // map post directories with post type
 /** @type {Record<Post_Type, string>} */
-const post_dirs = { "-b": "./blog", "-p": "./photos" };
+const post_dirs = { "-b": "./src/blog", "-p": "./src/photos" };
 
 // map post layouts with post type
 /** @type {Record<Post_Type, string>} */
@@ -61,7 +61,7 @@ layout: ${post_layouts[type]}
 title: ${title.toLowerCase().replace(/(?:^|\s)\w/g, (m) => m.toUpperCase())}
 description: TODO
 keyword: TODO
-cover: /assets/blog/
+cover: /src/assets/blog/
 date: ${new Date().toISOString().split("T")[0]}
 tags:
  - TODO
@@ -76,8 +76,8 @@ title: ${title.toLowerCase().replace(/(?:^|\s)\w/g, (m) => m.toUpperCase())}
 description: TODO
 keyword: TODO
 cover:
-  - url: /assets/photos/
-thumbnail: /assets/photos/thumbnail/
+  - url: /src/assets/photos/
+thumbnail: /src/assets/photos/thumbnail/
 date: ${new Date().toISOString().split("T")[0]}
 tags:
   - TODO
