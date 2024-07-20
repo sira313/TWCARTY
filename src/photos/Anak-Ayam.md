@@ -8,6 +8,7 @@ cover:
 thumbnail: /assets/photos/thumbnail/chick.jpg
 date: 2024-04-22
 tags: Hewan
+permalink: /photos/Anak-Ayam.html
 
 ---
 Adalah suatu keisengan. Di kala merenung, melihat anak ayam datang menghampiri. Langsung aja jepret dah...

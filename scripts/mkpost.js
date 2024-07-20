@@ -39,6 +39,10 @@ const post_dirs = { "-b": "./src/blog", "-p": "./src/photos" };
 /** @type {Record<Post_Type, string>} */
 const post_layouts = { "-b": "post-blog.html", "-p": "post-photos.html" };
 
+// map permalink paths with post type
+/** @type {Record<Post_Type, string>} */
+const permalink_paths = { "-b": "/blog/", "-p": "/photos/" };
+
 // create slug from title that sliced to 5 words
 const slug = title.toLocaleLowerCase().split(/\s+/g).slice(0, 5).join("-");
 
@@ -65,6 +69,7 @@ cover: /src/assets/blog/
 date: ${new Date().toISOString().split("T")[0]}
 tags:
  - TODO
+permalink: ${permalink_paths[type]}${slug}.html
 ---
 
 # TODO
@@ -81,6 +86,7 @@ thumbnail: /src/assets/photos/thumbnail/
 date: ${new Date().toISOString().split("T")[0]}
 tags:
   - TODO
+permalink: ${permalink_paths[type]}${slug}.html
 ---
 
 # TODO

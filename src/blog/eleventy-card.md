@@ -6,6 +6,7 @@ keyword: Eleventy, Bulma
 date: 2024-05-02
 tags:
  - Hello World
+permalink: /blog/eleventy-card.html
 ---
 Eleventy Card is a starter project for photographer/artist showing their work and blog randomly. I use `*.html` for default layout cause i don't understand nunjucks or any other. Everything i wrote to build this template is just copy paste, so...
 >I apologize for any shortcomings as I am not a coder by background.
