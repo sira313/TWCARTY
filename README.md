@@ -68,9 +68,9 @@ There are 3 layouts in [/src/_includes](/src/_includes/):
 - [/src/_includes/post-photos.html](/src/_includes/post-photos.html) is photos post layout.
 #### Index
 There are 3 indexs in this project
-- [/index.md](/src/index.md) where you describe your own business.
-- [/photos/index.html](/src/photos/index.html) is the index of all your photos.
-- [/blog/index.html](/src/blog/index.html) is the index of your blog.
+- [/src/index.md](/src/index.md) where you describe your own business.
+- [/src/photos/index.html](/src/photos/index.html) is the index of all your photos.
+- [/src/blog/index.html](/src/blog/index.html) is the index of your blog.
 #### Post
 We created a js script to make a post automatically, so you don't need to do that manual. [Thanks to my friend](https://github.com/mustofa-id).
 
@@ -85,6 +85,6 @@ And if you wanted to create a post in `/photos` you just need to
 pnpm mkpost -p Your post title
 ```
 #### Asset
-All assets are in [/assets](/assets/) directory and called in the frontmatter.
+All assets are in [/src/assets](/src/assets/) directory and called in the frontmatter.
 #### Tips
 Better use [Squoosh](https://squoosh.app/) to convert your pics to webp
