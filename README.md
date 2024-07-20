@@ -61,7 +61,7 @@ src
 │   └── warkop.md
 └── styles.css
 ```
-Modify your language first in [/_includes/base.html](https://github.com/sira313/TWCARTY/blob/4a69eaa27e836443707ecb1e1a10fea311a42cba/_includes/base.html#L2)
+Modify your language first in [/src/_includes/base.html](https://github.com/sira313/TWCARTY/blob/4a69eaa27e836443707ecb1e1a10fea311a42cba/_includes/base.html#L2)
 ```
 <html lang="en">
 ```
