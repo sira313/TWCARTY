@@ -10,7 +10,7 @@
   <title>{{ title }}</title>
   <meta property="og:title" content="{{ title }}">
   {% if cover %}
-    <meta property="og:image" content="{{ rootURL }}{{ cover }}">
+    <meta property="og:image" content="{{ rootURL }}{{ cover | firstCoverImage }}">
   {% else %}
     <meta property="og:image" content="{{ rootURL }}/assets/index/cover.webp">
   {% endif %}
@@ -18,7 +18,7 @@
   <meta name="twitter:title" content="{{ title }}">
   <meta name="twitter:description" id="twitter-description" content="{{ description }}">
   {% if cover %}
-    <meta name="twitter:image" content="{{ rootURL }}{{ cover }}">
+    <meta name="twitter:image" content="{{ rootURL }}{{ cover | firstCoverImage }}">
   {% else %}
     <meta name="twitter:image" content="{{ rootURL }}/assets/index/cover.webp">
   {% endif %}
