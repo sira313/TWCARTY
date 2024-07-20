@@ -1,5 +1,6 @@
 ## TWCARTY
-#### A starter project for photographer/artist showing their work and blog randomly
+A starter project for photographer/artist showing their work and blog randomly
+
 [![twcarty.netlify.app](https://img.shields.io/badge/LIVE-twcarty.netlify.app-blue?style=for-the-badge)](https://twcarty.netlify.app/)
 
 [![apoxi.cam](https://img.shields.io/badge/SAMPLE-apoxi.cam-blue?style=for-the-badge)](https://apoxi.cam/)
