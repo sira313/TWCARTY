@@ -62,15 +62,15 @@ So if you wanted to create another one, maybe [this tutorial](https://www.youtub
 ```
 
 #### Layout
-There are 3 layouts in [/_includes](/_includes/):
-- [/_includes/base.html](/_includes/base.html) is the main layout called in other layout frontmatter.
-- [/_includes/post-blog.html](/_includes/post-blog.html) is for blog post layout.
-- [/_includes/post-photos.html](/_includes/post-photos.html) is photos post layout.
+There are 3 layouts in [/src/_includes](/src/_includes/):
+- [/src/_includes/base.html](/src/_includes/base.html) is the main layout called in other layout frontmatter.
+- [/src/_includes/post-blog.html](/src/_includes/post-blog.html) is for blog post layout.
+- [/src/_includes/post-photos.html](/src/_includes/post-photos.html) is photos post layout.
 #### Index
 There are 3 indexs in this project
-- [/index.md](/index.md) where you describe your own business.
-- [/photos/index.html](/photos/index.html) is the index of all your photos.
-- [/blog/index.html](/blog/index.html) is the index of your blog.
+- [/index.md](/src/index.md) where you describe your own business.
+- [/photos/index.html](/src/photos/index.html) is the index of all your photos.
+- [/blog/index.html](/src/blog/index.html) is the index of your blog.
 #### Post
 We created a js script to make a post automatically, so you don't need to do that manual. [Thanks to my friend](https://github.com/mustofa-id).
 
