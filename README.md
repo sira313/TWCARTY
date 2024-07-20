@@ -37,38 +37,29 @@ pnpm build && pnpm serve
 ```
 Directory Tree
 ```
-.
-├── LICENSE
-├── package.json
-├── pnpm-lock.yaml
-├── postcss.config.js
-├── README.md
-├── scripts
-│   └── mkpost.js
-├── src
-│   ├── assets
-│   │   ├── index
-│   │   │   └── cover.webp
-│   │   └── photos
-│   │       ├── thumbnail
-│   │       │   └── warkop.jpg
-│   │       └── warkop.jpg
-│   ├── blog
-│   │   ├── eleventy-card.md
-│   │   ├── index.html
-│   │   └── tag.html
-│   ├── _includes
-│   │   ├── base.html
-│   │   ├── index.html
-│   │   ├── post-blog.html
-│   │   └── post-photos.html
-│   ├── index.md
-│   ├── photos
-│   │   ├── index.html
-│   │   ├── tag.html
-│   │   └── warkop.md
-│   └── styles.css
-└── tailwind.config.js
+src
+├── assets
+│   ├── index
+│   │   └── cover.webp
+│   └── photos
+│       ├── thumbnail
+│       │   └── warkop.jpg
+│       └── warkop.jpg
+├── blog
+│   ├── eleventy-card.md
+│   ├── index.html
+│   └── tag.html
+├── _includes
+│   ├── base.html
+│   ├── index.html
+│   ├── post-blog.html
+│   └── post-photos.html
+├── index.md
+├── photos
+│   ├── index.html
+│   ├── tag.html
+│   └── warkop.md
+└── styles.css
 ```
 Modify your language first in [/_includes/base.html](https://github.com/sira313/TWCARTY/blob/4a69eaa27e836443707ecb1e1a10fea311a42cba/_includes/base.html#L2)
 ```
