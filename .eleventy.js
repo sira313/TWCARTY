@@ -3,6 +3,14 @@ const eleventyPluginFilesMinifier = require("@sherby/eleventy-plugin-files-minif
 const lazyImagesPlugin = require('eleventy-plugin-lazyimages');
 
 module.exports = function(eleventyConfig) {
+  // cover for meta tag
+  eleventyConfig.addFilter("firstCoverImage", function(cover) {
+    if (Array.isArray(cover) && cover.length > 0) {
+      return cover[0].url;
+    }
+    return cover;
+  });
+
   // lazyimages
   eleventyConfig.addPlugin(lazyImagesPlugin);
 
