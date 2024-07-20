@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build:css": "tailwindcss -i styles.css -o _site/assets/css/style.css --minify",
-    "watch:css": "tailwindcss -i styles.css -o _site/assets/css/style.css --watch",
+    "build:css": "tailwindcss -i src/styles.css -o _site/assets/css/style.css --minify",
+    "watch:css": "tailwindcss -i src/styles.css -o _site/assets/css/style.css --watch",
     "build": "pnpm build:css && eleventy",
     "serve": "pnpm build:css && eleventy --serve",
     "watch": "pnpm watch:css & eleventy --serve",

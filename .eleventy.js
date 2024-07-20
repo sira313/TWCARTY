@@ -1,4 +1,4 @@
-const { execSync } = require('child_process')
+const { execSync } = require('child_process');
 const eleventyPluginFilesMinifier = require("@sherby/eleventy-plugin-files-minifier");
 const lazyImagesPlugin = require('eleventy-plugin-lazyimages');
 
@@ -8,11 +8,11 @@ module.exports = function(eleventyConfig) {
 
   // minifier
   eleventyConfig.addPlugin(eleventyPluginFilesMinifier);
-  
+
   // pagefind
   eleventyConfig.on('eleventy.after', () => {
-		execSync(`npx -y pagefind --site _site --output-subdir _pagefind`, { encoding: 'utf-8' })
-	})
+    execSync(`npx -y pagefind --site _site --output-subdir _pagefind`, { encoding: 'utf-8' });
+  });
 
   // tailwind
   eleventyConfig.addWatchTarget("tailwind.config.js");
@@ -21,16 +21,25 @@ module.exports = function(eleventyConfig) {
   eleventyConfig.addGlobalData("rootURL", "https://twcarty.netlify.app");
 
   // Passthrough copy asset
-  eleventyConfig.addPassthroughCopy("assets");
+  eleventyConfig.addPassthroughCopy({ "src/assets": "assets" });
+
+  // Passthrough copy robots.txt
+  eleventyConfig.addPassthroughCopy({ "src/robots.txt": "robots.txt" });
+
+  // Passthrough copy 404.html
+  eleventyConfig.addPassthroughCopy({ "src/404.html": "404.html" });
+
+  // Passthrough copy styles.css
+  eleventyConfig.addPassthroughCopy({ "src/styles.css": "styles.css" });
 
   // Collection post blog
   eleventyConfig.addCollection("posts", function(collectionApi) {
-    return collectionApi.getFilteredByGlob("blog/**/*.md");
+    return collectionApi.getFilteredByGlob("src/blog/**/*.md");
   });
 
   // Collection post photos
   eleventyConfig.addCollection("photos", function(collectionApi) {
-    return collectionApi.getFilteredByGlob("photos/**/*.md");
+    return collectionApi.getFilteredByGlob("src/photos/**/*.md");
   });
 
   // Collection tags
@@ -53,4 +62,13 @@ module.exports = function(eleventyConfig) {
       return Array.from(tagsSet);
     };
   }
+
+  return {
+    dir: {
+      input: "src",
+      includes: "_includes",
+      data: "_data",
+      output: "_site"
+    }
+  };
 };

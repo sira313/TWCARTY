@@ -1,6 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: ["./**/*.{html,njk,md}"],
+  content: ["./src/**/*.{html,njk,md}"],
   theme: {
     extend: {
       screens: {
@@ -13,4 +13,3 @@ module.exports = {
     require('daisyui'),
   ],
 }
-
