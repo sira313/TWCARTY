@@ -9,6 +9,7 @@ Powered by:
 [![Eleventy](https://img.shields.io/badge/Eleventy-000000?style=for-the-badge&logo=eleventy&logoColor=white)](https://www.11ty.dev/)[![TailwindCSS](https://img.shields.io/badge/tailwindcss-%2338B2AC.svg?style=for-the-badge&logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)[![DaisyUI](https://img.shields.io/badge/daisyui-5A0EF8?style=for-the-badge&logo=daisyui&logoColor=white)](https://daisyui.com/)
 
 ---
+
 ### Features
 - Auto minify html, css, and js
 - Lazy load images
@@ -33,6 +34,61 @@ pnpm install
 Run to your localhost 
 ```
 pnpm build && pnpm serve
+```
+Directory Tree
+```
+.
+├── LICENSE
+├── package.json
+├── pnpm-lock.yaml
+├── postcss.config.js
+├── README.md
+├── scripts
+│   └── mkpost.js
+├── src
+│   ├── assets
+│   │   ├── index
+│   │   │   ├── cover.webp
+│   │   │   ├── favicon.ico
+│   │   │   ├── profile.webp
+│   │   │   └── waduh.webp
+│   │   └── photos
+│   │       ├── chick.jpg
+│   │       ├── daun.jpg
+│   │       ├── kupu-kupu.jpg
+│   │       ├── motor.jpg
+│   │       ├── thumbnail
+│   │       │   ├── chick.jpg
+│   │       │   ├── daun.jpg
+│   │       │   ├── kupu-kupu.jpg
+│   │       │   ├── motor.jpg
+│   │       │   ├── toko.jpg
+│   │       │   └── warkop.jpg
+│   │       ├── toko.jpg
+│   │       └── warkop.jpg
+│   ├── blog
+│   │   ├── eleventy-card.md
+│   │   ├── how-to-post-in-blog.md
+│   │   ├── how-to-post-to-photos.md
+│   │   ├── index.html
+│   │   └── tag.html
+│   ├── _includes
+│   │   ├── base.html
+│   │   ├── index.html
+│   │   ├── post-blog.html
+│   │   └── post-photos.html
+│   ├── index.md
+│   ├── photos
+│   │   ├── Anak-Ayam.md
+│   │   ├── daun.md
+│   │   ├── index.html
+│   │   ├── kupu-kupu.md
+│   │   ├── motor.md
+│   │   ├── tag.html
+│   │   ├── Toko.md
+│   │   └── warkop.md
+│   └── styles.css
+└── tailwind.config.js
 ```
 Modify your language first in [/_includes/base.html](https://github.com/sira313/TWCARTY/blob/4a69eaa27e836443707ecb1e1a10fea311a42cba/_includes/base.html#L2)
 ```
