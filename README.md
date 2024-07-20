@@ -48,28 +48,13 @@ Directory Tree
 ├── src
 │   ├── assets
 │   │   ├── index
-│   │   │   ├── cover.webp
-│   │   │   ├── favicon.ico
-│   │   │   ├── profile.webp
-│   │   │   └── waduh.webp
+│   │   │   └── cover.webp
 │   │   └── photos
-│   │       ├── chick.jpg
-│   │       ├── daun.jpg
-│   │       ├── kupu-kupu.jpg
-│   │       ├── motor.jpg
 │   │       ├── thumbnail
-│   │       │   ├── chick.jpg
-│   │       │   ├── daun.jpg
-│   │       │   ├── kupu-kupu.jpg
-│   │       │   ├── motor.jpg
-│   │       │   ├── toko.jpg
 │   │       │   └── warkop.jpg
-│   │       ├── toko.jpg
 │   │       └── warkop.jpg
 │   ├── blog
 │   │   ├── eleventy-card.md
-│   │   ├── how-to-post-in-blog.md
-│   │   ├── how-to-post-to-photos.md
 │   │   ├── index.html
 │   │   └── tag.html
 │   ├── _includes
@@ -79,13 +64,8 @@ Directory Tree
 │   │   └── post-photos.html
 │   ├── index.md
 │   ├── photos
-│   │   ├── Anak-Ayam.md
-│   │   ├── daun.md
 │   │   ├── index.html
-│   │   ├── kupu-kupu.md
-│   │   ├── motor.md
 │   │   ├── tag.html
-│   │   ├── Toko.md
 │   │   └── warkop.md
 │   └── styles.css
 └── tailwind.config.js
