@@ -12,6 +12,7 @@ Powered by:
 ---
 
 ### Features
+- Responsive
 - Auto minify html, css, and js
 - Lazy load images
 - Using DaisyUI
