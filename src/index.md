@@ -9,7 +9,7 @@ profile: /assets/index/profile.webp
 ---
 
 #### Hello World
-I used Eleventy to create this website because I find it the easiest Static Site Generator (SSG) to understand, especially with its support for using `*.html` for layout. I chose DaisyUI as the CSS framework because its simple tutorials matched my level as a beginner.  As for the icons, I opted for Feathericons simply because I like that it's open source.
+I used Eleventy to create this website because I find it the easiest Static Site Generator (SSG) to understand, especially with its support for using `*.html` for layout. I chose DaisyUI as the CSS framework because its simple tutorials matched my level as a beginner. 
 The source code of this starter is available on [GitHub](https://github.com/sira313/twcarty).
 >I apologize for any shortcomings as I am not a coder by background.
 #### Eleventy
