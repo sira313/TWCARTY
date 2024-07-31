@@ -6,7 +6,7 @@ cover: /assets/index/cover.webp
 permalink: /blog.html
 ---
 <div class="sm:container m-0 p-0 sm:mx-auto sm:p-4 md:p-10">
-	<div class="card rounded-none sm:rounded-xl bg-base-100 shadow-xl w-full md:max-w-3xl mx-auto min-h-screen sm:min-h-min flex flex-col sm:flex-none">
+	<div class="the-card">
 		<!-- cover -->
 	  <figure>
 	    <img src="{{ cover }}" alt="cover" />
@@ -36,7 +36,7 @@ permalink: /blog.html
 				</a>
 			</div>
 			<div class="navbar-center">
-				<div class="text-md font-bold">{{ title }}</div>
+				<div class="text-md sm:text-lg md:text-lg font-bold">{{ title }}</div>
 			</div>
 			<div class="navbar-end">
 				<!-- search -->
@@ -125,20 +125,22 @@ permalink: /blog.html
 		</div>
     <div class="border-t border-base-300"></div>
 		<!-- content -->
-		<div class="flex-grow">
-	  	<div class="card-body pt-4 tn:pt-8">
+		<div class="card-body">
+			<div class="flex-grow">
 				<div class="w-full">
-					<ul>
+					<ul class="grup flex flex-col gap-4">
 						{% for post in collections.posts reversed %}
-						<li class="mb-4">
-							<p class="text-xl font-bold mb-2"><a class="link link-hover" href="{{ post.url }}">{{ post.data.title }}</a></p>
-							<p class="text-md mb-2">{{ post.data.description }}</a></p>
+						<li>
+							<p class="text-md sm:text-lg font-bold mb-2">
+								<a class="link link-hover" href="{{ post.url }}">{{ post.data.title }}</a>
+							</p>
+							<p class="text-sm sm:text-md mb-2">{{ post.data.description }}</p>
 							<p class="text-sm">{{ post.data.date | date: "%a, %d %b %Y" }}</p>
 						</li>
 						{% endfor %}
 					</ul>
 				</div>
-	  	</div>
+			</div>
 		</div>
     <div class="border-t border-base-300"></div>
 		<!-- Footer credit -->

@@ -1,17 +1,19 @@
 <!doctype html>
-<html lang="en">
+<html lang="id">
 <head>
   <meta charset="utf-8">
   <meta name="description" content="{{ description }}">
+  <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#1f1f1f" media="(prefers-color-scheme: dark)">
   <meta name="keyword" content="{{ keyword }}">
   <meta name="author" content="{{ author }}">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="generator" content="Eleventy">
   <link rel="icon" type="image/x-icon" href="{{ rootURL }}/assets/index/favicon.ico">
   <title>{{ title }}</title>
+  <meta name="google-site-verification" content="y5Sbw5uym2mSr3t1VKAYwZl24Nc5yTYUhefvBIkAkUk" />
   <meta property="og:title" content="{{ title }}">
   {% if cover %}
-    <meta property="og:image" content="{{ rootURL }}{{ cover | firstCoverImage }}">
+  <meta property="og:image" content="{{ rootURL }}{{ cover | firstCoverImage }}">
   {% else %}
     <meta property="og:image" content="{{ rootURL }}/assets/index/cover.webp">
   {% endif %}
@@ -28,22 +30,23 @@
   <link href="/_pagefind/pagefind-ui.css" rel="stylesheet">
   <style>
     :root {
-      --pagefind-ui-primary: oklch(var(--n));
-      --pagefind-ui-text: #313336;
-      --pagefind-ui-background: oklch(var(--nc));
-      --pagefind-ui-border: oklch(var(--b2));
-      --pagefind-ui-tag: oklch(var(--p));
+      --pagefind-ui-primary: #161516;
+      --pagefind-ui-text: #161516;
+      --pagefind-ui-background: #dedede;
+      --pagefind-ui-border: #dedede;
+      --pagefind-ui-tag: #d35728;
     }
+  
     @media (prefers-color-scheme: dark) {
       :root {
-        --pagefind-ui-primary: oklch(var(--nc));
-        --pagefind-ui-text: oklch(var(--nc));
-        --pagefind-ui-background: oklch(var(--b3));
-        --pagefind-ui-border: oklch(var(--b3));
-        --pagefind-ui-tag: oklch(var(--p));
+        --pagefind-ui-primary: #d0d0d0;
+        --pagefind-ui-text: #d0d0d0;
+        --pagefind-ui-background: #0e0e0e;
+        --pagefind-ui-border: #0e0e0e;
+        --pagefind-ui-tag: #d35728;
       }
     }
-  </style>
+  </style>  
 </head>
 <body class="bg-base-200" data-pagefind-body>
   <div class="sm:hero min-h-screen">
@@ -63,6 +66,9 @@
   <!-- share modal -->
   <dialog id="share" class="modal">
     <div class="modal-box">
+      <div role="alert" class="alert mb-4">
+        <span>System anda tidak support web share API. Silahkan tekan tombol copy di bawah ini.</span>
+      </div>
       <div class="flex items-center">
         <input
           type="text"
@@ -72,13 +78,13 @@
           aria-label="link"
           disabled/>
         <button 
-          class="btn btn-primary ml-2" 
+          class="btn btn-primary" 
           onclick="copyToClipboard()">
           Copy
         </button>
       </div>
     </div>
-    <form method="dialog" class="modal-backdrop">>
+    <form method="dialog" class="modal-backdrop">
       <button>close</button>
     </form>
   </dialog>

@@ -11,7 +11,7 @@ eleventyComputed:
   title: "{{ tag }}"
 ---
 <div class="sm:container m-0 p-0 sm:mx-auto sm:p-4 md:p-10">
-	<div class="card rounded-none sm:rounded-xl bg-base-100 shadow-xl w-full md:max-w-3xl mx-auto min-h-screen sm:min-h-min flex flex-col sm:flex-none">
+	<div class="the-card">
 		<!-- cover -->
 	  <figure>
 	    <img src="{{ cover }}" alt="cover" />
@@ -41,7 +41,7 @@ eleventyComputed:
 				</a>
 			</div>
 			<div class="navbar-center">
-				<div class="text-md font-bold">{{ title }}</div>
+				<div class="text-md sm:text-lg md:text-lg font-bold">{{ title }}</div>
 			</div>
 			<div class="navbar-end">
 				<!-- search -->

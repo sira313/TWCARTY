@@ -1,3 +1,18 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+/* styles.css */
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+@layer utilities {
+  .prose kbd {
+    @apply text-base-content; /* kbd follow daisyUI style not prose */
+  }
+}
+@layer components {
+  .the-card {
+    @apply card rounded-none sm:rounded-xl bg-base-100 shadow-xl w-full md:max-w-3xl 2xl:max-w-4xl mx-auto min-h-screen sm:min-h-min flex flex-col sm:flex-none;
+  }
+  .the-photos-card {
+    @apply card rounded-none sm:rounded-xl bg-base-100 shadow-xl w-full md:max-w-3xl 2xl:max-w-4xl mx-auto sm:card-side min-h-screen sm:max-h-[500px] sm:min-h-[500px] 2xl:max-h-[600px] 2xl:min-h-[600px] flex flex-col;
+  }
+}
