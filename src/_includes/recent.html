@@ -1,0 +1,58 @@
+<!-- Recent Photos -->
+<div class="not-prose mb-10">
+  <div class="card bg-base-200 rounded-xl overflow-hidden">
+    <!-- navbar -->
+	  <div class="navbar py-0 px-4">
+      <div class="navbar-start">
+        <div class="text-md sm:text-lg font-bold">
+          Recent Photos
+        </div>
+      </div>
+      <div class="navbar-end">
+        <div class="text-md sm:text-lg font-bold">
+          <a href="/photos.html">
+            <button aria-label="View Photos" class="btn btn-outline btn-sm">Photos</button>
+          </a>
+        </div>
+      </div>
+    </div>
+    <!-- content -->
+    <div class="grid sm:grid-cols-2 gap-0">
+      {% for photos in collections.recentPhotos %}
+      <!-- link to post -->
+      <a href="{{ photos.url }}" class="bg-white overflow-hidden rounded-xl">
+        <!-- thumbnail -->
+        <img src="{{ photos.data.thumbnail }}" alt="Image" class="aspect-square w-full h-full object-cover transition duration-300 ease-in-out hover:opacity-60">
+      </a>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+<!-- Recent Blog -->
+<div class="not-prose bg-base-200 rounded-xl mb-10">
+	<!-- navbar -->
+	<div class="navbar py-0 px-4">
+    <div class="navbar-start">
+      <div class="text-md sm:text-lg font-bold">
+        Recent Blog
+      </div>
+    </div>
+    <div class="navbar-end">
+      <div class="text-md sm:text-lg font-bold">
+        <a href="/blog.html"><button aria-label="View Blog" class="btn btn-outline btn-sm">Blog</button></a>
+      </div>
+    </div>
+  </div>
+  <div class="border-t border-base-100"></div>
+	<!-- content -->
+  <div class="mt-2 px-4 flex flex-col gap-2">
+		{% for post in collections.recentPosts %}
+			<p class="text-md sm:text-lg font-bold mb-2">
+				<a class="link link-hover" href="{{ post.url }}">{{ post.data.title }}</a>
+			</p>
+			<p class="text-sm sm:text-md mb-2">{{ post.data.description }}</p>
+			<p class="text-sm">{{ post.data.date | date: "%a, %d %b %Y" }}</p>
+		{% endfor %}
+	</div>
+</div>
