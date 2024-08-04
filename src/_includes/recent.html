@@ -46,9 +46,9 @@
     </div>
     <div class="border-t border-base-100"></div>
     <!-- content -->
-    <div class="p-4 flex flex-col">
+    <div class="px-4 py-2 flex flex-col gap-1">
       {% for post in collections.recentPosts %}
-      <div class="py-2">
+      <div>
         <p class="text-lg font-bold mb-2">
           <a class="link link-hover block" href="{{ post.url }}">{{ post.data.title }}</a>
         </p>
