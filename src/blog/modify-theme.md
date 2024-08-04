@@ -1,11 +1,11 @@
 ---
 layout: post-blog.html
 title: Modify Theme
-description: TODO
-keyword: TODO
+description: To change the default colors on this site, you can use the DaisyUI Theme Generator or manually customize them to suit your preferences.
+keyword: Daisyui, theme generator, tailwindcss
 date: 2024-08-04
 tags:
- - TODO
+ - Tutorial
 permalink: /blog/modify-theme.html
 ---
 
