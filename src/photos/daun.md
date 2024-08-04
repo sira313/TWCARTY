@@ -5,7 +5,7 @@ description: hac habitasse platea dictumst. Nunc hendrerit ultrices lectus, sed 
 keyword: Habitase, dictumst
 cover: 
   - url: /assets/photos/daun.jpg
-  - url: /assets/photos/chick.jpg
+  - url: /assets/photos/daun2.jpg
 thumbnail: /assets/photos/thumbnail/daun.jpg
 date: 2024-04-23
 tags: Tumbuhan

@@ -5,7 +5,7 @@ description: In hac habitasse platea dictumst. Nunc hendrerit ultrices lectus, s
 keyword: Cursus, eget
 cover: 
   - url: /assets/photos/motor.jpg
-  - url: /assets/photos/chick.jpg
+  - url: /assets/photos/motor2.jpg
 thumbnail: /assets/photos/thumbnail/motor.jpg
 date: 2024-04-25
 tags: Kendaraan

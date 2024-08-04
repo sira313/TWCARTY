@@ -50,6 +50,16 @@ module.exports = function(eleventyConfig) {
     return collectionApi.getFilteredByGlob("src/photos/**/*.md");
   });
 
+  // Recent post blog
+  eleventyConfig.addCollection("recentPosts", function(collectionApi) {
+    return collectionApi.getFilteredByGlob("src/blog/*.md").reverse().slice(0, 3);
+  });
+
+  // Recent post photos
+  eleventyConfig.addCollection("recentPhotos", function(collectionApi) {
+    return collectionApi.getFilteredByGlob("src/photos/*.md").reverse().slice(0, 4);
+  });
+
   // Collection tags
   eleventyConfig.addCollection("blogTags", getTags("blog"));
   eleventyConfig.addCollection("photosTags", getTags("photos"));

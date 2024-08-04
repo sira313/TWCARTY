@@ -5,7 +5,7 @@ description: Vivamus quis ipsum at sapien vestibulum tincidunt. Maecenas quis li
 keyword: Vivamus, Ipsum, Sapien
 cover: 
   - url: /assets/photos/toko.jpg
-  - url: /assets/photos/chick.jpg
+  - url: /assets/photos/toko2.jpg
 thumbnail: /assets/photos/thumbnail/toko.jpg
 date: 2024-04-26
 tags: Interior

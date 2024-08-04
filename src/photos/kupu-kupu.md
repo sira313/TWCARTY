@@ -5,7 +5,7 @@ description: In hac habitasse platea dictumst. Nunc hendrerit ultrices lectus, s
 keyword: Butterfly, photo
 cover: 
   - url: /assets/photos/kupu-kupu.jpg
-  - url: /assets/photos/chick.jpg
+  - url: /assets/photos/kupu-kupu2.jpg
 thumbnail: /assets/photos/thumbnail/kupu-kupu.jpg
 date: 2024-04-24
 tags: Hewan

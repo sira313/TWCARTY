@@ -5,7 +5,7 @@ description: n hac habitasse platea dictumst. Nunc hendrerit ultrices lectus, se
 keyword: habitase, platea, nunc
 cover: 
   - url: /assets/photos/warkop.jpg
-  - url: /assets/photos/chick.jpg
+  - url: /assets/photos/warkop2.jpg
 thumbnail: /assets/photos/thumbnail/warkop.jpg
 date: 2024-04-27
 tags: Interior

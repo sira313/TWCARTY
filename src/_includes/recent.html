@@ -1,0 +1,61 @@
+<div class="not-prose">
+  <!-- Recent Photos -->
+  <div class="mb-10">
+    <div class="card h-1/2 bg-base-200 rounded-xl overflow-hidden">
+      <!-- navbar -->
+  	  <div class="navbar py-0 px-4">
+        <div class="navbar-start">
+          <div class="text-md font-bold">
+            Recent Photos
+          </div>
+        </div>
+        <div class="navbar-end">
+          <a href="/photos.html">
+            <button aria-label="Lihat photos" class="btn btn-outline btn-sm">Photos</button>
+          </a>
+        </div>
+      </div>
+      <!-- content -->
+      <div class="carousel carousel-center">
+        {% for photos in collections.recentPhotos %}
+        <!-- link to post -->
+        <div class="carousel-item">
+          <a href="{{ photos.url }}">
+            <!-- thumbnail -->
+            <img src="{{ photos.data.thumbnail }}" alt="Image" class="aspect-square h-80 w-auto object-cover duration-300 ease-in-out hover:opacity-60">
+          </a>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+  <!-- Recent Blog -->
+  <div class="bg-base-200 rounded-xl">
+  	<!-- navbar -->
+  	<div class="navbar py-0 px-4">
+      <div class="navbar-start">
+        <div class="text-md font-bold">
+          Recent Blog
+        </div>
+      </div>
+      <div class="navbar-end">
+        <a href="/blog.html">
+          <button aria-label="Lihat blog" class="btn btn-outline btn-sm">Blog</button>
+        </a>
+      </div>
+    </div>
+    <div class="border-t border-base-100"></div>
+  	<!-- content -->
+    <div class="px-4 flex flex-col gap-2">
+  		{% for post in collections.recentPosts %}
+      <div>
+  			<p class="text-md sm:text-lg font-bold mb-2">
+  				<a class="link link-hover" href="{{ post.url }}">{{ post.data.title }}</a>
+  			</p>
+  			<p class="text-sm sm:text-md mb-2">{{ post.data.description }}</p>
+  			<p class="text-sm">{{ post.data.date | date: "%a, %d %b %Y" }}</p>
+      </div>
+  		{% endfor %}
+  	</div>
+  </div>
+</div>
