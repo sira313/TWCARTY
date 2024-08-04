@@ -3,7 +3,7 @@
   <div class="mb-10">
     <div class="card h-1/2 bg-base-200 rounded-xl overflow-hidden">
       <!-- navbar -->
-      <div class="navbar sm:py-0 sm:px-4">
+      <div class="navbar pl-4 sm:px-4">
         <div class="navbar-start">
           <div class="text-md font-bold">
             Recent Photos
@@ -20,7 +20,7 @@
         {% for photos in collections.recentPhotos %}
         <!-- link to post -->
         <div class="carousel-item">
-          <a href="{{ photos.url }}" class="block"> <!-- Adding padding here -->
+          <a href="{{ photos.url }}" class="block">
             <!-- thumbnail -->
             <img src="{{ photos.data.thumbnail }}" alt="Image" class="aspect-square h-80 w-auto object-cover duration-300 ease-in-out hover:opacity-60">
           </a>
@@ -32,7 +32,7 @@
   <!-- Recent Blog -->
   <div class="bg-base-200 rounded-xl">
     <!-- navbar -->
-    <div class="navbar sm:py-0 sm:px-4">
+    <div class="navbar pl-4 sm:px-4">
       <div class="navbar-start">
         <div class="text-md font-bold">
           Recent Blog
@@ -46,11 +46,11 @@
     </div>
     <div class="border-t border-base-100"></div>
     <!-- content -->
-    <div class="p-2 sm:p-4 flex flex-col">
+    <div class="p-4 flex flex-col">
       {% for post in collections.recentPosts %}
-      <div class="py-2"> <!-- Adding padding here -->
+      <div class="py-2">
         <p class="text-lg font-bold mb-2">
-          <a class="link link-hover block" href="{{ post.url }}">{{ post.data.title }}</a> <!-- Make the link a block element -->
+          <a class="link link-hover block" href="{{ post.url }}">{{ post.data.title }}</a>
         </p>
         <p class="text-sm sm:text-md mb-2">{{ post.data.description }}</p>
         <p class="text-sm">{{ post.data.date | date: "%a, %d %b %Y" }}</p>
