@@ -49,7 +49,7 @@
     <div class="p-2 sm:p-4 flex flex-col">
       {% for post in collections.recentPosts %}
       <div class="py-2"> <!-- Adding padding here -->
-        <p class="text-lg font-bold mb-4">
+        <p class="text-lg font-bold mb-2">
           <a class="link link-hover block" href="{{ post.url }}">{{ post.data.title }}</a> <!-- Make the link a block element -->
         </p>
         <p class="text-sm sm:text-md mb-2">{{ post.data.description }}</p>
