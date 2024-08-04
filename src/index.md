@@ -1,6 +1,6 @@
 ---
 layout: index.html
-title: Eleventy Card
+title: TWCARTY
 description: Eleventy starter for photographer/artist
 keyword: photography, camera, blog
 author: John Doe
