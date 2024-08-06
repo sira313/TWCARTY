@@ -1,17 +1,50 @@
 <div class="not-prose">
   <!-- Recent Photos -->
   <div class="mb-10">
-    <div class="card h-1/2 bg-base-200 rounded-xl overflow-hidden">
+    <div class="card bg-base-200 h-1/2 rounded-xl overflow-hidden">
       <!-- navbar -->
-      <div class="navbar pl-4 sm:px-4">
+      <div class="navbar pl-4">
         <div class="navbar-start">
           <div class="text-md font-bold">
             Recent Photos
           </div>
         </div>
         <div class="navbar-end">
-          <a href="/photos.html" class="block">
-            <button aria-label="view photos" class="btn btn-outline sm:btn-sm">Photos</button>
+          <!-- button view Photos -->
+          <a aria-label="See All Photos" href="/photos.html" class="btn btn-ghost btn-circle">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-5 w-5"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor">
+              <polyline
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                points="15 3 21 3 21 9"></polyline>
+              <polyline
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                points="9 21 3 21 3 15"></polyline>
+              <line
+                x1="21"
+                y1="3"
+                x2="14"
+                y2="10"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"></line>
+              <line
+                x1="3"
+                y1="21"
+                x2="10"
+                y2="14"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"></line>
+            </svg>
           </a>
         </div>
       </div>
@@ -30,21 +63,53 @@
     </div>
   </div>
   <!-- Recent Blog -->
-  <div class="bg-base-200 rounded-xl">
+  <div class="card bg-base-200 rounded-xl overflow-hidden">
     <!-- navbar -->
-    <div class="navbar pl-4 sm:px-4">
+    <div class="navbar pl-4 border-b border-base-100">
       <div class="navbar-start">
         <div class="text-md font-bold">
           Recent Blog
         </div>
       </div>
       <div class="navbar-end">
-        <a href="/blog.html" class="block">
-          <button aria-label="View blog" class="btn btn-outline sm:btn-sm">Blog</button>
+        <!-- button view Blog -->
+        <a aria-label="View All Blog" href="/blog.html" class="btn btn-ghost btn-circle">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-5 w-5"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor">
+            <polyline
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              points="15 3 21 3 21 9"></polyline>
+            <polyline
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              points="9 21 3 21 3 15"></polyline>
+            <line
+              x1="21"
+              y1="3"
+              x2="14"
+              y2="10"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"></line>
+            <line
+              x1="3"
+              y1="21"
+              x2="10"
+              y2="14"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"></line>
+          </svg>
         </a>
       </div>
     </div>
-    <div class="border-t border-base-100"></div>
     <!-- content -->
     <div class="px-4 py-2 flex flex-col gap-1">
       {% for post in collections.recentPosts %}
