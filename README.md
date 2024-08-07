@@ -119,4 +119,4 @@ All assets are in [/src/assets](/src/assets/) directory and called in the frontm
 #### Tips
 Better use [Squoosh](https://squoosh.app/) to convert your pics to *.webp
 
-I've tried eleventy-img but it's kinda not much for me. If you wanna try it, try it [yourself](https://www.11ty.dev/docs/plugins/image/).
+I've tried eleventy-img but it seems less suitable for me. If you wanna try it, try it [yourself](https://www.11ty.dev/docs/plugins/image/).
