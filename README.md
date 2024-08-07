@@ -117,4 +117,6 @@ pnpm mkpost -p Your post title
 #### Asset
 All assets are in [/src/assets](/src/assets/) directory and called in the frontmatter.
 #### Tips
-Better use [Squoosh](https://squoosh.app/) to convert your pics to webp
+Better use [Squoosh](https://squoosh.app/) to convert your pics to *.webp
+
+I've tried eleventy-img but it's kinda not much for me. If you wanna try it, try it [yourself](https://www.11ty.dev/docs/plugins/image/).
