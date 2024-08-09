@@ -17,6 +17,3 @@ Eleventy is a popular Static Site Generator (SSG) tool used by web developers to
 {% include "recent.html" %}
 
 I apologize for any shortcomings as I am not a coder by background. The source code of this starter is available on [GitHub](https://github.com/sira313/twcarty). Thanks for coming.
-
-> No one comes to your website to be entertained. They have questions they think you can answer. Content answers questions.
-― Jay Baer
