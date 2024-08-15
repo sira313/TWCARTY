@@ -6,7 +6,7 @@ keyword: Chick, chicken.
 cover: 
   - url: /assets/photos/chick.jpg
   - url: /assets/photos/chicks2.jpg
-thumbnail: /assets/photos/thumbnail/chick.jpg
+thumbnail: /assets/photos/thumbnail/chick.webp
 date: 2024-04-22
 tags: Hewan
 permalink: /photos/Anak-Ayam.html
