@@ -30,7 +30,6 @@ module.exports = function(eleventyConfig) {
     'src/assets': 'assets',
     'src/robots.txt': 'robots.txt',
     'src/404.html': '404.html',
-    'src/styles.css': 'styles.css'
   });
 
   // Collections
