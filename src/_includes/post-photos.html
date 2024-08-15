@@ -4,7 +4,7 @@ layout: base.html
 <div class="sm:container m-0 p-0 sm:mx-auto sm:px-4 md:px-10">
   <div class="the-photos-card">
     <!-- top navbar on mobile -->
-    <div class="navbar bg-base-100 rounded-t-xl px-4 sm:hidden">
+    <div class="sticky top-0 z-50 navbar bg-base-100 px-4 sm:hidden">
       <div class="navbar-start">
         <!-- back to posts -->
         <a aria-label="back" href="/photos.html" class="btn btn-ghost btn-circle">
@@ -56,23 +56,27 @@ layout: base.html
       </div>
     </div>
     <!-- cover -->
-    <div class="sm:w-1/2 flex items-center justify-center bg-black rounded-none sm:rounded-l-xl overflow-hidden">
-      <div class="carousel">
+    <div class="sm:w-1/2 flex items-center justify-center bg-black rounded-none sm:rounded-l-xl overflow-hidden relative">
+      <div class="carousel w-full">
         {% for image in cover %}
-          <div class="carousel-item w-full">
-            <img
-              src="{{image.url}}"
-              alt="Cover"
-              class="object-contain"
-            />
+          <div id="item{{ forloop.index }}" class="carousel-item w-full">
+            <img src="{{ image.url }}" alt="Cover" class="object-contain" />
           </div>
         {% endfor %}
       </div>
+      <!-- Carousel Indicators (hidden if only one image) -->
+      {% if cover.size > 1 %}
+        <div class="absolute bottom-2 left-1/2 transform -translate-x-1/2 z-10 flex gap-2 py-2">
+          {% for image in cover %}
+            <a aria-label="indicator item" href="#item{{ forloop.index }}" class="btn btn-circle btn-xs">{{ forloop.index }}</a>
+          {% endfor %}
+        </div>
+      {% endif %}
     </div>
     <!-- description -->
     <div class="sm:w-1/2 flex-grow flex flex-col overflow-hidden">
       <!-- top navbar -->
-      <div class="navbar bg-base-100 rounded-t-xl px-4 hidden sm:block">
+      <div class="navbar bg-base-100 rounded-t-xl px-4 hidden sm:block border-b border-base-300">
         <div class="navbar-start">
           <!-- back to posts -->
           <a aria-label="back" href="/photos.html" class="btn btn-ghost btn-circle">
@@ -123,7 +127,6 @@ layout: base.html
           </button>
         </div>
       </div>
-      <div class="border-t border-base-300"></div>
       <!-- content -->
       <div class="card-body sm:overflow-y-auto flex-grow">
         <div class="prose md:prose-lg max-w-none">
@@ -132,13 +135,12 @@ layout: base.html
           {{ content }}
         </div>
       </div>
-      <div class="border-t border-base-300"></div>
       <!-- bottom navbar -->
       {%- if collections.photos %}
       {%- assign previousPhotos = collections.photos | getPreviousCollectionItem %}
       {%- assign nextPhotos = collections.photos | getNextCollectionItem %}
       {%- if nextPhotos or previousPhotos %}
-      <div class="card-action navbar bg-base-100 rounded-b-xl px-4">
+      <div class="card-action navbar bg-base-100 rounded-b-xl px-4 border-t border-base-300">
         <div class="navbar-start">
           <!-- next post -->
           {%- if nextPhotos %}

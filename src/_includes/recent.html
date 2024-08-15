@@ -11,7 +11,7 @@
         </div>
         <div class="navbar-end">
           <!-- button view Photos -->
-          <a aria-label="See All Photos" href="/photos.html" class="btn btn-ghost btn-circle">
+          <a aria-label="View Photos" href="/photos.html" class="btn btn-ghost btn-circle">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               class="h-5 w-5"
@@ -52,12 +52,18 @@
       <div class="carousel carousel-center">
         {% for photos in collections.recentPhotos %}
         <!-- link to post -->
-        <div class="carousel-item">
+        <div id="item{{ forloop.index }}" class="carousel-item">
           <a href="{{ photos.url }}" class="block">
             <!-- thumbnail -->
             <img src="{{ photos.data.thumbnail }}" alt="Image" class="aspect-square h-80 w-auto object-cover duration-300 ease-in-out hover:opacity-60">
           </a>
         </div>
+        {% endfor %}
+      </div>
+      <!-- indicator carousel -->
+      <div class="absolute bottom-2 left-1/2 transform -translate-x-1/2 z-10 flex gap-2 py-2">
+        {% for photos in collections.recentPhotos %}
+          <a aria-label="indicator item" href="#item{{ forloop.index }}" class="btn btn-circle btn-xs">{{ forloop.index }}</a>
         {% endfor %}
       </div>
     </div>
@@ -73,7 +79,7 @@
       </div>
       <div class="navbar-end">
         <!-- button view Blog -->
-        <a aria-label="View All Blog" href="/blog.html" class="btn btn-ghost btn-circle">
+        <a aria-label="View blog" href="/blog.html" class="btn btn-ghost btn-circle">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             class="h-5 w-5"

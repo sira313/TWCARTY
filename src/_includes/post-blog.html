@@ -4,7 +4,7 @@ layout: base.html
 <div class="sm:container m-0 p-0 sm:mx-auto sm:p-4 md:p-10">
 	<div class="the-card">
     <!-- top navbar -->
-    <div class="navbar bg-base-100 rounded-t-xl px-4">
+    <div class="navbar bg-base-100 rounded-t-xl px-4 border-b border-base-300 sticky top-0 z-50">
       <div class="navbar-start">
         <!-- back to posts -->
         <a href="/blog" aria-label="back" class="btn btn-ghost btn-circle">
@@ -60,7 +60,6 @@ layout: base.html
         </button>
       </div>
     </div>
-    <div class="border-t border-base-300"></div>
     <!-- content -->
     <div class="flex-grow">
       <div class="card-body pt-4 tn:pt-8">
@@ -101,7 +100,7 @@ layout: base.html
       </div>
       <!-- credit license -->
       <div class="navbar-center py-4">
-        <p>© 2024 <a class="link link-hover" href="https://apoxi.cam/">Apoxicam</a>.<br>All rights reserved.</p>
+        {% include "footer-credit.html" %}
       </div>
       <div class="navbar-end">
         <!-- prev post -->
