@@ -1,0 +1,96 @@
+<!-- relative position -->
+<div class="relative -mt-12 sm:-mt-14 md:-mt-12 flex pl-8 items-center justify-between">
+  <!-- avatar -->
+  <div class="avatar tn:pt-2 md:pt-0">
+    <div class="border border-4 border-base-100 w-24 sm:w-28 rounded-xl">
+      <img src="{{ profile }}" alt="Avatar">
+    </div>
+  </div>
+  <!-- button menu small screen -->
+  <div class="pr-4 tn:hidden pt-14">
+    <!-- search -->
+    <button class="btn btn-ghost btn-circle" aria-label="search" onclick="searchme.showModal()">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        class="h-5 w-5"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor">
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+      </svg>
+    </button>
+    <!-- dropdown menu -->
+    <div class="dropdown dropdown-end">
+      <div tabindex="0" aria-label="menu" role="button" class="btn btn-ghost btn-circle">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><line stroke-linecap="round" stroke-linejoin="round" stroke-width="2" x1="8" y1="6" x2="21" y2="6"/><line stroke-linecap="round" stroke-linejoin="round" stroke-width="2" x1="8" y1="12" x2="21" y2="12"/><line stroke-linecap="round" stroke-linejoin="round" stroke-width="2" x1="8" y1="18" x2="21" y2="18"/><line stroke-linecap="round" stroke-linejoin="round" stroke-width="2" x1="3" y1="6" x2="3.01" y2="6"/><line stroke-linecap="round" stroke-linejoin="round" stroke-width="2" x1="3" y1="12" x2="3.01" y2="12"/><line stroke-linecap="round" stroke-linejoin="round" stroke-width="2" x1="3" y1="18" x2="3.01" y2="18"/></svg>
+      </div>
+      <ul
+        tabindex="0"
+        class="menu menu-md dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow-xl border border-base-300">
+        {% for item in nav-mobile.items %}
+        <li><a href="{{ item.url }}">{{ item.name }}</a></li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+  <!-- button menu tablet -->
+  <div class="pr-4 pt-12 gap-0 hidden tn:flex sm:hidden">
+    <!-- search -->
+    <button class="btn btn-ghost btn-circle" aria-label="search" onclick="searchme.showModal()">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        class="h-5 w-5"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor">
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+      </svg>
+    </button>
+    <!-- Menu -->
+    {% for item in nav.items %}
+    <a href="{{ item.url }}" aria-label="{{ item.aria-label }}" class="btn btn-ghost btn-circle">
+      {{ item.name }}
+    </a>
+    {% endfor %}
+  </div>
+</div>
+<!-- desktop view -->
+<div class="relative pl-8 sm:pl-12 pt-4 sm:pt-6 sm:-mt-20 sm:ml-28 flex items-center justify-between">
+  <!-- Name -->
+  <div class="sm:pt-2">
+    <div class="text-2xl sm:text-xl font-bold">{{ title }}</div>
+    <div class="text-sm text-gray-500">{{ author }}</div>
+  </div>
+  <!-- button menu desktop -->
+  <div class="pr-4 sm:flex gap-0 hidden">
+    <!-- search -->
+    <button class="btn btn-ghost btn-circle" aria-label="search" onclick="searchme.showModal()">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        class="h-5 w-5"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor">
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+      </svg>
+    </button>
+    <!-- Menu -->
+    {% for item in nav.items %}
+    <a href="{{ item.url }}" aria-label="{{ item.aria-label }}" class="btn btn-ghost btn-circle">
+      {{ item.name }}
+    </a>
+    {% endfor %}
+  </div>
+</div>

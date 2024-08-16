@@ -90,6 +90,7 @@ So if you wanted to create another one, maybe [this tutorial](https://www.youtub
     return collectionApi.getFilteredByGlob("photos/**/*.md");
   });
 ```
+Don't forget to add your new menu in [/src/_data](/src/_data/)
 
 #### Layout
 There are 3 layouts in [/src/_includes](/src/_includes/):
