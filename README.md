@@ -1,8 +1,7 @@
 ## TWCARTY
-A starter project for photographer/artist showing their work and blog randomly
+An eleventy starter project for photographers or artists to showcase their work and blog.
 
-[![twcarty.netlify.app](https://img.shields.io/badge/LIVE-twcarty.netlify.app-blue?style=for-the-badge)](https://twcarty.netlify.app/)
-
+[![twcarty.netlify.app](https://img.shields.io/badge/LIVE-twcarty.netlify.app-blue?style=for-the-badge)](https://twcarty.netlify.app/)  
 [![apoxi.cam](https://img.shields.io/badge/SAMPLE-apoxi.cam-blue?style=for-the-badge)](https://apoxi.cam/)
 
 Powered by:
@@ -12,32 +11,44 @@ Powered by:
 ---
 
 ### Features
-- Responsive
-- Auto minify html, css, and js
-- Lazy load images
-- Using DaisyUI
+- Clean, simple, and responsive design
+- Auto-minifies HTML, CSS, and JS
+- Lazy loading of images
+- DaisyUI integration
 - Carousel post gallery
 
 ### Basic Info
-Better use Linux
 
-Clone this repo
+#### Required skills
+
+- Git
+- NPM
+- Html and css (opsional)
+
+#### How to
+
+Clone the repository
 ```
 git clone https://github.com/sira313/twcarty
 ```
-Use PNPM
+Install PNPM globally
 ```
 npm install -g pnpm
 ```
-Install modules
+Install the project dependencies
 ```
 pnpm install
 ```
-Run to your localhost 
+Run the project locally
 ```
 pnpm build && pnpm serve
 ```
-Directory Tree
+If you wanted to modify the style, you may need to run this command below in split terminal
+```
+pnpm watch:css
+```
+
+#### Directory Structure
 ```
 src
 ├── assets
@@ -63,61 +74,65 @@ src
 │   └── warkop.md
 └── styles.css
 ```
-Modify your language first in [/src/_includes/base.html](https://github.com/sira313/TWCARTY/blob/4a69eaa27e836443707ecb1e1a10fea311a42cba/_includes/base.html#L2)
-```
-<html lang="en">
-```
-Then your root url in [/.eleventy.js](https://github.com/sira313/TWCARTY/blob/4a69eaa27e836443707ecb1e1a10fea311a42cba/.eleventy.js#L21)
-```javascript
-// root url for share button
-eleventyConfig.addGlobalData("rootURL", "https://twcarty.netlify.app");
-```
+
+#### Settings
+- **Language**: Update the language setting in [src/_includes/base.html](https://github.com/sira313/TWCARTY/blob/main/src/_includes/base.html#L3):
+  ```html
+  <html lang="en">
+  ```
+- **Root URL**: Set your root URL in [.eleventy.js](https://github.com/sira313/TWCARTY/blob/main/.eleventy.js#L19):
+  ```javascript
+  // Root URL for the share button
+  eleventyConfig.addGlobalData("rootURL", "https://twcarty.netlify.app");
+  ```
 
 #### Menu
-There are 2 menus (for indexing post, not a single page) we created by default:
+The project includes two default menus for post indexing:
 - Photos
 - Blog
 
-So if you wanted to create another one, maybe [this tutorial](https://www.youtube.com/watch?v=kzf9A9tkkl4) will help. And don't forget to add your new page to collection in [/.eleventy.js](https://github.com/sira313/TWCARTY/blob/4a69eaa27e836443707ecb1e1a10fea311a42cba/.eleventy.js#L32)
+To add another menu, follow [this tutorial](https://www.youtube.com/watch?v=kzf9A9tkkl4). Don’t forget to update the collection in [.eleventy.js](https://github.com/sira313/TWCARTY/blob/main/.eleventy.js#L26-L27):
 ```javascript
-// Collection post blog
-  eleventyConfig.addCollection("posts", function(collectionApi) {
-    return collectionApi.getFilteredByGlob("blog/**/*.md");
-  });
+// Collections
+const collectionConfigs = [
+  { name: "posts", glob: "src/blog/**/*.md" },
+  { name: "photos", glob: "src/photos/**/*.md" },
+  { name: "recentPosts", glob: "src/blog/*.md", limit: 3 },
+  { name: "recentPhotos", glob: "src/photos/*.md", limit: 6 }
+];
+```
+Also, add your new menu in [src/_data](/src/_data/).
 
-// Collection post photos
-  eleventyConfig.addCollection("photos", function(collectionApi) {
-    return collectionApi.getFilteredByGlob("photos/**/*.md");
-  });
-```
-Don't forget to add your new menu in [/src/_data](/src/_data/)
+#### Layouts
+There are three layouts in [src/_includes](/src/_includes/):
+- **Main Layout**: [src/_includes/base.html](/src/_includes/base.html), referenced in other layouts.
+- **Blog Post Layout**: [src/_includes/post-blog.html](/src/_includes/post-blog.html).
+- **Photo Post Layout**: [src/_includes/post-photos.html](/src/_includes/post-photos.html).
 
-#### Layout
-There are 3 layouts in [/src/_includes](/src/_includes/):
-- [/src/_includes/base.html](/src/_includes/base.html) is the main layout called in other layout frontmatter.
-- [/src/_includes/post-blog.html](/src/_includes/post-blog.html) is for blog post layout.
-- [/src/_includes/post-photos.html](/src/_includes/post-photos.html) is photos post layout.
-#### Index
-There are 3 indexs in this project
-- [/src/index.md](/src/index.md) where you describe your own business.
-- [/src/photos/index.html](/src/photos/index.html) is the index of all your photos.
-- [/src/blog/index.html](/src/blog/index.html) is the index of your blog.
-#### Post
-We created a js script to make a post automatically, so you don't need to do that manual. [Thanks to my friend](https://github.com/mustofa-id).
+#### Index Pages
+The project includes three index pages:
+- **Main Index**: [src/index.md](/src/index.md) for describing your business.
+- **Photo Index**: [src/photos/index.html](/src/photos/index.html) for all your photos.
+- **Blog Index**: [src/blog/index.html](/src/blog/index.html) for your blog posts.
 
-To create a post in `/blog` you need to
-```
-pnpm mkpost -b Your post title
-```
-It will create a markdown file in `/blog`.
+#### Creating Posts
+A script is available to automate post creation, so manual work is not necessary. [Thanks to my friend](https://github.com/mustofa-id).
 
-And if you wanted to create a post in `/photos` you just need to
+To create a blog post in `/blog`:
 ```
-pnpm mkpost -p Your post title
+pnpm mkpost -b "Your post title"
 ```
-#### Asset
-All assets are in [/src/assets](/src/assets/) directory and called in the frontmatter.
+This will create a markdown file in `/blog`.
+
+To create a photo post in `/photos`:
+```
+pnpm mkpost -p "Your post title"
+```
+
+#### Assets
+All assets are stored in the [/src/assets](/src/assets/) directory and referenced in the front matter.
+
 #### Tips
-Better use [Squoosh](https://squoosh.app/) to convert your pics to *.webp
+For optimal image conversion to `.webp`, use [Squoosh](https://squoosh.app/).
 
-I've tried eleventy-img but it seems less suitable for me. If you wanna try it, try it [yourself](https://www.11ty.dev/docs/plugins/image/).
+I tried using eleventy-img, but it didn’t quite fit my needs. Feel free to [explore it yourself](https://www.11ty.dev/docs/plugins/image/).
