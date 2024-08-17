@@ -51,28 +51,46 @@ pnpm watch:css
 #### Directory Structure
 ```
 src
+├── 404.html
 ├── assets
 │   ├── index
-│   │   └── cover.webp
+│   │   ├── cover.webp
+│   │   ├── favicon.ico
+│   │   └── profile.webp
 │   └── photos
+│       ├── motor2.jpg
+│       ├── motor.jpg
 │       ├── thumbnail
+│       │   ├── toko.jpg
 │       │   └── warkop.jpg
 │       └── warkop.jpg
 ├── blog
 │   ├── eleventy-card.md
+│   ├── how-to-post-in-blog.md
+│   ├── how-to-post-to-photos.md
 │   ├── index.html
 │   └── tag.html
+├── _data
+│   ├── nav.json
+│   └── nav-mobile.json
 ├── _includes
 │   ├── base.html
+│   ├── footer-credit.html
 │   ├── index.html
 │   ├── post-blog.html
-│   └── post-photos.html
+│   ├── post-photos.html
+│   ├── profile.html
+│   ├── recent.html
+│   └── sosmed.html
 ├── index.md
 ├── photos
+│   ├── Anak-Ayam.md
+│   ├── daun.md
 │   ├── index.html
 │   ├── tag.html
 │   └── warkop.md
-└── styles.css
+├── styles.css
+└── theme.html
 ```
 
 #### Settings
