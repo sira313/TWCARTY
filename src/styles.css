@@ -5,7 +5,7 @@
 
 @layer utilities {
   .prose kbd {
-    @apply text-base-content; /* kbd follow daisyUI style not prose */
+    @apply text-base-content; /* Warna teks dalam kbd */
   }
 }
 @layer components {
