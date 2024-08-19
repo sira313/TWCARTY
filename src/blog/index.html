@@ -130,10 +130,10 @@ permalink: /blog.html
 					<ul class="grup flex flex-col gap-4">
 						{% for post in collections.posts reversed %}
 						<li>
-							<p class="text-md sm:text-lg font-bold mb-2">
+							<p class="text-md text-primary sm:text-lg font-bold mb-2">
 								<a class="link link-hover" href="{{ post.url }}">{{ post.data.title }}</a>
 							</p>
-							<p class="text-sm sm:text-md mb-2">{{ post.data.description }}</p>
+							<p class="text-sm sm:text-md mb-2">{{ post.data.description | limitWords: 30 }}</p>
 							<p class="text-sm">{{ post.data.date | date: "%a, %d %b %Y" }}</p>
 						</li>
 						{% endfor %}
