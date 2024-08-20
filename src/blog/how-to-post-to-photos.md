@@ -6,7 +6,6 @@ keyword: eleventy, tutorial, post.
 date: 2024-05-02
 tags:
     - Tutorial
-permalink: /blog/how-to-post-to-photos.html
 ---
 Similar to the [previous tutorial about posting to the blog](/blog/how-to-post-in-blog), but this time I'm giving you some tips. First, we need to set the frontmatter. We need to set up the cover and the thumbnail.
 

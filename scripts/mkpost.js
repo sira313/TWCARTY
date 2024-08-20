@@ -69,7 +69,6 @@ cover: /src/assets/blog/
 date: ${new Date().toISOString().split("T")[0]}
 tags:
  - TODO
-permalink: ${permalink_paths[type]}${slug}.html
 ---
 
 # TODO
@@ -86,7 +85,6 @@ thumbnail: /src/assets/photos/thumbnail/
 date: ${new Date().toISOString().split("T")[0]}
 tags:
   - TODO
-permalink: ${permalink_paths[type]}${slug}.html
 ---
 
 # TODO

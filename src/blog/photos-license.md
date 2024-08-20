@@ -6,7 +6,6 @@ keyword: License
 date: 2024-08-04
 tags:
     - Notice
-permalink: /blog/photos-license.html
 ---
 
 #### Legal Simplicity

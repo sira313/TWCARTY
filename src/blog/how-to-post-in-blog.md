@@ -6,7 +6,6 @@ keyword: eleventy, tutorial
 date: 2024-05-02
 tags:
     - Tutorial
-permalink: /blog/how-to-post-in-blog.html
 ---
 
 Create a new file in the `/blog` directory. Do not use blank spaces; use `-` instead. For example:

@@ -6,7 +6,6 @@ keyword: Daisyui, theme generator, tailwindcss
 date: 2024-08-04
 tags:
  - Tutorial
-permalink: /blog/modify-theme.html
 ---
 
 To change the default colors on this site, you can use the [DaisyUI Theme Generator](https://daisyui.com/theme-generator/) or manually customize them to suit your preferences.

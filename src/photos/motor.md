@@ -9,7 +9,6 @@ cover:
 thumbnail: /assets/photos/thumbnail/motor.jpg
 date: 2024-04-25
 tags: Kendaraan
-permalink: /photos/motor.html
 ---
 Pellentesque eget est consequat orci lacinia posuere. Sed risus est, consequat at pretium vel, placerat ac neque. Fusce vitae consectetur lorem, sed fermentum tellus. Aenean tristique arcu ullamcorper, feugiat orci sit amet, viverra dui. Proin ipsum enim, cursus ac augue vitae, semper blandit sapien. Sed finibus cursus nisi ac pharetra. Vivamus quis ipsum at sapien vestibulum tincidunt. Maecenas quis libero et neque elementum scelerisque. Aenean dapibus dui ut fermentum rhoncus. Interdum et malesuada fames ac ante ipsum primis in faucibus. Nulla lacinia gravida nulla id iaculis.
 
