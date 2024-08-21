@@ -154,3 +154,6 @@ All assets are stored in the [/src/assets](/src/assets/) directory and reference
 For optimal image conversion to `.webp`, use [Squoosh](https://squoosh.app/).
 
 I tried using eleventy-img, but it didn’t quite fit my needs. Feel free to [explore it yourself](https://www.11ty.dev/docs/plugins/image/).
+
+## Like my work, gimme coffee 😉
+[![PayPal](https://img.shields.io/badge/PayPal-00457C?style=for-the-badge&logo=paypal&logoColor=white)](https://paypal.me/aflasio) 
