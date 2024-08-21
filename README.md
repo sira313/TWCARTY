@@ -104,6 +104,11 @@ src
   eleventyConfig.addGlobalData("rootURL", "https://twcarty.netlify.app");
   ```
 
+#### Social media buttons
+Set your social media in [src/_data/sosmed.json](src/_data/sosmed.json)
+Use svg icon you can download from anywhere like [feathericons](https://feathericons.com
+) or create your own with inkscape
+
 #### Menu
 The project includes two default menus for post indexing:
 - Photos
@@ -120,6 +125,8 @@ const collectionConfigs = [
 ];
 ```
 Also, add your new menu in [src/_data](/src/_data/).
+- [src/_data/nav.json](src/_data/nav.json) for regular view
+- [src/_data/nav-mobile.json](src/_data/nav.json) for mobile view below 300px
 
 #### Layouts
 There are three layouts in [src/_includes](/src/_includes/):
