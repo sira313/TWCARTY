@@ -126,7 +126,7 @@ const collectionConfigs = [
 ```
 Also, add your new menu in [src/_data](/src/_data/).
 - [src/_data/nav.json](src/_data/nav.json) for regular view
-- [src/_data/nav-mobile.json](src/_data/nav.json) for mobile view below 300px
+- [src/_data/nav-mobile.json](src/_data/nav-mobile.json) for mobile view below 300px
 
 #### Layouts
 There are three layouts in [src/_includes](/src/_includes/):
