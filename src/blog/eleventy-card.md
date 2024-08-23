@@ -8,124 +8,168 @@ tags:
  - Hello World
 ---
 
-**Eleventy Card** is a starter project for photographers and artists to showcase their work and blog posts randomly. I use `*.html` for the default layout because I don't fully understand Nunjucks or other templating languages. Everything I wrote to build this template was mostly copy-pasting, so...
-
->I apologize for any shortcomings, as I am not a coder by background.
+**TWCARTY** (Tailwind Card Eleventy) An eleventy starter project for photographers or artists to showcase their work and blog.
 
 ### Features
-- Responsive design
-- Automatic minification of HTML, CSS, and JS
+- Clean, simple, and responsive design
+- Auto-minifies HTML, CSS, and JS
 - Lazy loading of images
-- Built with DaisyUI
+- DaisyUI integration
 - Carousel post gallery
 
-### Installation Steps and Basic Information
->It's recommended to use Linux
+### Basic Info
 
-1. Clone this repository:
-   ```bash
-   git clone https://github.com/sira313/twcarty
-   ```
-2. Install PNPM:
-   ```bash
-   npm install -g pnpm
-   ```
-3. Install the required modules:
-   ```bash
-   pnpm install
-   ```
-4. Run the project locally:
-   ```bash
-   pnpm serve
-   ```
-   You may need to split your terminal and run the command below if you need to modify the styles:
-   ```bash
-   pnpm watch:css
-   ```
+#### Required skills
 
-#### Directory Structure
-```plaintext
-src
-├── asset/s
-│   ├── index
-│   │   └── cover.webp
-│   └── photos
-│       ├── thumbnail
-│       │   └── warkop.jpg
-│       └── warkop.jpg
-├── blog
-│   ├── eleventy-card.md
-│   ├── index.html
-│   └── tag.html
-├── _includes
-│   ├── base.html
-│   ├── index.html
-│   ├── post-blog.html
-│   └── post-photos.html
-├── index.md
-├── photos
-│   ├── index.html
-│   ├── tag.html
-│   └── warkop.md
-└── styles.css
+- Git
+- NPM
+- Html and css (opsional)
+
+#### How to
+
+Clone the repository
+```
+git clone https://github.com/sira313/twcarty
+```
+Install PNPM globally
+```
+npm install -g pnpm
+```
+Install the project dependencies
+```
+pnpm install
+```
+Run the project locally
+```
+pnpm build && pnpm serve
+```
+If you wanted to modify the style, you may need to run this command below in split terminal
+```
+pnpm watch:css
 ```
 
-5. Modify your language settings first in [`/src/_includes/base.html`](https://github.com/sira313/TWCARTY/blob/7a51bfdcc55763dcb86c7d5d09076836704e02ce/src/_includes/base.html#L3):
-   ```html
-   <html lang="en">
-   ```
-6. Then update your root URL in [`/.eleventy.js`](https://github.com/sira313/TWCARTY/blob/7a51bfdcc55763dcb86c7d5d09076836704e02ce/.eleventy.js#L19):
-   ```javascript
-   // Root URL for the share button
-   eleventyConfig.addGlobalData("rootURL", "https://twcarty.netlify.app");
-   ```
+#### Directory Structure
+```bash
+❯ tree
+.
+├── src
+│   ├── 404.html
+│   ├── asset
+│   │   ├── index
+│   │   │   ├── cover.webp
+│   │   │   ├── favicon.ico
+│   │   │   └── profile.webp
+│   │   └── photos
+│   │       ├── chick.jpg
+│   │       ├── chicks2.jpg
+│   │       ├── thumbnail
+│   │       │   ├── toko.jpg
+│   │       │   └── warkop.jpg
+│   │       └── warkop.jpg
+│   ├── blog
+│   │   ├── eleventy-card.md
+│   │   ├── how-to-post-in-blog.md
+│   ├── _data
+│   │   ├── nav.json
+│   │   ├── nav-mobile.json
+│   │   └── sosmed.json
+│   ├── _includes
+│   │   ├── base.html
+│   │   ├── comment.html
+│   │   ├── footer-credit.html
+│   │   ├── footer-sosmed.html
+│   │   ├── index.html
+│   │   ├── post-blog.html
+│   │   ├── post-photos.html
+│   │   ├── profile.html
+│   │   ├── recent.html
+│   │   ├── search-global.html
+│   │   └── search.html
+│   ├── index.md
+│   ├── _pages
+│   │   ├── 404.html
+│   │   ├── blog.html
+│   │   ├── photos.html
+│   │   ├── search-data.html
+│   │   ├── search.html
+│   │   ├── tag-blog.html
+│   │   ├── tag-photos.html
+│   │   └── theme.html
+│   ├── photos
+│   │   ├── Toko.md
+│   │   └── warkop.md
+│   └── styles.css
+└── tailwind.config.js
+```
 
-#### Menus
-There are 2 default menus for indexing posts (not single pages):
+#### Settings
+- **Language**: Update the language setting in [src/_includes/base.html](https://github.com/sira313/TWCARTY/blob/main/src/_includes/base.html#L3):
+  ```html
+  <html lang="en">
+  ```
+- **Root URL**: Set your root URL in [.eleventy.js](https://github.com/sira313/TWCARTY/blob/main/.eleventy.js#L19):
+  ```javascript
+  // Root URL for the share button
+  eleventyConfig.addGlobalData("rootURL", "https://twcarty.netlify.app");
+  ```
+
+#### Social media buttons
+Set your social media in `src/_data/sosmed.json`
+Use svg icon you can download from anywhere like [feathericons](https://feathericons.com
+) or create your own with inkscape
+
+#### Menu
+The project includes two default menus for post indexing:
 - Photos
 - Blog
 
-If you want to create another one, this [tutorial](https://www.youtube.com/watch?v=kzf9A9tkkl4) might help. Don't forget to add your new page to the collections in [`/.eleventy.js`](https://github.com/sira313/TWCARTY/blob/7a51bfdcc55763dcb86c7d5d09076836704e02ce/.eleventy.js#L26):
-   ```javascript
-   // Collections
-   const collectionConfigs = [
-     { name: "posts", glob: "src/blog/**/*.md" },
-     { name: "photos", glob: "src/photos/**/*.md" },
-     { name: "recentPosts", glob: "src/blog/*.md", limit: 3 },
-     { name: "recentPhotos", glob: "src/photos/*.md", limit: 6 }
-   ];
-   ```
+To add another menu, follow [this tutorial](https://www.youtube.com/watch?v=kzf9A9tkkl4). Don’t forget to update the collection in [.eleventy.js](https://github.com/sira313/TWCARTY/blob/main/.eleventy.js#L26-L27):
+```javascript
+// Collections
+const collectionConfigs = [
+  { name: "posts", glob: "src/blog/**/*.md" },
+  { name: "photos", glob: "src/photos/**/*.md" },
+  { name: "recentPosts", glob: "src/blog/*.md", limit: 3 },
+  { name: "recentPhotos", glob: "src/photos/*.md", limit: 6 }
+];
+```
+Also, add your new menu in `src/_data`.
+- `src/_data/nav.json` for regular view
+- `src/_data/nav-mobile.json` for mobile view below 300px
 
 #### Layouts
-There are 3 main layouts in [`/src/_includes`](https://github.com/sira313/TWCARTY/tree/main/src/_includes):
-- [`/src/_includes/base.html`](https://github.com/sira313/TWCARTY/blob/main/src/_includes/base.html): This is the main layout, called in other layout frontmatter.
-- [`/src/_includes/post-blog.html`](https://github.com/sira313/TWCARTY/blob/main/src/_includes/post-blog.html): This is the layout for blog posts.
-- [`/src/_includes/post-photos.html`](https://github.com/sira313/TWCARTY/blob/main/src/_includes/post-photos.html): This is the layout for photo posts.
+There are three layouts in `src/_includes`:
+- **Main Layout**: `src/_includes/base.html`, referenced in other layouts.
+- **Blog Post Layout**: `src/_includes/post-blog.html`.
+- **Photo Post Layout**: `src/_includes/post-photos.html`.
 
 #### Index Pages
-There are 3 index pages in this project:
-- [`/src/index.md`](https://github.com/sira313/TWCARTY/blob/main/src/index.md): This is where you describe your own business.
-- [`/src/photos/index.html`](https://github.com/sira313/TWCARTY/blob/main/src/photos/index.html): This is the index of all your photos.
-- [`/src/blog/index.html`](https://github.com/sira313/TWCARTY/blob/main/src/blog/index.html): This is the index of your blog.
+All pages store in `src/_pages`. But the project includes three index pages:
+- **Main Index**: `src/index.md` for describing your business.
+- **Photo Index**: `src/_pages/photos.html` for all your photos.
+- **Blog Index**: `src/_pages/blog.html` for your blog posts.
 
-#### Creating a Post
-We have a script that automatically creates posts, so you don't need to do it manually. [Thanks to my friend](https://github.com/mustofa-id).
+#### Creating Posts
+A script is available to automate post creation, so manual work is not necessary. [Thanks to my friend](https://github.com/mustofa-id).
 
-To create a post in `/blog`, you need to run:
-   ```bash
-   pnpm mkpost -b "Your post title"
-   ```
+To create a blog post in `/blog`:
+```
+pnpm mkpost -b "Your post title"
+```
 This will create a markdown file in `/blog`.
 
-If you want to create a post in `/photos`, run:
-   ```bash
-   pnpm mkpost -p "Your post title"
-   ```
+To create a photo post in `/photos`:
+```
+pnpm mkpost -p "Your post title"
+```
 
-#### asset/s
-All asset/s are stored in the [`/src/asset/s`](https://github.com/sira313/TWCARTY/tree/main/src/asset/s) directory and are referenced in the frontmatter.
+#### Assets
+All assets are stored in the `/src/asset/` directory and referenced in the front matter.
 
 #### Tips
-It's recommended to use [Squoosh](https://squoosh.app/) to convert your images to `.webp`.
+For optimal image conversion to `.webp`, use [Squoosh](https://squoosh.app/).
 
-I've tried `eleventy-img`, but it doesn't seem suitable for me because it generates too many images, which clutters the output directory. If you want to try it yourself, you can check it out [here](https://www.11ty.dev/docs/plugins/image/).
+I tried using eleventy-img, but it didn’t quite fit my needs. Feel free to [explore it yourself](https://www.11ty.dev/docs/plugins/image/).
+
+## Like my work? Gimme a cup coffee 😉
+[![PayPal](https://img.shields.io/badge/PayPal-00457C?style=for-the-badge&logo=paypal&logoColor=white)](https://paypal.me/aflasio) 
