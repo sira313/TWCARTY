@@ -4,26 +4,21 @@ const lazyImagesPlugin = require('eleventy-plugin-lazyimages');
 
 module.exports = function(eleventyConfig) {
   
-  // Add lazyImages and Files Minifier plugins
+  // lazyImages and Files Minifier
   eleventyConfig.addPlugin(lazyImagesPlugin);
   eleventyConfig.addPlugin(eleventyPluginFilesMinifier);
 
-  // Run Pagefind after Eleventy build is complete
-  eleventyConfig.on('eleventy.after', () => {
-    execSync(`npx -y pagefind --site _site --output-subdir _pagefind`, { encoding: 'utf-8' });
-  });
-
-  // Add Tailwind config to the watch target
+  // Tailwind config target watch
   eleventyConfig.addWatchTarget("tailwind.config.js");
 
-  // Add global data for the root URL
+  // Global data for root URL
   eleventyConfig.addGlobalData("rootURL", "https://twcarty.netlify.app");
 
-  // Passthrough Copy for files and folders to the output
-  const passthroughCopies = ["src/robots.txt", "src/assets"];
+  // Bypass dir
+  const passthroughCopies = ["src/robots.txt", "src/asset/", "src/CNAME"];
   passthroughCopies.forEach(path => eleventyConfig.addPassthroughCopy(path));
 
-  // Define custom collections
+  // Custom collection
   const collectionConfigs = [
     { name: "posts", glob: "src/blog/**/*.md" },
     { name: "photos", glob: "src/photos/**/*.md" },
@@ -31,7 +26,7 @@ module.exports = function(eleventyConfig) {
     { name: "recentPhotos", glob: "src/photos/*.md", limit: 6 }
   ];
 
-  // Loop to create collections based on the above configurations
+  // Loop custom collection
   collectionConfigs.forEach(config => {
     eleventyConfig.addCollection(config.name, function(collectionApi) {
       let items = collectionApi.getFilteredByGlob(config.glob);
@@ -39,12 +34,12 @@ module.exports = function(eleventyConfig) {
     });
   });
 
-  // Add tag collections for blog and photos
+  // Tags collection for blog and photos
   ["blog", "photos"].forEach(type => {
     eleventyConfig.addCollection(`${type}Tags`, getTags(type));
   });
 
-  // Filter to get the first image from a cover image array
+  // Filter to get first image array cover
   eleventyConfig.addFilter("firstCoverImage", function(cover) {
     if (Array.isArray(cover) && cover.length > 0) {
       return cover[0].url;
@@ -52,7 +47,7 @@ module.exports = function(eleventyConfig) {
     return cover;
   });
 
-  // Filter to limit the number of words in a string
+  // Filter to limit words string
   eleventyConfig.addLiquidFilter("limitWords", function(str, wordLimit) {
     let words = str.split(" ");
     if (words.length > wordLimit) {
@@ -62,9 +57,9 @@ module.exports = function(eleventyConfig) {
   });
   
   /**
-   * Function to get unique tags from a collection
-   * @param {'blog'|'photos'} type - The collection type (blog or photos)
-   * @returns {Array} - Array of unique tags
+   * Get tag from collection
+   * @param {'blog'|'photos'} type - Collection type (blog or photos)
+   * @returns {Array} - Array uniq tags
    */
   function getTags(type) {
     return (collection) => {
@@ -80,7 +75,7 @@ module.exports = function(eleventyConfig) {
     };
   }
 
-  // Directory configuration for input and output
+  // Input output dir
   return {
     dir: {
       input: "src",

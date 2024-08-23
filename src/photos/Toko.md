@@ -4,9 +4,9 @@ title: Toko
 description: Vivamus quis ipsum at sapien vestibulum tincidunt. Maecenas quis libero et neque elementum scelerisque. Aenean dapibus dui ut fermentum rhoncus.
 keyword: Vivamus, Ipsum, Sapien
 cover: 
-  - url: /assets/photos/toko.jpg
-  - url: /assets/photos/toko2.jpg
-thumbnail: /assets/photos/thumbnail/toko.jpg
+  - url: /asset/photos/toko.jpg
+  - url: /asset/photos/toko2.jpg
+thumbnail: /asset/photos/thumbnail/toko.jpg
 date: 2024-04-26
 tags: Interior
 ---

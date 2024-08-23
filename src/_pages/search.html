@@ -1,0 +1,50 @@
+---
+title: Search
+layout: base.html
+cover: /asset/index/cover.webp
+permalink: /search.html
+---
+<div class="sm:container m-0 p-0 sm:mx-auto sm:p-4 md:p-10">
+	<div class="the-card">
+		<!-- cover -->
+    <figure>
+      <img src="{{ cover }}" alt="cover" />
+    </figure>
+		<!-- navbar -->
+		<div class="sticky flex-row top-0 z-50 navbar bg-base-100 px-4 border-b border-base-300">
+			<!-- back home -->
+			<a aria-label="home" href="/" class="btn btn-ghost btn-circle">
+				<svg
+	        xmlns="http://www.w3.org/2000/svg"
+	        class="h-5 w-5"
+	        fill="none"
+	        viewBox="0 0 24 24"
+	        stroke="currentColor">
+	        <path
+	          stroke-linecap="round"
+	          stroke-linejoin="round"
+	          stroke-width="2"
+	          d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+	        <polyline
+	          stroke-linecap="round"
+	          stroke-linejoin="round"
+	          stroke-width="2"
+	          points="9 22 9 12 15 12 15 22" />
+	      </svg>
+			</a>
+			<div class="flex-grow">
+				<!-- Simple search -->
+				{% include "search-global.html" %}
+			</div>
+			<!-- Menu -->
+			{% for item in nav.items %}
+			<a href="{{ item.url }}" aria-label="{{ item.aria-label }}" class="btn btn-ghost btn-circle">
+				{{ item.name }}
+			</a>
+			{% endfor %}
+		</div>
+		<div class="card-body">
+			<div id="search-results"></div>
+		</div>
+	</div>
+</div>

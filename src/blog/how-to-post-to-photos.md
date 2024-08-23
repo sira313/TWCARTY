@@ -16,9 +16,9 @@ title: Daun
 description: hac habitasse platea dictumst. Nunc hendrerit ultrices lectus, sed facilisis nisi lacinia quis.
 keyword: Habitase, dictumst
 cover:
-    - url: /assets/photos/daun.jpg
-    - url: /assets/photos/daun.jpg
-thumbnail: /assets/photos/thumbnail/daun.jpg
+    - url: /asset/photos/daun.jpg
+    - url: /asset/photos/daun.jpg
+thumbnail: /asset/photos/thumbnail/daun.jpg
 date: 2024-04-21
 tags: Tumbuhan
 ---
@@ -26,7 +26,7 @@ tags: Tumbuhan
 
 Use [Squoosh](https://squoosh.app/) to convert and compress your images to webp. It's better for performance, trust me.
 
-Put the real images in the `/assets/photos/` directory. You can post 2 or more photos in the cover that will show in a carousel. Next, you need to scale the images to a maximum width of 300px, and still use webp. Put them into `/assets/photos/thumbnail`.
+Put the real images in the `/asset/photos/` directory. You can post 2 or more photos in the cover that will show in a carousel. Next, you need to scale the images to a maximum width of 300px, and still use webp. Put them into `/asset/photos/thumbnail`.
 
 The cover will show in the post, and the thumbnail will show in the index.
 >Just like that

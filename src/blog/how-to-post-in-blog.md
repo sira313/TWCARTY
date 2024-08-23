@@ -19,7 +19,7 @@ layout: post-blog.html
 title: How to post in blog
 description: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi nec cursus tortor. Ut eu quam consequat, gravida massa vel, luctus diam. Duis congue lacus eget magna faucibus sodales. Curabitur laoreet justo in libero faucibus, at laoreet risus lacinia.
 keyword: eleventy, tutorial
-cover: /assets/blog/cover.webp
+cover: /asset/blog/cover.webp
 date: 2024-04-21
 tags:
     - Tutorial

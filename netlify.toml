@@ -1,20 +1,20 @@
 [[headers]]
-  for = "/assets/**/*.webp"
+  for = "/asset/**/*.webp"
     [headers.values]
     Cache-Control = "public, max-age=3600"
 
 [[headers]]
-  for = "/assets/**/*.jpg"
+  for = "/asset/**/*.jpg"
     [headers.values]
     Cache-Control = "public, max-age=3600"
 
 [[headers]]
-  for = "/assets/css/*.css"
+  for = "/asset/css/*.css"
     [headers.values]
     Cache-Control = "public, max-age=3600"
 
 [[headers]]
-  for = "/assets/js/*.js"
+  for = "/asset/js/*.js"
     [headers.values]
     Cache-Control = "public, max-age=3600"
 

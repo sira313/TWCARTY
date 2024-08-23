@@ -46,7 +46,7 @@ tags:
 #### Directory Structure
 ```plaintext
 src
-├── assets
+├── asset/s
 │   ├── index
 │   │   └── cover.webp
 │   └── photos
@@ -122,8 +122,8 @@ If you want to create a post in `/photos`, run:
    pnpm mkpost -p "Your post title"
    ```
 
-#### Assets
-All assets are stored in the [`/src/assets`](https://github.com/sira313/TWCARTY/tree/main/src/assets) directory and are referenced in the frontmatter.
+#### asset/s
+All asset/s are stored in the [`/src/asset/s`](https://github.com/sira313/TWCARTY/tree/main/src/asset/s) directory and are referenced in the frontmatter.
 
 #### Tips
 It's recommended to use [Squoosh](https://squoosh.app/) to convert your images to `.webp`.
