@@ -4,9 +4,9 @@ title: Kupu-kupu
 description: In hac habitasse platea dictumst. Nunc hendrerit ultrices lectus, sed facilisis nisi lacinia quis. Nunc nulla libero, consequat at arcu sit amet, sollicitudin placerat nisl. Praesent mollis nulla maximus nisl tristique, ac tempor enim cursus
 keyword: Butterfly, photo
 cover: 
-  - url: /asset/photos/kupu-kupu.jpg
-  - url: /asset/photos/kupu-kupu2.jpg
-thumbnail: /asset/photos/thumbnail/kupu-kupu.jpg
+  - url: /asset/photos/kupu-kupu.webp
+  - url: /asset/photos/kupu-kupu2.webp
+thumbnail: /asset/photos/thumbnail/kupu-kupu.webp
 date: 2024-04-24
 tags: Hewan
 ---

@@ -60,12 +60,12 @@ pnpm watch:css
 │   │   │   ├── favicon.ico
 │   │   │   └── profile.webp
 │   │   └── photos
-│   │       ├── chick.jpg
-│   │       ├── chicks2.jpg
+│   │       ├── chick.webp
+│   │       ├── chicks2.webp
 │   │       ├── thumbnail
-│   │       │   ├── toko.jpg
-│   │       │   └── warkop.jpg
-│   │       └── warkop.jpg
+│   │       │   ├── toko.webp
+│   │       │   └── warkop.webp
+│   │       └── warkop.webp
 │   ├── blog
 │   │   ├── eleventy-card.md
 │   │   ├── how-to-post-in-blog.md

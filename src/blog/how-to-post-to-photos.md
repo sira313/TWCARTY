@@ -16,9 +16,9 @@ title: Daun
 description: hac habitasse platea dictumst. Nunc hendrerit ultrices lectus, sed facilisis nisi lacinia quis.
 keyword: Habitase, dictumst
 cover:
-    - url: /asset/photos/daun.jpg
-    - url: /asset/photos/daun.jpg
-thumbnail: /asset/photos/thumbnail/daun.jpg
+    - url: /asset/photos/daun.webp
+    - url: /asset/photos/daun.webp
+thumbnail: /asset/photos/thumbnail/daun.webp
 date: 2024-04-21
 tags: Tumbuhan
 ---

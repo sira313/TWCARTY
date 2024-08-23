@@ -4,9 +4,9 @@ title: Warkop
 description: n hac habitasse platea dictumst. Nunc hendrerit ultrices lectus, sed facilisis nisi lacinia quis.
 keyword: habitase, platea, nunc
 cover: 
-  - url: /asset/photos/warkop.jpg
-  - url: /asset/photos/warkop2.jpg
-thumbnail: /asset/photos/thumbnail/warkop.jpg
+  - url: /asset/photos/warkop.webp
+  - url: /asset/photos/warkop2.webp
+thumbnail: /asset/photos/thumbnail/warkop.webp
 date: 2024-04-27
 tags: Interior
 ---
