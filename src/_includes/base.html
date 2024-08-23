@@ -1,6 +1,5 @@
 <!doctype html>
-<!-- do not remove the style as it needed for carousel -->
-<html lang="en" style="scroll-padding-top: 5rem; scroll-behavior: smooth;">
+<html lang="id" style="scroll-padding-top: 5rem; scroll-behavior: smooth;">
 <head>
   <meta charset="utf-8">
   <meta name="description" content="{{ description }}">
@@ -8,15 +7,15 @@
   <meta name="theme-color" content="#1f1f1f" media="(prefers-color-scheme: dark)">
   <meta name="keyword" content="{{ keyword }}">
   <meta name="author" content="{{ author }}">
-  <meta name="generator" content="Eleventy">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="icon" type="image/x-icon" href="{{ rootURL }}/assets/index/favicon.ico">
+  <link rel="icon" type="image/x-icon" href="{{ rootURL }}/asset/index/favicon.ico">
   <title>{{ title }}</title>
+  <meta name="google-site-verification" content="y5Sbw5uym2mSr3t1VKAYwZl24Nc5yTYUhefvBIkAkUk" />
   <meta property="og:title" content="{{ title }}">
   {% if cover %}
   <meta property="og:image" content="{{ rootURL }}{{ cover | firstCoverImage }}">
   {% else %}
-    <meta property="og:image" content="{{ rootURL }}/assets/index/cover.webp">
+    <meta property="og:image" content="{{ rootURL }}/asset/index/cover.webp">
   {% endif %}
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="{{ title }}">
@@ -24,62 +23,22 @@
   {% if cover %}
     <meta name="twitter:image" content="{{ rootURL }}{{ cover | firstCoverImage }}">
   {% else %}
-    <meta name="twitter:image" content="{{ rootURL }}/assets/index/cover.webp">
+    <meta name="twitter:image" content="{{ rootURL }}/asset/index/cover.webp">
   {% endif %}
-  <link rel="stylesheet" href="/assets/css/style.css">
+  <link rel="stylesheet" href="/asset/css/style.css">
   <meta name="view-transition" content="same-origin">
-  <link href="/_pagefind/pagefind-ui.css" rel="stylesheet">
-  <style>
-    :root {
-      --pagefind-ui-primary: #161516;
-      --pagefind-ui-text: #161516;
-      --pagefind-ui-background: #dedede;
-      --pagefind-ui-border: #dedede;
-      --pagefind-ui-tag: #d35728;
-    }
-  
-    @media (prefers-color-scheme: dark) {
-      :root {
-        --pagefind-ui-primary: #d0d0d0;
-        --pagefind-ui-text: #d0d0d0;
-        --pagefind-ui-background: #0e0e0e;
-        --pagefind-ui-border: #0e0e0e;
-        --pagefind-ui-tag: #d35728;
-      }
-    }
-  </style>  
+  <!-- backup if lazysizes cdn doesn't work -->
+  <script src="/asset/js/lazysizes.min.js"></script>
 </head>
-<body class="bg-base-200" data-pagefind-body>
+<body class="bg-base-200">
   <div class="sm:hero min-h-screen">
     {{ content }}
   </div>
-  <!-- search modal -->
-  <dialog id="searchme" class="modal">
-    <div class="modal-box">
-      <div class="w-full">
-        <div id="search" class="search"></div>
-      </div>
-    </div>
-    <form method="dialog" class="modal-backdrop">
-      <button>close</button>
-    </form>
-  </dialog>
   <!-- share modal -->
   <dialog id="share" class="modal">
     <div class="modal-box">
-      <div role="alert" class="mb-4 alert alert-warning">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          class="h-6 w-6 shrink-0 stroke-current"
-          fill="none"
-          viewBox="0 0 24 24">
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-        </svg>
-        <span>Your system did not support web share API, please click the copy button below.</span>
+      <div role="alert" class="alert mb-4">
+        <span>System anda tidak support web share API. Silahkan tekan tombol copy di bawah ini.</span>
       </div>
       <div class="flex items-center">
         <input
@@ -100,8 +59,6 @@
       <button>close</button>
     </form>
   </dialog>
-  <!-- pagefind script -->
-  <script src="/_pagefind/pagefind-ui.js" onload="new PagefindUI({ element: '#search', showImages: false });"></script>
   <!-- script copy to clipboard -->
   <script>
     function copyToClipboard() {

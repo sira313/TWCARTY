@@ -52,7 +52,7 @@ pnpm watch:css
 ```
 src
 ├── 404.html
-├── assets
+├── asset/s
 │   ├── index
 │   │   ├── cover.webp
 │   │   ├── favicon.ico
@@ -154,8 +154,8 @@ To create a photo post in `/photos`:
 pnpm mkpost -p "Your post title"
 ```
 
-#### Assets
-All assets are stored in the [/src/assets](/src/assets/) directory and referenced in the front matter.
+#### asset/s
+All asset/s are stored in the [/src/asset/s](/src/asset/) directory and referenced in the front matter.
 
 #### Tips
 For optimal image conversion to `.webp`, use [Squoosh](https://squoosh.app/).

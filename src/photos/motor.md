@@ -4,9 +4,9 @@ title: Photo In hac habitasse platea dictumst
 description: In hac habitasse platea dictumst. Nunc hendrerit ultrices lectus, sed facilisis nisi lacinia quis. Nunc nulla libero, consequat at arcu sit amet, sollicitudin placerat nisl. Praesent mollis nulla maximus nisl tristique, ac tempor enim cursus
 keyword: Cursus, eget
 cover: 
-  - url: /assets/photos/motor.jpg
-  - url: /assets/photos/motor2.jpg
-thumbnail: /assets/photos/thumbnail/motor.jpg
+  - url: /asset/photos/motor.jpg
+  - url: /asset/photos/motor2.jpg
+thumbnail: /asset/photos/thumbnail/motor.jpg
 date: 2024-04-25
 tags: Kendaraan
 ---

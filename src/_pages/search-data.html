@@ -1,0 +1,27 @@
+---
+permalink: /search-data.json
+---
+{
+  "blog":[
+    {% for post in collections.posts %}
+    {
+      "url": "{{ post.url | url }}",
+      "category": "Blog",
+      "title": "{{ post.data.title }}",
+      "description": "{{ post.data.description }}",
+      "date": "{{ post.data.date | date: '%a, %d %b %Y' }}"
+    }{% unless forloop.last %},{% endunless %}
+    {% endfor %}
+  ],
+  "photos":[
+    {% for photos in collections.photos %}
+    {
+      "url": "{{ photos.url | url }}",
+      "category": "Photos",
+      "title": "{{ photos.data.title }}",
+      "description": "{{ photos.data.description }}",
+      "date": "{{ photos.data.date | date: '%a, %d %b %Y' }}"
+    }{% unless forloop.last %},{% endunless %}
+    {% endfor %}
+  ]
+}

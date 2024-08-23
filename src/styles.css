@@ -9,10 +9,19 @@
   }
 }
 @layer components {
+  .text-hidden {
+    @apply hidden
+  }
   .the-card {
     @apply card rounded-none sm:rounded-xl bg-base-100 shadow-xl w-full md:max-w-3xl 2xl:max-w-4xl mx-auto min-h-screen sm:min-h-min flex flex-col sm:flex-none;
   }
   .the-photos-card {
     @apply card rounded-none sm:rounded-xl bg-base-100 shadow-xl w-full md:max-w-3xl 2xl:max-w-4xl mx-auto sm:card-side min-h-screen sm:max-h-[500px] sm:min-h-[500px] 2xl:max-h-[600px] 2xl:min-h-[600px] flex flex-col;
+  }
+  .prose pre {
+    @apply bg-base-200;
+  }
+  .prose code:not(pre > code) {
+    @apply bg-primary text-neutral;
   }
 }

@@ -4,8 +4,8 @@ title: TWCARTY
 description: Eleventy starter for photographer/artist
 keyword: photography, camera, blog
 author: John Doe
-cover: /assets/index/cover.webp
-profile: /assets/index/profile.webp
+cover: /asset/index/cover.webp
+profile: /asset/index/profile.webp
 ---
 
 #### Hello World

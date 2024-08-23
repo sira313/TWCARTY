@@ -1,7 +1,7 @@
 <!-- relative position -->
 <div class="relative -mt-12 sm:-mt-14 md:-mt-12 flex pl-8 items-center justify-between">
   <!-- avatar -->
-  <div class="avatar tn:pt-2 md:pt-0">
+  <div class="avatar tn:pt-2 md:pt-0 indicator">
     <div class="border border-4 border-base-100 w-24 sm:w-28 rounded-xl">
       <img src="{{ profile }}" alt="Avatar">
     </div>
@@ -9,7 +9,7 @@
   <!-- button menu small screen -->
   <div class="pr-4 tn:hidden pt-14">
     <!-- search -->
-    <button class="btn btn-ghost btn-circle" aria-label="search" onclick="searchme.showModal()">
+    <a role="button" class="btn btn-ghost btn-circle" aria-label="search" href="/search">
       <svg
         xmlns="http://www.w3.org/2000/svg"
         class="h-5 w-5"
@@ -22,7 +22,7 @@
           stroke-width="2"
           d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
       </svg>
-    </button>
+    </a>
     <!-- dropdown menu -->
     <div class="dropdown dropdown-end">
       <div tabindex="0" aria-label="menu" role="button" class="btn btn-ghost btn-circle">
@@ -40,7 +40,7 @@
   <!-- button menu tablet -->
   <div class="pr-4 pt-12 gap-0 hidden tn:flex sm:hidden">
     <!-- search -->
-    <button class="btn btn-ghost btn-circle" aria-label="search" onclick="searchme.showModal()">
+    <a role="button" class="btn btn-ghost btn-circle" aria-label="search" href="/search">
       <svg
         xmlns="http://www.w3.org/2000/svg"
         class="h-5 w-5"
@@ -53,7 +53,7 @@
           stroke-width="2"
           d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
       </svg>
-    </button>
+    </a>
     <!-- Menu -->
     {% for item in nav.items %}
     <a href="{{ item.url }}" aria-label="{{ item.aria-label }}" class="btn btn-ghost btn-circle">
@@ -72,7 +72,7 @@
   <!-- button menu desktop -->
   <div class="pr-4 sm:flex gap-0 hidden">
     <!-- search -->
-    <button class="btn btn-ghost btn-circle" aria-label="search" onclick="searchme.showModal()">
+    <a role="button" class="btn btn-ghost btn-circle" aria-label="search" href="/search">
       <svg
         xmlns="http://www.w3.org/2000/svg"
         class="h-5 w-5"
@@ -85,7 +85,7 @@
           stroke-width="2"
           d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
       </svg>
-    </button>
+    </a>
     <!-- Menu -->
     {% for item in nav.items %}
     <a href="{{ item.url }}" aria-label="{{ item.aria-label }}" class="btn btn-ghost btn-circle">
