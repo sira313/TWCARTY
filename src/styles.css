@@ -22,6 +22,6 @@
     @apply bg-base-200;
   }
   .prose code:not(pre > code) {
-    @apply bg-primary text-neutral;
+    @apply bg-primary text-neutral-content;
   }
 }
