@@ -109,7 +109,7 @@ permalink: /photos.html
 		<!-- content -->
 		<div class="flex-grow">
 			<div id="results-list" class="grid grid-cols-3 gap-0.5">
-				<p id="no-results" class="p-8 col-span-3 text-center text-gray-500 hidden">Didn't find anything</p>
+				<p id="no-results" class="p-8 col-span-3 text-center text-gray-500 hidden">Didn't found anything</p>
 				{% for photos in collections.photos reversed %}
 				<!-- link to post -->
 				<a href="{{ photos.url }}" class="result-item cursor-pointer">

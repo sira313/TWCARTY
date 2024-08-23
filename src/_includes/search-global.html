@@ -70,14 +70,14 @@
         if (results.length > 0) {
           displaySearchResults(results);
         } else {
-          resultsContainer.innerHTML = '<p class="text-red-500 text-center">Tidak ditemukan apa-apa</p>';
+          resultsContainer.innerHTML = '<p class="text-red-500 text-center">Did not found anything.</p>';
         }
       } else {
         resultsContainer.innerHTML = '<p class="text-red-500 text-center">Error loading search data</p>';
       }
     } else {
       // Show initial message when input is empty
-      resultsContainer.innerHTML = '<p class="text-gray-500 text-center">Silahkan cari seluruh konten situs saya di sini</p>';
+      resultsContainer.innerHTML = '<p class="text-gray-500 text-center">Search all my contents here.</p>';
     }
   });
 
