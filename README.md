@@ -49,48 +49,57 @@ pnpm watch:css
 ```
 
 #### Directory Structure
-```
-src
-├── 404.html
-├── asset/s
-│   ├── index
-│   │   ├── cover.webp
-│   │   ├── favicon.ico
-│   │   └── profile.webp
-│   └── photos
-│       ├── motor2.jpg
-│       ├── motor.jpg
-│       ├── thumbnail
-│       │   ├── toko.jpg
-│       │   └── warkop.jpg
-│       └── warkop.jpg
-├── blog
-│   ├── eleventy-card.md
-│   ├── how-to-post-in-blog.md
-│   ├── how-to-post-to-photos.md
-│   ├── index.html
-│   └── tag.html
-├── _data
-│   ├── nav.json
-│   └── nav-mobile.json
-├── _includes
-│   ├── base.html
-│   ├── footer-credit.html
-│   ├── index.html
-│   ├── post-blog.html
-│   ├── post-photos.html
-│   ├── profile.html
-│   ├── recent.html
-│   └── sosmed.html
-├── index.md
-├── photos
-│   ├── Anak-Ayam.md
-│   ├── daun.md
-│   ├── index.html
-│   ├── tag.html
-│   └── warkop.md
-├── styles.css
-└── theme.html
+```bash
+❯ tree
+.
+├── src
+│   ├── 404.html
+│   ├── asset
+│   │   ├── index
+│   │   │   ├── cover.webp
+│   │   │   ├── favicon.ico
+│   │   │   └── profile.webp
+│   │   └── photos
+│   │       ├── chick.jpg
+│   │       ├── chicks2.jpg
+│   │       ├── thumbnail
+│   │       │   ├── toko.jpg
+│   │       │   └── warkop.jpg
+│   │       └── warkop.jpg
+│   ├── blog
+│   │   ├── eleventy-card.md
+│   │   ├── how-to-post-in-blog.md
+│   ├── _data
+│   │   ├── nav.json
+│   │   ├── nav-mobile.json
+│   │   └── sosmed.json
+│   ├── _includes
+│   │   ├── base.html
+│   │   ├── comment.html
+│   │   ├── footer-credit.html
+│   │   ├── footer-sosmed.html
+│   │   ├── index.html
+│   │   ├── post-blog.html
+│   │   ├── post-photos.html
+│   │   ├── profile.html
+│   │   ├── recent.html
+│   │   ├── search-global.html
+│   │   └── search.html
+│   ├── index.md
+│   ├── _pages
+│   │   ├── 404.html
+│   │   ├── blog.html
+│   │   ├── photos.html
+│   │   ├── search-data.html
+│   │   ├── search.html
+│   │   ├── tag-blog.html
+│   │   ├── tag-photos.html
+│   │   └── theme.html
+│   ├── photos
+│   │   ├── Toko.md
+│   │   └── warkop.md
+│   └── styles.css
+└── tailwind.config.js
 ```
 
 #### Settings
@@ -135,10 +144,10 @@ There are three layouts in [src/_includes](/src/_includes/):
 - **Photo Post Layout**: [src/_includes/post-photos.html](/src/_includes/post-photos.html).
 
 #### Index Pages
-The project includes three index pages:
+All pages store in [src/_pages](src/_pages). But the project includes three index pages:
 - **Main Index**: [src/index.md](/src/index.md) for describing your business.
-- **Photo Index**: [src/photos/index.html](/src/photos/index.html) for all your photos.
-- **Blog Index**: [src/blog/index.html](/src/blog/index.html) for your blog posts.
+- **Photo Index**: [src/_pages/photos.html](/src/_pages/photos.html) for all your photos.
+- **Blog Index**: [src/_pages/blog.html](/src/_pages/blog.html) for your blog posts.
 
 #### Creating Posts
 A script is available to automate post creation, so manual work is not necessary. [Thanks to my friend](https://github.com/mustofa-id).
@@ -154,8 +163,8 @@ To create a photo post in `/photos`:
 pnpm mkpost -p "Your post title"
 ```
 
-#### asset/s
-All asset/s are stored in the [/src/asset/s](/src/asset/) directory and referenced in the front matter.
+#### Assets
+All asset/s are stored in the [/src/asset/](/src/asset/) directory and referenced in the front matter.
 
 #### Tips
 For optimal image conversion to `.webp`, use [Squoosh](https://squoosh.app/).
