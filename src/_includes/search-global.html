@@ -63,7 +63,8 @@
     const searchData = await fetchSearchData();
     const resultsContainer = document.getElementById('search-results');
     
-    if (query) {
+    // Check if the query length meets the minimum requirement (e.g., 3 characters)
+    if (query.length >= 3) {
       if (searchData) {
         const results = searchPostsAndPhotos(searchData, query);
         
@@ -76,8 +77,8 @@
         resultsContainer.innerHTML = '<p class="text-red-500 text-center">Error loading search data</p>';
       }
     } else {
-      // Show initial message when input is empty
-      resultsContainer.innerHTML = '<p class="text-gray-500 text-center">Search all my contents here.</p>';
+      // Show initial message or hide results when query is too short
+      resultsContainer.innerHTML = '<p class="text-gray-500 text-center">Search all my contents here</p>';
     }
   });
 
@@ -107,6 +108,6 @@
   document.addEventListener('DOMContentLoaded', () => {
     const resultsContainer = document.getElementById('search-results');
     resultsContainer.classList.add('flex', 'flex-col', 'gap-6'); // Center content
-    resultsContainer.innerHTML = '<p class="text-gray-500 text-center">Search all my contents here.</p>';
+    resultsContainer.innerHTML = '<p class="text-gray-500 text-center">Search all my contents here</p>';
   });
 </script>
