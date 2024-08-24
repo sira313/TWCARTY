@@ -53,7 +53,6 @@ pnpm watch:css
 ❯ tree
 .
 ├── src
-│   ├── 404.html
 │   ├── asset
 │   │   ├── index
 │   │   │   ├── cover.webp
