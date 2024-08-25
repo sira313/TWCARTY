@@ -58,38 +58,4 @@
       <button>close</button>
     </form>
   </dialog>
-  <!-- script copy to clipboard -->
-  <script>
-    function copyToClipboard() {
-      const urlInput = document.getElementById('share-url');
-      urlInput.select();
-      urlInput.setSelectionRange(0, 99999); // For mobile devices
-      navigator.clipboard.writeText(urlInput.value)
-        .then(() => {
-          alert('URL copied to clipboard');
-        })
-        .catch(err => {
-          console.error('Failed to copy: ', err);
-        });
-    }
-
-    function sharePost() {      
-      if (!navigator.share) {
-        // use modal if native share not compatible
-        share.showModal()
-        return
-      }
-
-      navigator.share({
-        title: document.title,
-        url: location.href
-      }).catch((e) => {
-        if (e.name !== 'AbortError') {
-          console.warn(`Failed to use native share API. `, e);
-          // fallback custom modal only if not aborted by user
-          share.showModal();
-        }
-      });
-    }
-  </script>
 </body>
