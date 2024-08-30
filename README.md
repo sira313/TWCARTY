@@ -106,7 +106,7 @@ src
 ```
 
 #### Settings
-- **Language**: Update the language setting in [src/_includes/main/base.html](https://github.com/sira313/TWCARTY/blob/main/src/_includes/main/base.html#L3):
+- **Language**: Update the language setting in [src/_includes/main/base.html](https://github.com/sira313/TWCARTY/blob/main/src/_includes/main/base.html#L2):
   ```html
   <html lang="en">
   ```
