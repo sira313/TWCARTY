@@ -5,7 +5,9 @@ const lazyImagesPlugin = require('eleventy-plugin-lazyimages');
 module.exports = function(eleventyConfig) {
   
   // lazyImages and Files Minifier
-  eleventyConfig.addPlugin(lazyImagesPlugin);
+  eleventyConfig.addPlugin(lazyImagesPlugin, {
+    appendInitScript: false, // Menonaktifkan penyertaan otomatis script lazysizes dari CDN
+  });
   eleventyConfig.addPlugin(eleventyPluginFilesMinifier);
 
   // Tailwind config target watch
