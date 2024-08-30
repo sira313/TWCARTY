@@ -1,7 +1,7 @@
 ---
 title: Apoxicam Photos
 description: Saya bukanlah seorang fotografer, tapi saya suka memotret apa yang menurut saya bagus sembari belajar.
-layout: base.html
+layout: main/base.html
 cover: /asset/index/cover.webp
 keyword: apoxicam, apoxicam photos, photos
 permalink: /photos/
@@ -36,7 +36,7 @@ permalink: /photos/
 			</a>
 			<!-- simple search -->
 			<div class="flex-grow">
-				{% include "search.html" %}
+				{% include "search/search.html" %}
 			</div>
 			<!-- categories -->
 			<div class="dropdown dropdown-end">
@@ -131,7 +131,7 @@ permalink: /photos/
 		</div>
 		<!-- Footer credit -->
 	  <div class="text-center py-4 border-t border-base-300">
-      {% include "footer-credit.html" %}
+      {% include "footer/footer-credit.html" %}
 	  </div>
 	</div>
 </div>

@@ -1,7 +1,7 @@
 ---
 title: Apoxicam Blog
 description: Saya bukan penulis, saya hanya ingin mendokumentasikan apa yang menurut saya penting kepada dunia.
-layout: base.html
+layout: main/base.html
 cover: /asset/index/cover.webp
 keyword: blog, apoxicam blog, apoxicam
 permalink: /blog/
@@ -36,7 +36,7 @@ permalink: /blog/
 			</a>
 			<div class="flex-grow">
 				<!-- Simple search -->
-				{% include "search.html" %}
+				{% include "search/search.html" %}
 			</div>
 			<!-- categories -->
 			<div class="dropdown dropdown-end">
@@ -127,7 +127,7 @@ permalink: /blog/
 		</div>
 		<!-- Footer credit -->
 	  <div class="text-center py-4 border-t border-base-300">
-      {% include "footer-credit.html" %}
+      {% include "footer/footer-credit.html" %}
 	  </div>
 	</div>
 </div>

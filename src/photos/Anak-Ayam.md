@@ -1,5 +1,5 @@
 ---
-layout: post-photos.html
+layout: main/post-photos.html
 title: Anak Ayam
 description: Interdum et malesuada fames ac ante ipsum primis in faucibus. Nulla lacinia gravida nulla id iaculis.
 keyword: Chick, chicken.

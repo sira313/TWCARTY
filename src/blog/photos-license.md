@@ -1,5 +1,5 @@
 ---
-layout: post-blog.html 
+layout: main/post-blog.html 
 title: License of images
 description: All photos here is downloaded from https://pexels.com that can be downloaded and used for free.
 keyword: License

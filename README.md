@@ -51,62 +51,66 @@ pnpm watch:css
 #### Directory Structure
 ```bash
 ❯ tree
-.
-├── src
-│   ├── asset
-│   │   ├── index
-│   │   │   ├── cover.webp
-│   │   │   ├── favicon.ico
-│   │   │   └── profile.webp
-│   │   └── photos
-│   │       ├── chick.webp
-│   │       ├── chicks2.webp
-│   │       ├── thumbnail
-│   │       │   ├── toko.webp
-│   │       │   └── warkop.webp
-│   │       └── warkop.webp
-│   ├── blog
-│   │   ├── eleventy-card.md
-│   │   ├── how-to-post-in-blog.md
-│   ├── _data
-│   │   ├── nav.json
-│   │   ├── nav-mobile.json
-│   │   └── sosmed.json
-│   ├── _includes
-│   │   ├── base.html
-│   │   ├── comment.html
+src
+├── asset
+│   ├── index
+│   │   ├── cover.webp
+│   │   ├── favicon.ico
+│   │   └── profile.webp
+│   ├── js
+│   │   └── lazysizes.min.js
+│   └── photos
+│       ├── thumbnail
+│       │   └── warkop.webp
+│       └── warkop.webp
+├── blog
+│   ├── eleventy-card.md
+│   └── photos-license.md
+├── _data
+│   ├── nav.json
+│   ├── nav-mobile.json
+│   └── sosmed.json
+├── _includes
+│   ├── footer
 │   │   ├── footer-credit.html
-│   │   ├── footer-sosmed.html
+│   │   └── footer-sosmed.html
+│   ├── index
+│   │   ├── profile.html
+│   │   └── recent.html
+│   ├── main-layout
+│   │   ├── base.html
 │   │   ├── index.html
 │   │   ├── post-blog.html
-│   │   ├── post-photos.html
-│   │   ├── profile.html
-│   │   ├── recent.html
-│   │   ├── search-global.html
-│   │   └── search.html
-│   ├── index.md
-│   ├── _pages
-│   │   ├── 404.html
-│   │   ├── blog.html
-│   │   ├── photos.html
-│   │   ├── search-data.html
-│   │   ├── search.html
-│   │   ├── tag-blog.html
-│   │   ├── tag-photos.html
-│   │   └── theme.html
-│   ├── photos
-│   │   ├── Toko.md
-│   │   └── warkop.md
-│   └── styles.css
-└── tailwind.config.js
+│   │   └── post-photos.html
+│   ├── post
+│   │   ├── comment.html
+│   │   └── share.html
+│   └── search
+│       ├── search-global.html
+│       └── search.html
+├── index.md
+├── _pages
+│   ├── 404.html
+│   ├── blog.html
+│   ├── photos.html
+│   ├── search-data.html
+│   ├── search.html
+│   ├── tag-blog.html
+│   ├── tag-photos.html
+│   └── theme.html
+├── photos
+│   ├── Toko.md
+│   └── warkop.md
+└── styles.css
+
 ```
 
 #### Settings
-- **Language**: Update the language setting in [src/_includes/base.html](https://github.com/sira313/TWCARTY/blob/main/src/_includes/base.html#L3):
+- **Language**: Update the language setting in [src/_includes/main/base.html](https://github.com/sira313/TWCARTY/blob/main/src/_includes/main/base.html#L3):
   ```html
   <html lang="en">
   ```
-- **Root URL**: Set your root URL in [.eleventy.js](https://github.com/sira313/TWCARTY/blob/main/.eleventy.js#L19):
+- **Root URL**: Set your root URL in [.eleventy.js](https://github.com/sira313/TWCARTY/blob/main/.eleventy.js#L17):
   ```javascript
   // Root URL for the share button
   eleventyConfig.addGlobalData("rootURL", "https://twcarty.netlify.app");
@@ -122,7 +126,7 @@ The project includes two default menus for post indexing:
 - Photos
 - Blog
 
-To add another menu, follow [this tutorial](https://www.youtube.com/watch?v=kzf9A9tkkl4). Don’t forget to update the collection in [.eleventy.js](https://github.com/sira313/TWCARTY/blob/main/.eleventy.js#L26-L27):
+To add another menu, follow [this tutorial](https://www.youtube.com/watch?v=kzf9A9tkkl4). Don’t forget to update the collection in [.eleventy.js](https://github.com/sira313/TWCARTY/blob/main/.eleventy.js#L24-L29):
 ```javascript
 // Collections
 const collectionConfigs = [
@@ -137,10 +141,10 @@ Also, add your new menu in [src/_data](/src/_data/).
 - [src/_data/nav-mobile.json](src/_data/nav-mobile.json) for mobile view below 300px
 
 #### Layouts
-There are three layouts in [src/_includes](/src/_includes/):
-- **Main Layout**: [src/_includes/base.html](/src/_includes/base.html), referenced in other layouts.
-- **Blog Post Layout**: [src/_includes/post-blog.html](/src/_includes/post-blog.html).
-- **Photo Post Layout**: [src/_includes/post-photos.html](/src/_includes/post-photos.html).
+There are three layouts in [src/_includes/main](/src/_includes/main):
+- **Main Layout**: [src/_includes/main/base.html](/src/_includes/main/base.html), referenced in other layouts.
+- **Blog Post Layout**: [src/_includes/main/post-blog.html](/src/_includes/main/post-blog.html).
+- **Photo Post Layout**: [src/_includes/main/post-photos.html](/src/_includes/main/post-photos.html).
 
 #### Index Pages
 All pages store in [src/_pages](src/_pages). But the project includes three index pages:

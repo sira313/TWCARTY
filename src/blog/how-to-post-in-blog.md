@@ -1,5 +1,5 @@
 ---
-layout: post-blog.html
+layout: main/post-blog.html
 title: How to post in blog
 description: A short description to use this starter to post your log to blog.
 keyword: eleventy, tutorial
@@ -15,7 +15,7 @@ how-to-create-post-in-blog.md
 Since we use markdown, refer to this [markdown cheat sheet](https://www.markdownguide.org/cheat-sheet/) as a guide. Do not forget our default frontmatter:
 ```
 ---
-layout: post-blog.html
+layout: main/post-blog.html
 title: How to post in blog
 description: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi nec cursus tortor. Ut eu quam consequat, gravida massa vel, luctus diam. Duis congue lacus eget magna faucibus sodales. Curabitur laoreet justo in libero faucibus, at laoreet risus lacinia.
 keyword: eleventy, tutorial

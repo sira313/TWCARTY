@@ -1,5 +1,5 @@
 ---
-layout: post-blog.html 
+layout: main/post-blog.html 
 title: Eleventy Card
 description: Eleventy Card is a starter project for photographer/artist showing their work and blog randomly
 keyword: Eleventy, Bulma

@@ -5,7 +5,7 @@ pagination:
   size: 1
   alias: tag
   addAllPagesToCollections: true
-layout: base.html
+layout: main/base.html
 permalink: /photos/tag/{{tag | slugify }}/index.html
 eleventyComputed:
   title: "{{ tag }}"
@@ -40,7 +40,7 @@ eleventyComputed:
 			</a>
 			<!-- simple search -->
 			<div class="flex-grow">
-				{% include "search.html" %}
+				{% include "search/search.html" %}
 			</div>
 			<!-- back to posts -->
 			<a aria-label="back" href="/photos" class="btn btn-ghost btn-circle">
@@ -150,7 +150,7 @@ eleventyComputed:
 		</div>
 		<!-- Footer credit -->
 	  <div class="text-center py-4 border-t border-base-300">
-      {% include "footer-credit.html" %}
+      {% include "footer/footer-credit.html" %}
 	  </div>
 	</div>
 </div>

@@ -1,6 +1,6 @@
 ---
 title: Search
-layout: base.html
+layout: main/base.html
 cover: /asset/index/cover.webp
 permalink: /search.html
 ---
@@ -34,7 +34,7 @@ permalink: /search.html
 			</a>
 			<div class="flex-grow">
 				<!-- Simple search -->
-				{% include "search-global.html" %}
+				{% include "search/search-global.html" %}
 			</div>
 			<!-- Menu -->
 			{% for item in nav.items %}

@@ -1,5 +1,5 @@
 ---
-layout: post-blog.html
+layout: main/post-blog.html
 title: Modify Theme
 description: To change the default colors on this site, you can use the DaisyUI Theme Generator or manually customize them to suit your preferences.
 keyword: Daisyui, theme generator, tailwindcss

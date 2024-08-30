@@ -1,5 +1,5 @@
 ---
-layout: post-blog.html
+layout: main/post-blog.html
 title: How to post to photos
 description: A short description to use this starter to post your pics to gallery.
 keyword: eleventy, tutorial, post.
@@ -11,7 +11,7 @@ Similar to the [previous tutorial about posting to the blog](/blog/how-to-post-i
 
 ```markdown
 ---
-layout: post-photos.html
+layout: main/post-photos.html
 title: Daun
 description: hac habitasse platea dictumst. Nunc hendrerit ultrices lectus, sed facilisis nisi lacinia quis.
 keyword: Habitase, dictumst

@@ -1,5 +1,5 @@
 ---
-layout: base.html
+layout: main/base.html
 ---
 <div class="sm:container m-0 p-0 sm:mx-auto sm:p-4 md:p-10">
 	<div class="the-card">
@@ -8,7 +8,7 @@ layout: base.html
       <img src="{{ cover }}" alt="cover" />
     </figure>
     <!-- Profile and menus -->
-    {% include "profile.html" %}
+    {% include "index/profile.html" %}
     <!-- content -->
     <div class="flex-grow">
       <div class="card-body pt-4 tn:pt-8">
@@ -20,9 +20,9 @@ layout: base.html
       </div>
     </div>
     <!-- Footer credit -->
-    {% include "footer-sosmed.html" %}
+    {% include "footer/footer-sosmed.html" %}
     <div class="text-center py-4">
-      {% include "footer-credit.html" %}
+      {% include "footer/footer-credit.html" %}
     </div>
   </div>
 </div>
