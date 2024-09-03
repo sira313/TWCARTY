@@ -167,7 +167,7 @@ pnpm mkpost -p "Your post title"
 ```
 
 #### Assets
-All asset/s are stored in the [/src/asset/](/src/asset/) directory and referenced in the front matter.
+All assets are stored in the [/src/asset/](/src/asset/) directory and referenced in the front matter.
 
 #### Tips
 For optimal image conversion to `.webp`, use [Squoosh](https://squoosh.app/).
