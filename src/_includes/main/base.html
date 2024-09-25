@@ -1,61 +1,41 @@
 <!doctype html>
-<html lang="en" style="scroll-padding-top: 5rem; scroll-behavior: smooth;">
-<head>
-  <meta charset="utf-8">
-  <meta name="description" content="{{ description }}">
-  <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
-  <meta name="theme-color" content="#1f1f1f" media="(prefers-color-scheme: dark)">
-  <meta name="keyword" content="{{ keyword }}">
-  <meta name="author" content="{{ author }}">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="icon" type="image/x-icon" href="{{ rootURL }}/asset/index/favicon.ico">
-  <title>{{ title }}</title>
-  <meta property="og:title" content="{{ title }}">
-  {% if cover %}
-  <meta property="og:image" content="{{ rootURL }}{{ cover | firstCoverImage }}">
-  {% else %}
-    <meta property="og:image" content="{{ rootURL }}/asset/index/cover.webp">
-  {% endif %}
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="{{ title }}">
-  <meta name="twitter:description" id="twitter-description" content="{{ description }}">
-  {% if cover %}
-    <meta name="twitter:image" content="{{ rootURL }}{{ cover | firstCoverImage }}">
-  {% else %}
-    <meta name="twitter:image" content="{{ rootURL }}/asset/index/cover.webp">
-  {% endif %}
-  <link rel="stylesheet" href="/asset/css/style.css">
-  <meta name="view-transition" content="same-origin">
-  <!-- lazyimages -->
-  <script src="/asset/js/lazysizes.min.js"></script>
-</head>
-<body class="bg-base-200">
-  <div class="sm:hero min-h-screen">
-    {{ content }}
-  </div>
-  <!-- share modal -->
-  <dialog id="share" class="modal">
-    <div class="modal-box">
-      <div role="alert" class="alert mb-4">
-        <span>Your system does not support web share API. Please press the copy button below.</span>
-      </div>
-      <div class="flex items-center">
-        <input
-          type="text"
-          id="share-url"
-          value="{{ rootURL }}{{ page.url }}"
-          class="input input-bordered w-full mr-4"
-          aria-label="link"
-          disabled/>
-        <button 
-          class="btn btn-primary" 
-          onclick="copyToClipboard()">
-          Copy
-        </button>
-      </div>
+<html lang="id">
+  <head>
+    <meta charset="utf-8">
+    <meta name="description" content="{{ description }}">
+    <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+    <meta name="theme-color" content="#1f1f1f" media="(prefers-color-scheme: dark)">
+    <meta name="keyword" content="{{ keyword }}">
+    <meta name="author" content="{{ author }}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="/asset/index/favicon.ico">
+    <title>{{ title }}</title>
+    <meta property="og:title" content="{{ title }}">
+    {% if cover %}
+    <meta property="og:image" content="{{ rootURL }}{{ cover | firstCoverImage }}">
+    {% else %}
+      <meta property="og:image" content="{{ rootURL }}/asset/index/cover.webp">
+    {% endif %}
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{{ title }}">
+    <meta name="twitter:description" id="twitter-description" content="{{ description }}">
+    {% if cover %}
+      <meta name="twitter:image" content="{{ rootURL }}{{ cover | firstCoverImage }}">
+    {% else %}
+      <meta name="twitter:image" content="{{ rootURL }}/asset/index/cover.webp">
+    {% endif %}
+    <link rel="stylesheet" href="/asset/css/style.css">
+    <meta name="view-transition" content="same-origin">
+    <!-- search -->
+    <link rel="modulepreload" as="script" crossorigin href="/asset/js/search.js">
+    <link rel="modulepreload" as="script" crossorigin href="/asset/js/search-global.js">
+    <!-- lazyimages -->
+    <script src="/asset/js/lazysizes.min.js"></script>
+    <script type="application/ld+json">{"@context":"http://schema.org","@type":"WebSite","name":"SD Negeri 19 Periji","url":"{{ rootURL }}{{ page.url }}"}</script>
+  </head>
+  <body class="bg-base-200">
+    <div class="sm:hero min-h-screen">
+      {{ content }}
     </div>
-    <form method="dialog" class="modal-backdrop">
-      <button>close</button>
-    </form>
-  </dialog>
-</body>
+  </body>
+</html>

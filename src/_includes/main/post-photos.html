@@ -4,7 +4,7 @@ layout: main/base.html
 <div class="sm:container m-0 p-0 sm:mx-auto sm:px-4 md:px-10">
   <div class="the-photos-card">
     <!-- top navbar on mobile -->
-    <div class="sticky top-0 z-50 navbar bg-base-100 px-4 sm:hidden">
+    <div class="the-navbar sm:hidden">
       <div class="navbar-start">
         <!-- back to posts -->
         <a aria-label="back" href="/photos" class="btn btn-ghost btn-circle">
@@ -44,7 +44,7 @@ layout: main/base.html
       </div>
       <div class="navbar-end">
         <!-- share -->
-        {% include "post/share.html" %}
+        {% include "post/sharebutton.html" %}
       </div>
     </div>
     <!-- cover -->
@@ -68,7 +68,7 @@ layout: main/base.html
     <!-- description -->
     <div class="sm:w-1/2 flex-grow flex flex-col overflow-hidden">
       <!-- top navbar -->
-      <div class="navbar bg-base-100 rounded-t-xl px-4 hidden sm:block border-b border-base-300">
+      <div class="navbar bg-base-100 rounded-t-xl px-4 hidden sm:block border-b border-base-200">
         <div class="navbar-start">
           <!-- back to posts -->
           <a aria-label="back" href="/photos" class="btn btn-ghost btn-circle">
@@ -108,12 +108,12 @@ layout: main/base.html
         </div>
         <div class="navbar-end">
           <!-- share -->
-          {% include "post/share.html" %}
+          {% include "post/sharebutton.html" %}
         </div>
       </div>
       <!-- content -->
       <div class="card-body sm:overflow-y-auto flex-grow">
-        <div class="prose md:prose-lg max-w-none">
+        <div class="prose max-w-none">
           <h3>{{ title }}</h3>
           <div class="text-sm m-0">{{ date | date: "%a, %d %b %Y" }}</div>
           {{ content }}
@@ -124,7 +124,7 @@ layout: main/base.html
       {%- assign previousPhotos = collections.photos | getPreviousCollectionItem %}
       {%- assign nextPhotos = collections.photos | getNextCollectionItem %}
       {%- if nextPhotos or previousPhotos %}
-      <div class="card-action navbar bg-base-100 rounded-b-xl px-4 border-t border-base-300">
+      <div class="card-action navbar bg-base-100 rounded-b-xl px-4 border-t border-base-200">
         <div class="navbar-start">
           <!-- next post -->
           {%- if nextPhotos %}
@@ -173,3 +173,4 @@ layout: main/base.html
     </div>
   </div>
 </div>
+{% include "post/sharemodal.html" %}

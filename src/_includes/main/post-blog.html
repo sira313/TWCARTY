@@ -4,7 +4,7 @@ layout: main/base.html
 <div class="sm:container m-0 p-0 sm:mx-auto sm:p-4 md:p-10">
 	<div class="the-card">
     <!-- top navbar -->
-    <div class="navbar bg-base-100 rounded-t-xl px-4 border-b border-base-300 sticky top-0 z-50">
+    <div class="the-navbar rounded-t-xl">
       <div class="navbar-start">
         <!-- back to posts -->
         <a href="/blog" aria-label="back" class="btn btn-ghost btn-circle">
@@ -49,22 +49,24 @@ layout: main/base.html
       </div>
       <div class="navbar-end">
         <!-- share -->
-        {% include "post/share.html" %}
+        {% include "post/sharebutton.html" %}
       </div>
     </div>
     <!-- content -->
     <div class="flex-grow">
       <div class="card-body pt-4 tn:pt-8">
         <div class="w-full">
-          <div class="prose md:prose-lg max-w-none">
+          <div class="prose max-w-none">
             <h3>{{ title }}</h3>
-            <div class="text-sm m-0">{{ date | date: "%a, %d %b %Y" }}</div>
+            <div class="text-sm mt-0 mx-0 mb-6">
+              {{ date | date: "%a, %d %b %Y" }} ― <b>{{ author }}</b>
+            </div>
             {{ content }}
           </div>
         </div>
       </div>
     </div>
-    <div class="border-t border-base-300"></div>
+    <div class="border-t border-base-200"></div>
     <!-- bottom navbar -->
     {%- if collections.posts %}
   {%- assign previousPost = collections.posts | getPreviousCollectionItem %}
@@ -91,7 +93,7 @@ layout: main/base.html
         {% endif %}
       </div>
       <!-- credit license -->
-      <div class="navbar-center py-4">
+      <div class="navbar-center text-center py-4">
         {% include "footer/footer-credit.html" %}
       </div>
       <div class="navbar-end">
@@ -118,3 +120,4 @@ layout: main/base.html
     {% endif %}
   </div>
 </div>
+{% include "post/sharemodal.html" %}

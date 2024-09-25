@@ -15,6 +15,7 @@ module.exports = function(eleventyConfig) {
 
   // Global data for root URL
   eleventyConfig.addGlobalData("rootURL", "https://twcarty.netlify.app");
+  eleventyConfig.addGlobalData("rootTitle", "Apoxicam");
 
   // Bypass dir
   const passthroughCopies = ["src/robots.txt", "src/asset/", "src/CNAME"];

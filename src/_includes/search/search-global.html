@@ -1,5 +1,5 @@
 <label class="input bg-base-200 flex w-full md:mx-4 items-center gap-2">
-  <input id="search-input" type="text" class="grow w-full" placeholder="Search" />
+  <input id="search-input" type="text" class="grow w-full" placeholder="Search here" />
   <svg
     xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 16 16"
@@ -11,103 +11,6 @@
       clip-rule="evenodd" />
   </svg>
 </label>
-<script>
-  // Fetch the search data
-  async function fetchSearchData() {
-    try {
-      const response = await fetch('/search-data.json');
-      const searchData = await response.json();
-      return searchData;
-    } catch (error) {
-      console.error('Error loading search data:', error);
-      return null;
-    }
-  }
-
-  // Search function to filter posts and photos
-  function searchPostsAndPhotos(searchData, query) {
-    const results = [];
-
-    // Handle blog posts if available
-    if (searchData.blog && Array.isArray(searchData.blog)) {
-      searchData.blog.forEach((item) => {
-        if (
-          item.title.toLowerCase().includes(query) ||
-          item.description.toLowerCase().includes(query) ||
-          item.category.toLowerCase().includes(query)
-        ) {
-          results.push(item);
-        }
-      });
-    }
-
-    // Handle photos if available
-    if (searchData.photos && Array.isArray(searchData.photos)) {
-      searchData.photos.forEach((item) => {
-        if (
-          item.title.toLowerCase().includes(query) ||
-          item.description.toLowerCase().includes(query) ||
-          item.category.toLowerCase().includes(query)
-        ) {
-          results.push(item);
-        }
-      });
-    }
-
-    return results;
-  }
-
-  // Event listener for the search input
-  document.getElementById('search-input').addEventListener('input', async function () {
-    const query = this.value.toLowerCase();
-    const searchData = await fetchSearchData();
-    const resultsContainer = document.getElementById('search-results');
-    
-    // Check if the query length meets the minimum requirement (e.g., 3 characters)
-    if (query.length >= 3) {
-      if (searchData) {
-        const results = searchPostsAndPhotos(searchData, query);
-        
-        if (results.length > 0) {
-          displaySearchResults(results);
-        } else {
-          resultsContainer.innerHTML = '<p class="text-red-500 text-center">Did not found anything.</p>';
-        }
-      } else {
-        resultsContainer.innerHTML = '<p class="text-red-500 text-center">Error loading search data</p>';
-      }
-    } else {
-      // Show initial message or hide results when query is too short
-      resultsContainer.innerHTML = '<p class="text-gray-500 text-center">Search all my contents here</p>';
-    }
-  });
-
-  // Function to display the search results
-  function displaySearchResults(results) {
-    const resultsContainer = document.getElementById('search-results');
-    resultsContainer.innerHTML = '';
-    resultsContainer.classList.add('flex', 'flex-col', 'gap-4'); // Add flex styles
-
-    results.forEach((result) => {
-      const resultItem = document.createElement('div');
-      resultItem.classList.add('the-result');
-
-      resultItem.innerHTML = `
-        <p class="text-md sm:text-lg font-bold mb-2 text-primary">
-          <a class="link link-hover" href="${result.url}">${result.title}</a>
-        </p>
-        <p class="text-sm sm:text-md mb-2">${result.description}</p>
-        <p class="text-sm"><code class="bg-base-200 rounded-md p-1">${result.category}</code> - ${result.date}</p>
-      `;
-
-      resultsContainer.appendChild(resultItem);
-    });
-  }
-
-  // Initialize the results container with the initial message
-  document.addEventListener('DOMContentLoaded', () => {
-    const resultsContainer = document.getElementById('search-results');
-    resultsContainer.classList.add('flex', 'flex-col', 'gap-6'); // Center content
-    resultsContainer.innerHTML = '<p class="text-gray-500 text-center">Search all my contents here</p>';
-  });
+<script type="module">
+  import '/asset/js/search-global.js';
 </script>

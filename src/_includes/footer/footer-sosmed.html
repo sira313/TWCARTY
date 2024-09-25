@@ -1,16 +1,24 @@
-<footer class="footer bg-base-200 text-neutral-content items-center p-8 border-x-4 border-base-100">
-  <aside>
-    <div class="prose">
-      <blockquote class="text-sm">
-        <i>Happy Independence Day of the Republic of Indonesia 2024! Today, we celebrate not only physical independence, but also freedom in thought and work.</i>
-      </blockquote>
-    </div>
-  </aside>
-  <nav class="gap-4 grid-flow-col md:place-self-center md:justify-self-end">
-    {% for item in sosmed.items %}
-      <a class="text-base-content hover:text-primary" href="{{ item.url }}" aria-label="{{ item.aria-label }}">
+<footer class="footer footer-center bg-base-200 text-base-content p-8 border-x-4 border-base-100">
+  <nav class="flex flex-col sm:flex-row gap-2 sm:gap-4">
+    {% for item in links.items %}
+      <a href="{{ item.url }}" class="font-semibold hover:text-primary">
         {{ item.name }}
       </a>
     {% endfor %}
+  </nav>
+  <aside>
+    <p>
+      <i>“No one comes to your website to be entertained. They have questions they think you can answer. Content answers questions.”</i>
+      <b>― Jay Baer</b>
+    </p>
+  </aside>
+  <nav>
+    <div class="grid grid-flow-col gap-4">
+      {% for item in sosmed.items %}
+      <a class="text-base-content hover:text-primary" href="{{ item.url }}" aria-label="{{ item.aria-label }}">
+        {{ item.name }}
+      </a>
+      {% endfor %}
+    </div>
   </nav>
 </footer>

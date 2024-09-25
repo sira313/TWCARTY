@@ -1,0 +1,109 @@
+<!-- navbar -->
+<div class="sticky top-0 z-50">
+  <div class="flex-row navbar bg-base-100 px-4 border-b border-base-200 backdrop-blur bg-opacity-80">
+    <!-- back home -->
+    <div class="dropdown dropdown-start mr-2 md:mr-0">
+      <div tabindex="0" role="button" class="btn btn-ghost btn-circle avatar online">
+        <div class="w-10 rounded-full">
+          <img
+            alt="Profile"
+            src="{{ profile }}" />
+        </div>
+      </div>
+      <ul
+        tabindex="0"
+        class="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow-xl border border-base-200">
+        {% for item in links.items %}
+        <li>
+          <a href="{{ item.url }}">
+            {{ item.name }}
+          </a>
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+    <!-- Simple search -->
+    <div class="flex-grow">
+      {% include "search/search-global.html" %}
+    </div>
+    <!-- Menu large -->
+    <div class="sm:ml-2 md:ml-0">
+      <div class="hidden sm:flex">
+        {% for item in nav.items %}
+        <a href="{{ item.url }}" aria-label="{{ item.aria-label }}" class="btn btn-ghost btn-circle">
+          {{ item.name }}
+        </a>
+        {% endfor %}
+      </div>
+      <div class="sm:hidden">
+        <div class="dropdown dropdown-end">
+          <div aria-label="categories" tabindex="0" role="button" class="btn btn-ghost btn-circle">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-5 w-5"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor">
+              <line
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                x1="8"
+                y1="6"
+                x2="21"
+                y2="6" />
+              <line
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                x1="8"
+                y1="12"
+                x2="21"
+                y2="12" />
+              <line
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                x1="8"
+                y1="18"
+                x2="21"
+                y2="18" />
+              <line
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                x1="3"
+                y1="6"
+                x2="3.01"
+                y2="6" />
+              <line
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                x1="3"
+                y1="12"
+                x2="3.01"
+                y2="12" />
+              <line
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                x1="3"
+                y1="18"
+                x2="3.01"
+                y2="18" />
+            </svg>
+          </div>
+          <ul
+            tabindex="0"
+            class="menu menu-md dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow-xl border border-base-200">
+            {% for item in nav-mobile.items %}
+            <li><a href="{{ item.url }}">{{ item.name }}</a></li>
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="my-2 mx-8 rounded-xl card-body max-h-[250px] overflow-y-auto flex flex-col gap-6 hidden bg-base-200 backdrop-blur bg-opacity-80 shadow-xl" id="search-results"></div>
+</div>

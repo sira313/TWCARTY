@@ -1,0 +1,41 @@
+---
+title: Blog SD Negeri 19 Periji
+description: SD Negeri 19 Periji adalah sebuah sekolah dasar berstatus negeri dengan NPSN 69856875. Sekolah ini beroperasi di bawah kepemilikan Pemerintah Daerah Kabupaten Sanggau dan menyediakan layanan pendidikan tingkat dasar (SD).
+layout: main/base.html
+cover: /asset/index/cover.webp
+keyword: blog, apoxicam blog, apoxicam
+permalink: /blog/
+---
+<div class="sm:container m-0 p-0 sm:mx-auto sm:p-4 md:p-10">
+	<div class="the-card">
+		<!-- cover -->
+	  <figure>
+	    <img src="{{ cover }}" alt="cover" />
+	  </figure>
+		<!-- navbar -->
+		{% include "nav/nav-blog.html" %}
+		<!-- content -->
+		<div class="card-body">
+			<div class="flex-grow">
+				<div class="w-full">
+					<ul id="results-list" class="grup flex flex-col gap-4">
+						<p id="no-results" class="col-span-3 text-center text-error hidden">Did not found any.</p>
+						{% for post in collections.posts reversed %}
+						<li class="result-item cursor-pointer">
+							<p class="text-md sm:text-lg font-bold mb-2 text-primary">
+								<a class="link link-hover" href="{{ post.url }}">{{ post.data.title }}</a>
+							</p>
+							<p class="text-sm sm:text-md mb-2">{{ post.data.description | limitWords: 30 }}</p>
+							<p class="text-sm">{{ post.data.date | date: "%a, %d %b %Y" }}</p>
+						</li>
+						{% endfor %}
+					</ul>
+				</div>
+			</div>
+		</div>
+		<!-- Footer credit -->
+	  <div class="text-center py-4 border-t border-base-300">
+      {% include "footer/footer-credit.html" %}
+	  </div>
+	</div>
+</div>

@@ -1,0 +1,45 @@
+---
+title: Foto kegiatan SD Negeri 19 Periji
+description: SD Negeri 19 Periji adalah sebuah sekolah dasar berstatus negeri dengan NPSN 69856875. Sekolah ini beroperasi di bawah kepemilikan Pemerintah Daerah Kabupaten Sanggau dan menyediakan layanan pendidikan tingkat dasar (SD).
+layout: main/base.html
+cover: /asset/index/cover.webp
+keyword: apoxicam, apoxicam photos, photos
+permalink: /photos/
+---
+<div class="sm:container m-0 p-0 sm:mx-auto sm:p-4 md:p-10">
+	<div class="the-card">
+		<!-- cover -->
+	  <figure>
+	    <img src="{{ cover }}" alt="cover" />
+	  </figure>
+		<!-- navbar -->
+		{% include "nav/nav-photos.html" %}
+		<!-- content -->
+		<div class="flex-grow">
+			<div id="results-list" class="grid grid-cols-3 gap-0.5">
+				<p id="no-results" class="p-8 col-span-3 text-center text-error hidden">Did not found any.</p>
+				{% for photos in collections.photos reversed %}
+				<!-- link to post -->
+				<a href="{{ photos.url }}" class="result-item cursor-pointer">
+					<!-- thumbnail -->
+			  	<div class="bg-white overflow-hidden">
+						<img src="{{ photos.data.thumbnail}}" alt="Image" class="aspect-square w-full h-full object-cover transition duration-300 ease-in-out hover:opacity-60">
+			  	</div>
+					<!-- item hidden for filter by text search -->
+					<div class="text-hidden">
+						<p class="text-md sm:text-lg font-bold mb-2 text-primary">
+							{{ photos.data.title }}
+						</p>
+						<p class="text-sm sm:text-md mb-2">{{ photos.data.description | limitWords: 30 }}</p>
+						<p class="text-sm">{{ photos.data.date | date: "%a, %d %b %Y" }}</p>
+					</div>
+				</a>
+				{% endfor %}
+			</div>
+		</div>
+		<!-- Footer credit -->
+	  <div class="text-center py-4 border-t border-base-300">
+      {% include "footer/footer-credit.html" %}
+	  </div>
+	</div>
+</div>

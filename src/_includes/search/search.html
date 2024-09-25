@@ -1,5 +1,5 @@
 <label class="input bg-base-200 flex w-full md:mx-4 items-center gap-2">
-  <input id="search-input" type="text" class="grow w-full" placeholder="Search" />
+  <input id="search-input" type="text" class="grow w-full" placeholder="Search here" />
   <svg
     xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 16 16"
@@ -11,65 +11,6 @@
       clip-rule="evenodd" />
   </svg>
 </label>
-<script>
-  // Encapsulate the code in an IIFE to avoid global conflicts
-  (function() {
-    let activeIndex = -1;
-
-    function updateResults() {
-      const query = document.getElementById('search-input').value.toLowerCase();
-      const results = document.querySelectorAll('.result-item');
-      let hasVisibleResults = false;
-
-      activeIndex = -1;
-
-      // Show all results if the query length is less than 3
-      if (query.length < 3) {
-        results.forEach((result) => {
-          result.classList.remove('hidden');
-        });
-        hasVisibleResults = true;
-      } else {
-        results.forEach((result) => {
-          const text = result.textContent.toLowerCase();
-          if (text.includes(query)) {
-            result.classList.remove('hidden');
-            hasVisibleResults = true;
-          } else {
-            result.classList.add('hidden');
-          }
-        });
-      }
-
-      // Show or hide the "no-results" message
-      document.getElementById('no-results').classList.toggle('hidden', hasVisibleResults);
-    }
-
-    function handleArrowKeys(e) {
-      const results = document.querySelectorAll('.result-item:not(.hidden)');
-      if (results.length === 0) return;
-
-      if (e.key === 'ArrowDown') {
-        activeIndex = (activeIndex + 1) % results.length;
-      } else if (e.key === 'ArrowUp') {
-        activeIndex = (activeIndex - 1 + results.length) % results.length;
-      }
-
-      results.forEach((result, index) => {
-        result.classList.toggle('active', index === activeIndex);
-      });
-    }
-
-    document.getElementById('search-input').addEventListener('input', updateResults);
-    document.getElementById('search-input').addEventListener('keydown', handleArrowKeys);
-
-    document.addEventListener('keydown', function(e) {
-      if (e.key === 'Enter') {
-        const results = document.querySelectorAll('.result-item:not(.hidden)');
-        if (activeIndex >= 0 && activeIndex < results.length) {
-          alert('Selected: ' + results[activeIndex].textContent);
-        }
-      }
-    });
-  })();
+<script type="module">
+  import '/asset/js/search.js';
 </script>

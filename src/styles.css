@@ -3,12 +3,31 @@
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
 
+:root {
+  scroll-behavior: smooth;
+}
+
+/* Ini berlaku untuk semua browser */
+body {
+  scroll-padding-top: 5rem;
+}
+
+/* CSS khusus untuk Firefox */
+@-moz-document url-prefix() {
+  :root {
+      scroll-padding-top: 5rem;
+  }
+}
+
 @layer utilities {
   .prose kbd {
     @apply text-base-content; /* Warna teks dalam kbd */
   }
 }
 @layer components {
+  .the-navbar {
+    @apply sticky flex-row top-0 z-50 navbar bg-base-100 px-4 border-b border-base-200 backdrop-blur bg-opacity-80;
+  }
   .text-hidden {
     @apply hidden
   }

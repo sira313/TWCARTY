@@ -6,6 +6,7 @@ keyword: photography, camera, blog
 author: John Doe
 cover: /asset/index/cover.webp
 profile: /asset/index/profile.webp
+permalink: /index.html
 ---
 
 #### Hello World

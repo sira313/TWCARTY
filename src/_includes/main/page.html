@@ -1,6 +1,7 @@
 ---
 layout: main/base.html
 ---
+
 <div class="sm:container m-0 p-0 sm:mx-auto sm:p-4 md:p-10">
 	<div class="the-card">
     <!-- cover -->
@@ -8,16 +9,16 @@ layout: main/base.html
       <img src="{{ cover }}" alt="cover" />
     </figure>
     <!-- Profile and menus -->
-    {% include "index/profile.html" %}
+    {% include "nav/nav-index.html" %}
     <!-- content -->
     <div class="flex-grow">
       <div class="card-body pt-4 tn:pt-8">
         <div class="w-full">
-          <div class="prose max-w-none pb-8">
+          <!-- title -->
+          <div class="font-bold text-xl mb-4 text-center">{{ title }}</div>
+          <div class="prose max-w-none">
             {{ content }}
           </div>
-          <!-- Blog and photos -->
-          {% include "index/recent.html" %}
         </div>
       </div>
     </div>

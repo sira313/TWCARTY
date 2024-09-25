@@ -1,10 +1,14 @@
 ---
-title: Apoxicam Photos
-description: Saya bukanlah seorang fotografer, tapi saya suka memotret apa yang menurut saya bagus sembari belajar.
-layout: main/base.html
 cover: /asset/index/cover.webp
-keyword: apoxicam, apoxicam photos, photos
-permalink: /photos/
+pagination:
+  data: collections.photosTags
+  size: 1
+  alias: tag
+  addAllPagesToCollections: true
+layout: main/base.html
+permalink: /photos/tag/{{tag | slugify }}/index.html
+eleventyComputed:
+  title: "{{ tag }}"
 ---
 <div class="sm:container m-0 p-0 sm:mx-auto sm:p-4 md:p-10">
 	<div class="the-card">
@@ -38,6 +42,21 @@ permalink: /photos/
 			<div class="flex-grow">
 				{% include "search/search.html" %}
 			</div>
+			<!-- back to posts -->
+			<a aria-label="back" href="/photos" class="btn btn-ghost btn-circle">
+				<svg
+					xmlns="http://www.w3.org/2000/svg"
+					class="h-5 w-5"
+					fill="none"
+					viewBox="0 0 24 24"
+					stroke="currentColor">
+					<path
+						stroke-linecap="round"
+						stroke-linejoin="round"
+						stroke-width="2"
+						d="M3 3h7v7H3V3zM14 3h7v7h-7V3zM3 14h7v7H3v-7zM14 14h7v7h-7v-7z" />
+				</svg>
+			</a>
 			<!-- categories -->
 			<div class="dropdown dropdown-end">
 				<div aria-label="categories" tabindex="0" role="button" class="btn btn-ghost btn-circle">
@@ -109,13 +128,13 @@ permalink: /photos/
 		<!-- content -->
 		<div class="flex-grow">
 			<div id="results-list" class="grid grid-cols-3 gap-0.5">
-				<p id="no-results" class="p-8 col-span-3 text-center text-gray-500 hidden">Didn't found anything</p>
-				{% for photos in collections.photos reversed %}
+				<p id="no-results" class="p-8 col-span-3 text-center text-gray-500 hidden">Did not found any</p>
+				{% for photos in collections[tag] reversed %}
 				<!-- link to post -->
 				<a href="{{ photos.url }}" class="result-item cursor-pointer">
 					<!-- thumbnail -->
 			  	<div class="bg-white overflow-hidden">
-						<img src="{{ photos.data.thumbnail}}" alt="Image" class="aspect-square w-full h-full object-cover transition duration-300 ease-in-out hover:opacity-60">
+						<img src="{{ photos.data.thumbnail}}" alt="Image" class="aspect-square w-full h-full object-cover">
 			  	</div>
 					<!-- item hidden for filter by text search -->
 					<div class="text-hidden">
