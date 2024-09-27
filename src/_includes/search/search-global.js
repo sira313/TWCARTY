@@ -36,6 +36,13 @@ document.getElementById('search-input').addEventListener('input', async function
   const query = this.value.toLowerCase();
   const resultsContainer = document.getElementById('search-results');
   
+  // Display message when input is empty
+  if (query.length === 0) {
+    resultsContainer.innerHTML = '<p class="text-center text-base-conten">All content will show here</p>';
+    resultsContainer.classList.remove('hidden');
+    return;
+  }
+
   // Remove hidden class when query length is sufficient
   if (query.length >= 3) {
     const searchData = await fetchSearchData();
@@ -47,7 +54,7 @@ document.getElementById('search-input').addEventListener('input', async function
         displaySearchResults(results);
         resultsContainer.classList.remove('hidden'); // Show results container when there are results
       } else {
-        resultsContainer.innerHTML = '<p class="text-error text-center">Did not found any.</p>';
+        resultsContainer.innerHTML = '<p class="text-error text-center">Tidak ditemukan apa-apa</p>';
         resultsContainer.classList.remove('hidden'); // Show the container with no results message
       }
     } else {
@@ -55,9 +62,10 @@ document.getElementById('search-input').addEventListener('input', async function
       resultsContainer.classList.remove('hidden'); // Show error message
     }
   } else {
-    // Add hidden class when query is too short
-    resultsContainer.classList.add('hidden');
-  }
+    // Show the default message when query is too short
+    resultsContainer.innerHTML = '<p class="text-center text-base-content">All content will show here</p>';
+    resultsContainer.classList.remove('hidden');
+  } 
 });
 
 // Function to display the search results
@@ -84,7 +92,8 @@ function displaySearchResults(results) {
 // Initialize the results container with the initial message
 document.addEventListener('DOMContentLoaded', () => {
   const resultsContainer = document.getElementById('search-results');
-  // Initial state with hidden class
+  resultsContainer.innerHTML = '<p class="text-center text-base-content">All content will show here</p>';
+  resultsContainer.classList.remove('hidden'); // Show the message initially
 });
 
 // Clear search input when clicking outside the search results
@@ -95,6 +104,7 @@ document.addEventListener('click', function (event) {
   // Check if the click is outside the search input and results container
   if (!searchInput.contains(event.target) && !resultsContainer.contains(event.target)) {
     searchInput.value = ''; // Clear search input
-    resultsContainer.classList.add('hidden'); // Hide the results container
+    resultsContainer.innerHTML = '<p class="text-center text-base-content">All content will show here</p>';
+    resultsContainer.classList.remove('hidden'); // Reset to the initial message
   }
 });

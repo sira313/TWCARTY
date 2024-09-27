@@ -17,7 +17,7 @@ eleventyComputed:
 	    <img src="{{ cover }}" alt="cover" />
 	  </figure>
 		<!-- navbar -->
-		<div class="sticky flex-row top-0 z-50 navbar bg-base-100 px-4 border-b border-base-300">
+		<div class="sticky flex-row top-0 z-50 navbar bg-base-100 px-4 border-b border-base-200">
 			<!-- back home -->
 			<a aria-label="home" href="/" class="btn btn-ghost btn-circle">
 				<svg
@@ -123,7 +123,7 @@ eleventyComputed:
 				</div>
 				<ul
 					tabindex="0"
-					class="menu menu-md dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow-xl border border-base-300">
+					class="menu menu-md dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow-xl border border-base-200">
 					{% for tag in collections.blogTags %}
 					<li><a href="/blog/tag/{{ tag | slugify }}">{{ tag }}</a></li>
 					{% endfor %}
@@ -150,7 +150,7 @@ eleventyComputed:
 			</div>
 		</div>
 		<!-- Footer credit -->
-	  <div class="text-center py-4 border-t border-base-300">
+	  <div class="text-center py-4 border-t border-base-200">
       {% include "footer/footer-credit.html" %}
 	  </div>
 	</div>
