@@ -3,6 +3,9 @@ const eleventyPluginFilesMinifier = require("@sherby/eleventy-plugin-files-minif
 const lazyImagesPlugin = require('eleventy-plugin-lazyimages');
 
 module.exports = function(eleventyConfig) {
+
+  // minifier js
+  eleventyConfig.addTransform("minify", require("./scripts/minify"));
   
   // lazyImages and Files Minifier
   eleventyConfig.addPlugin(lazyImagesPlugin, {
@@ -13,9 +16,9 @@ module.exports = function(eleventyConfig) {
   // Tailwind config target watch
   eleventyConfig.addWatchTarget("tailwind.config.js");
 
-  // Global data for root URL
-  eleventyConfig.addGlobalData("rootURL", "https://twcarty.netlify.app");
+  // Global data for root
   eleventyConfig.addGlobalData("rootTitle", "Apoxicam");
+  eleventyConfig.addGlobalData("rootURL", "https://twcarty.netlify.app");
 
   // Bypass dir
   const passthroughCopies = ["src/robots.txt", "src/asset/", "src/CNAME"];
