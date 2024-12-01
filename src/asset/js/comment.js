@@ -1,5 +1,12 @@
-const db = supabase.createClient("TODO", "TODO");
+if (!window.SUPABASE_URL || !window.SUPABASE_KEY) {
+	throw new Error(
+		"Supabase url and key are not set yet! Please set in `/asset/js/settings.js`. " +
+			"Copy settings.js.example and paste to settings.js in /asset/js/ directory"
+	);
+}
 
+const db = supabase.createClient(window.SUPABASE_URL, window.SUPABASE_KEY);
+const ls_user_key = "COMMENT_USER";
 let comments_shown = false;
 
 /**
@@ -40,9 +47,11 @@ async function send_comment(e) {
 		});
 		if (error) throw new Error("Server error");
 
+		form.elements["description"].value = ""; // reset comment box
+		if (comments_shown) load_comments().catch((e) => console.error(e)); // load newly added comment
+		localStorage.setItem(ls_user_key, JSON.stringify({ name, email })); // store user name and email to use again latter
+
 		// TODO: success message
-		form.reset();
-		if (comments_shown) load_comments().catch((e) => console.error(e));
 	} catch (err) {
 		// TODO: error message
 		alert(`Failed to comment`);
@@ -71,7 +80,7 @@ async function see_comments(e) {
 
 		await load_comments();
 		comments_shown = true;
-		btn.hidden = true;
+		btn.classList.add("hidden");
 	} catch (err) {
 		// TODO: error message
 		alert(`Failed to load comments`);
@@ -93,16 +102,25 @@ async function load_comments() {
 
 	const { data, error } = await db
 		.from("comments")
-		.select("name,description")
+		.select("name,description,created_at")
 		.order("created_at", { ascending: false })
 		.eq("slug", location.pathname)
-		.eq("show", true);
+		.or(`hidden.is.null,hidden.eq.false`);
 	if (error) throw error;
 
+	if (!data?.length) {
+		container.innerHTML = `No comment yet`;
+		return;
+	}
+
+	container.innerHTML = ``;
 	for (const comment of data) {
 		const comment_el = document.createElement("div");
 		comment_el.innerHTML = `
-			<p class="text-secondary"><strong>${comment.name}</strong></p>
+			<p>
+				<strong class="text-secondary">${comment.name}</strong> &bullet;
+				<em class="text-xs">${new Date(comment.created_at).toLocaleString()}</em>
+			</p>
 			<p>${comment.description}</p>
 		`;
 		container.appendChild(comment_el);
@@ -112,6 +130,10 @@ async function load_comments() {
 window.addEventListener("load", () => {
 	const form = document.getElementById("comment-form");
 	form.onsubmit = send_comment;
+
+	const user = JSON.parse(localStorage.getItem(ls_user_key) || "{}");
+	form.elements["name"].value = user.name || "";
+	form.elements["email"].value = user.email || "";
 
 	const loader = document.getElementById("comment-list-loader");
 	loader.onclick = see_comments;

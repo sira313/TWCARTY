@@ -1,3 +1,5 @@
 node_modules
 _site
 .lazyimages.json
+settings.js
+!settings.js.example
