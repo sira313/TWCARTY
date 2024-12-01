@@ -1,0 +1,46 @@
+<section>
+	<form
+		id="comment-form"
+		class="form-control w-full gap-3"
+		action="."
+		method="post"
+	>
+		<div class="flex w-full gap-3">
+			<input
+				class="input input-bordered w-full"
+				type="text"
+				name="name"
+				spellcheck="false"
+				placeholder="Full name"
+				required
+			/>
+
+			<input
+				class="input input-bordered w-full"
+				type="email"
+				name="email"
+				spellcheck="false"
+				placeholder="Email (opsional)"
+			/>
+		</div>
+
+		<textarea
+			class="textarea textarea-bordered"
+			name="description"
+			placeholder="Type your comment"
+			rows="3"
+			required
+			minlength="7"
+		></textarea>
+
+		<button class="btn btn-primary" name="send">Send</button>
+	</form>
+</section>
+
+<section class="mt-3">
+	<button id="comment-list-loader" class="btn btn-outline btn-sm">
+		See comments
+	</button>
+
+	<article id="comment-list-container" class="space-y-3"></article>
+</section>

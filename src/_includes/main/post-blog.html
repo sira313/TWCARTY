@@ -67,6 +67,12 @@ layout: main/base.html
       </div>
     </div>
     <div class="border-t border-base-200"></div>
+    
+    <div class="m-3 p-3">
+      {% include "main/comment.html" %}
+    </div>
+
+    <div class="border-t border-base-200"></div>
     <!-- bottom navbar -->
     {%- if collections.posts %}
   {%- assign previousPost = collections.posts | getPreviousCollectionItem %}

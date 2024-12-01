@@ -118,6 +118,9 @@ layout: main/base.html
           <div class="text-sm m-0">{{ date | date: "%a, %d %b %Y" }}</div>
           {{ content }}
         </div>
+
+        <!-- comments -->
+        {% include "main/comment.html" %}
       </div>
       <!-- bottom navbar -->
       {%- if collections.photos %}

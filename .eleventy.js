@@ -1,6 +1,7 @@
-const { execSync } = require('child_process');
 const eleventyPluginFilesMinifier = require("@sherby/eleventy-plugin-files-minifier");
 const lazyImagesPlugin = require('eleventy-plugin-lazyimages');
+
+require("dotenv").config();
 
 module.exports = function(eleventyConfig) {
 
@@ -19,6 +20,8 @@ module.exports = function(eleventyConfig) {
   // Global data for root
   eleventyConfig.addGlobalData("rootTitle", "Apoxicam");
   eleventyConfig.addGlobalData("rootURL", "https://twcarty.netlify.app");
+  eleventyConfig.addGlobalData("SUPABASE_URL", process.env.SUPABASE_URL);
+  eleventyConfig.addGlobalData("SUPABASE_KEY", process.env.SUPABASE_KEY);
 
   // Bypass dir
   const passthroughCopies = ["src/robots.txt", "src/asset/", "src/CNAME"];
