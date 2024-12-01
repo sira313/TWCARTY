@@ -122,7 +122,7 @@ async function load_comments() {
 	const { data, error } = await db
 		.from("comments")
 		.select("name,description,created_at")
-		.order("created_at", { ascending: false })
+		.order("created_at")
 		.eq("slug", location.pathname)
 		.or(`hidden.is.null,hidden.eq.false`);
 	if (error) throw error;
