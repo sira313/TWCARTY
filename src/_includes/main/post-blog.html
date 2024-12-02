@@ -59,19 +59,17 @@ layout: main/base.html
           <div class="prose max-w-none">
             <h3>{{ title }}</h3>
             <div class="text-sm mt-0 mx-0 mb-6">
-              {{ date | date: "%a, %d %b %Y" }} ― <b>{{ author }}</b>
+              {{ date | date: "%a, %d %b %Y" }}
             </div>
             {{ content }}
+          </div>
+          <!-- comment -->
+          <div class="mt-8">
+            {% include "post/comment.html" %}
           </div>
         </div>
       </div>
     </div>
-    <div class="border-t border-base-200"></div>
-    
-    <div class="m-3 p-3">
-      {% include "main/comment.html" %}
-    </div>
-
     <div class="border-t border-base-200"></div>
     <!-- bottom navbar -->
     {%- if collections.posts %}

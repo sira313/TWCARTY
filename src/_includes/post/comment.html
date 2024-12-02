@@ -1,3 +1,49 @@
-<div class="commentbox"></div>
-<script src="https://unpkg.com/commentbox.io/dist/commentBox.min.js"></script>
-<script>commentBox('5725225253601280-proj')</script>
+<div class="text-md prose font-bold my-4">
+	Leave your comment below
+</div>
+<section>
+	<form
+		id="comment-form"
+		class="form-control w-full gap-3"
+		action="."
+		method="post"
+	>
+		<div class="flex w-full gap-3">
+			<input
+				class="input bg-base-200 w-full"
+				type="text"
+				name="name"
+				spellcheck="false"
+				placeholder="Full name"
+				required
+			/>
+
+			<input
+				class="input bg-base-200 w-full"
+				type="email"
+				name="email"
+				spellcheck="false"
+				placeholder="Email (opsional)"
+			/>
+		</div>
+
+		<textarea
+			class="textarea bg-base-200"
+			name="description"
+			placeholder="Type your comment"
+			rows="3"
+			required
+			minlength="7"
+		></textarea>
+
+		<button class="btn btn-primary w-28 mt-2" name="send">Send</button>
+	</form>
+</section>
+
+<section class="mt-3">
+	<button id="comment-list-loader" class="hover:text-primary">
+		See comments
+	</button>
+
+	<article id="comment-list-container" class="space-y-3"></article>
+</section>
