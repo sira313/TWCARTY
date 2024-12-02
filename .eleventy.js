@@ -1,7 +1,7 @@
 const eleventyPluginFilesMinifier = require("@sherby/eleventy-plugin-files-minifier");
 const lazyImagesPlugin = require('eleventy-plugin-lazyimages');
 
-require("dotenv").config();
+if (process.env.NODE_ENV?.toLocaleLowerCase() !== "production") require("dotenv").config();
 
 module.exports = function(eleventyConfig) {
 
