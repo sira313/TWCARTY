@@ -37,7 +37,7 @@ const post_dirs = { "-b": "./src/blog", "-p": "./src/photos" };
 
 // map post layouts with post type
 /** @type {Record<Post_Type, string>} */
-const post_layouts = { "-b": "main-layout/post-blog.html", "-p": "main-layout/post-photos.html" };
+const post_layouts = { "-b": "main/post-blog.html", "-p": "main/post-photos.html" };
 
 // map permalink paths with post type
 /** @type {Record<Post_Type, string>} */
