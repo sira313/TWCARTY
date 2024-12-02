@@ -137,7 +137,7 @@ async function load_comments() {
 		const comment_el = document.createElement("div");
 		comment_el.innerHTML = `
 			<p>
-				<strong class="text-secondary">${comment.name}</strong> &bullet;
+				<strong class="text-secondary">${comment.name}</strong> &#8211;
 				<em class="text-xs">${new Date(comment.created_at).toLocaleString()}</em>
 			</p>
 			<p>${comment.description}</p>
