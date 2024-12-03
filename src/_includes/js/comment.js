@@ -56,7 +56,7 @@ async function send_comment(e) {
 
 	try {
 		submit_btn.disabled = true;
-		submit_btn.innerHTML = `<span class="loading loading-spinner"></span> Sending...`;
+		submit_btn.innerHTML = `<span class="loading loading-dots loading-md"></span>`;
 
 		const { error } = await db.from("comments").insert({
 			slug: location.pathname,
@@ -104,7 +104,7 @@ async function see_comments(e) {
 
 	try {
 		btn.disabled = true;
-		btn.innerHTML = `<span class="loading loading-spinner"></span> Loading...`;
+		btn.innerHTML = `<span class="loading loading-dots loading-md"></span>`;
 
 		await load_comments();
 		comments_shown = true;

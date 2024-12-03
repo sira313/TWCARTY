@@ -10,7 +10,7 @@ tags:
 ---
 
 
-This starter includes a built-in comment system, thanks to my friend Mustofa-id for helping me set it up. The comment system uses Supabase as the database.
+This starter includes a built-in comment system, thanks to my friend [Mustofa-ID](https://mustofa.id) for helping me set it up. The comment system uses Supabase as the database.
 
 > Here we go
 
