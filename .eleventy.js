@@ -22,6 +22,7 @@ module.exports = function(eleventyConfig) {
   eleventyConfig.addGlobalData("rootURL", "https://twcarty.netlify.app");
   eleventyConfig.addGlobalData("SUPABASE_URL", process.env.SUPABASE_URL);
   eleventyConfig.addGlobalData("SUPABASE_KEY", process.env.SUPABASE_KEY);
+  eleventyConfig.addGlobalData("quotes", "<i>No one comes to your website to be entertained. They have questions they think you can answer. Content answers questions.</i><br /><b>― Jay Baer</b>")
 
   // Bypass dir
   const passthroughCopies = ["src/robots.txt", "src/asset/", "src/CNAME"];

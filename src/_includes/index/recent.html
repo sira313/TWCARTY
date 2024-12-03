@@ -5,12 +5,12 @@
     <div class="navbar pl-4">
       <div class="navbar-start">
         <h2 class="text-md font-bold">
-          Foto Kegiatan Terbaru
+          Recent Photos
         </h2>
       </div>
       <div class="navbar-end">
         <!-- button view Photos -->
-        <a title="Gallery" aria-label="Lihat semua Foto" href="/photos" class="btn btn-ghost btn-circle">
+        <a title="Gallery" aria-label="Photos" href="/photos" class="btn btn-ghost btn-circle">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             class="h-5 w-5"
@@ -62,7 +62,7 @@
     <!-- indicator carousel -->
     <div class="absolute bottom-2 left-1/2 transform -translate-x-1/2 z-10 flex gap-2 py-2">
       {% for photos in collections.recentPhotos %}
-        <a aria-label="indicator item" href="#item{{ forloop.index }}" class="btn btn-circle btn-xs" title="Item Gambar">{{ forloop.index }}</a>
+        <a aria-label="indicator item" href="#item{{ forloop.index }}" class="btn btn-circle btn-xs" title="Item Pic">{{ forloop.index }}</a>
       {% endfor %}
     </div>
   </div>
@@ -73,12 +73,12 @@
   <div class="navbar pl-4 bg-base-200 dark:bg-base-300">
     <div class="navbar-start">
       <h2 class="text-md font-bold">
-        Blog Terbaru
+        Recent Blog
       </h2>
     </div>
     <div class="navbar-end">
       <!-- button view Blog -->
-      <a title="Semua Blog" aria-label="Lihat semua Blog" href="/blog" class="btn btn-ghost btn-circle">
+      <a title="Blog" aria-label="Blog" href="/blog" class="btn btn-ghost btn-circle">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           class="h-5 w-5"
