@@ -2,7 +2,7 @@
 layout: main/post-blog.html
 title: Configure Comment System
 description: A simple, fully customizable comment system using Supabase as the database. Easily manage, display, and store comments with complete control and flexibility
-keyword: TODO
+keyword: comment system, apoxicam, supabase
 cover: /asset/blog/comment.webp
 date: 2024-12-03
 tags:
