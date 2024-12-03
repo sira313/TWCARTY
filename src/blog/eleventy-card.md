@@ -1,129 +1,112 @@
 ---
-layout: main/post-blog.html 
-title: Eleventy Card
-description: Eleventy Card is a starter project for photographer/artist showing their work and blog randomly
-keyword: Eleventy, Bulma
-date: 2024-05-02
-tags:
- - Hello World
+layout: main/post-blog.html  
+title: Eleventy Card  
+description: Eleventy Card is a starter project for photographers and artists to showcase their work and blog content.  
+keywords: Eleventy, Bulma  
+date: 2024-05-02  
+tags:  
+- Hello World  
 ---
 
-**TWCARTY** (Tailwind Card Eleventy) An eleventy starter project for photographers or artists to showcase their work and blog.
+**TWCARTY** (Tailwind Card Eleventy) is a starter project for photographers or artists to showcase their work and blog posts.
 
 ### Features
-- Clean, simple, and responsive design
-- Auto-minifies HTML, CSS, and JS
-- Lazy loading of images
-- DaisyUI integration
-- Carousel post gallery
+- Clean, simple, and responsive design  
+- Automatic minification of HTML, CSS, and JS  
+- Lazy image loading for improved performance  
+- Integration with DaisyUI  
+- Carousel for displaying photo galleries  
+- Basic comment system included  
 
 ### Basic Info
 
-#### Required skills
+#### Required Skills
+- Git  
+- NPM  
+- HTML, CSS, and JavaScript (optional)
 
-- Git
-- NPM
-- Html and css (opsional)
+#### How to Get Started
 
-#### How to
+1. **Clone the repository**:  
+   ```bash
+   git clone https://github.com/sira313/twcarty
+   ```
 
-Clone the repository
-```
-git clone https://github.com/sira313/twcarty
-```
-Install PNPM globally
-```
-npm install -g pnpm
-```
-Install the project dependencies
-```
-pnpm install
-```
-Run the project locally
-```
-pnpm build && pnpm serve
-```
-If you wanted to modify the style, you may need to run this command below in split terminal
-```
-pnpm watch:css
-```
+2. **Install PNPM globally**:  
+   ```bash
+   npm install -g pnpm
+   ```
 
-#### Directory Structure
+3. **Install the project dependencies**:  
+   ```bash
+   pnpm install
+   ```
+
+4. **Run the project locally**:  
+   ```bash
+   pnpm build && pnpm serve
+   ```
+
+5. **Modify the styles (optional)**:  
+   If you need to modify the CSS, run the following command in a separate terminal:  
+   ```bash
+   pnpm watch:css
+   ```
+
+### Directory Structure
 ```bash
 ❯ tree
-.
-├── src
-│   ├── 404.html
-│   ├── asset
-│   │   ├── index
-│   │   │   ├── cover.webp
-│   │   │   ├── favicon.ico
-│   │   │   └── profile.webp
-│   │   └── photos
-│   │       ├── chick.webp
-│   │       ├── chicks2.webp
-│   │       ├── thumbnail
-│   │       │   ├── toko.webp
-│   │       │   └── warkop.webp
-│   │       └── warkop.webp
-│   ├── blog
-│   │   ├── eleventy-card.md
-│   │   ├── how-to-post-in-blog.md
-│   ├── _data
-│   │   ├── nav.json
-│   │   ├── nav-mobile.json
-│   │   └── sosmed.json
-│   ├── _includes
-│   │   ├── base.html
-│   │   ├── comment.html
-│   │   ├── footer-credit.html
-│   │   ├── footer-sosmed.html
-│   │   ├── index.html
-│   │   ├── post-blog.html
-│   │   ├── post-photos.html
-│   │   ├── profile.html
-│   │   ├── recent.html
-│   │   ├── search-global.html
-│   │   └── search.html
-│   ├── index.md
-│   ├── _pages
-│   │   ├── 404.html
-│   │   ├── blog.html
-│   │   ├── photos.html
-│   │   ├── search-data.html
-│   │   ├── search.html
-│   │   ├── tag-blog.html
-│   │   ├── tag-photos.html
-│   │   └── theme.html
-│   ├── photos
-│   │   ├── Toko.md
-│   │   └── warkop.md
-│   └── styles.css
-└── tailwind.config.js
+├───scripts
+└───src
+    ├───asset
+    │   ├───blog
+    │   ├───index
+    │   └───photos
+    │       └───thumbnail
+    ├───blog
+    ├───photos
+    ├───_data
+    ├───_includes
+    │   ├───footer
+    │   ├───index
+    │   ├───js
+    │   ├───main
+    │   ├───nav
+    │   ├───post
+    │   └───search
+    └───_pages
+        ├───data
+        ├───js
+        ├───main
+        └───tags
 ```
 
-#### Settings
-- **Language**: Update the language setting in [src/_includes/base.html](https://github.com/sira313/TWCARTY/blob/main/src/_includes/base.html#L3):
+### Settings
+
+- **Language**:  
+  Update the language setting in `src/_includes/base.html`:  
   ```html
   <html lang="en">
   ```
-- **Root URL**: Set your root URL in [.eleventy.js](https://github.com/sira313/TWCARTY/blob/main/.eleventy.js#L19):
+
+- **Root URL**:  
+  Set your website's root URL in `.eleventy.js`:  
   ```javascript
   // Root URL for the share button
-  eleventyConfig.addGlobalData("rootURL", "https://twcarty.netlify.app");
+  eleventyConfig.addGlobalData("rootURL", "https://yourwebsite.com");
   ```
 
-#### Social media buttons
-Set your social media in `src/_data/sosmed.json`
-Use svg icon you can download from anywhere like [feathericons](https://feathericons.com
-) or create your own with inkscape
+### Social Media Buttons
+Set up your social media links in `src/_data/sosmed.json`.  
+You can use SVG icons from [Feather Icons](https://feathericons.com) or create your own with Inkscape.
 
-#### Menu
-The project includes two default menus for post indexing:
-- Photos
-- Blog
+### Menus
+The project includes default menus for posts:  
+- **Photos**  
+- **Blog**  
 
-To add another menu, follow [this tutorial](https://www.youtube.com/watch?v=kzf9A9tkkl4). Don’t forget to update the collection in [.eleventy.js](https://github.com/sira313/TWCARTY/blob/main/.eleventy.js#L26-L27):
+To add a new menu, follow [this tutorial](https://www.youtube.com/watch?v=kzf9A9tkkl4).  
+Don’t forget to update the collection in `.eleventy.js`:
 ```javascript
 // Collections
 const collectionConfigs = [
@@ -133,43 +116,42 @@ const collectionConfigs = [
   { name: "recentPhotos", glob: "src/photos/*.md", limit: 6 }
 ];
 ```
-Also, add your new menu in `src/_data`.
-- `src/_data/nav.json` for regular view
-- `src/_data/nav-mobile.json` for mobile view below 300px
+Also, update your menu files:  
+- `src/_data/nav.json` for regular view  
+- `src/_data/nav-mobile.json` for mobile view (under 300px)  
 
-#### Layouts
-There are three layouts in `src/_includes`:
-- **Main Layout**: `src/_includes/base.html`, referenced in other layouts.
-- **Blog Post Layout**: `src/_includes/post-blog.html`.
+### Layouts
+The project includes three layouts in `src/_includes`:
+- **Main Layout**: `src/_includes/base.html` (used as the base for other layouts).  
+- **Blog Post Layout**: `src/_includes/post-blog.html`.  
 - **Photo Post Layout**: `src/_includes/post-photos.html`.
 
-#### Index Pages
-All pages store in `src/_pages`. But the project includes three index pages:
-- **Main Index**: `src/index.md` for describing your business.
-- **Photo Index**: `src/_pages/photos.html` for all your photos.
-- **Blog Index**: `src/_pages/blog.html` for your blog posts.
+### Index Pages
+All index pages are stored in `src/_pages`:
+- **Main Index**: `src/index.md` (for your website’s main description).  
+- **Photo Index**: `src/_pages/photos.html` (for displaying photos).  
+- **Blog Index**: `src/_pages/blog.html` (for blog posts).
 
-#### Creating Posts
-A script is available to automate post creation, so manual work is not necessary. [Thanks to my friend](https://github.com/mustofa-id).
+### Creating Posts
+You can automate post creation with a script, so no manual work is required. [Thanks to my friend](https://github.com/mustofa-id).
 
-To create a blog post in `/blog`:
-```
+To create a **blog post** in `/blog`:  
+```bash
 pnpm mkpost -b "Your post title"
 ```
 This will create a markdown file in `/blog`.
 
-To create a photo post in `/photos`:
-```
+To create a **photo post** in `/photos`:  
+```bash
 pnpm mkpost -p "Your post title"
 ```
 
-#### Assets
-All assets are stored in the `/src/asset/` directory and referenced in the front matter.
+### Assets
+All assets are stored in the `/src/asset/` directory and referenced via front matter.
 
-#### Tips
-For optimal image conversion to `.webp`, use [Squoosh](https://squoosh.app/).
+### Tips
+For optimal image conversion to `.webp`, use [Squoosh](https://squoosh.app).  
+Although I tried using `eleventy-img`, it didn’t fit my needs. You can [explore it here](https://www.11ty.dev/docs/plugins/image/).
 
-I tried using eleventy-img, but it didn’t quite fit my needs. Feel free to [explore it yourself](https://www.11ty.dev/docs/plugins/image/).
-
-## Like my work? Gimme a cup coffee 😉
-[![PayPal](https://img.shields.io/badge/PayPal-00457C?style=for-the-badge&logo=paypal&logoColor=white)](https://paypal.me/aflasio) 
+## Like my work? Buy me a coffee! ☕  
+[![PayPal](https://img.shields.io/badge/PayPal-00457C?style=for-the-badge&logo=paypal&logoColor=white)](https://paypal.me/aflasio)

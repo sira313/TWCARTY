@@ -75,4 +75,10 @@ This starter includes a built-in comment system, thanks to my friend [Mustofa-ID
 3. **Local Development**  
    You can also create a `.env` file for local development, but avoid hard-coding the values directly into your code.
 
+If you want to modify the comment layout, simply check the files `_include/js/comment.js` and `_include/post/comment.html`.
+
+Please note that you need to manually update the **hidden column value** for each new comment in Supabase. A value of false means the comment will be displayed on your website.
+
+I haven’t figured out how to set up email notifications yet, but I’ll work on it and write a post about it once I do.
+
 > That's it! Your comment system is now configured. Have any question?
