@@ -18,5 +18,7 @@ Powered by:
 - Carousel post gallery
 - Simple comment system
 
+### [Read Docs](https://twcarty.netlify.app/blog)
+
 ### Like my work? Gimme a cup coffee 😉
 [![PayPal](https://img.shields.io/badge/PayPal-00457C?style=for-the-badge&logo=paypal&logoColor=white)](https://paypal.me/aflasio) 
