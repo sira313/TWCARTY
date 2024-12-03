@@ -3,6 +3,7 @@ An eleventy starter project for photographers or artists to showcase their work 
 
 [![twcarty.netlify.app](https://img.shields.io/badge/LIVE-twcarty.netlify.app-blue?style=for-the-badge)](https://twcarty.netlify.app/)  
 [![apoxi.cam](https://img.shields.io/badge/SAMPLE-apoxi.cam-blue?style=for-the-badge)](https://apoxi.cam/)
+[![sdn19periji.sch.id](https://img.shields.io/badge/SAMPLE-sdn19periji.sch.id-blue?style=for-the-badge)](https://sdn19periji.sch.id)
 
 Powered by:
 
