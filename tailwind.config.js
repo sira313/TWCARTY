@@ -3,6 +3,11 @@ module.exports = {
   content: ["./src/**/*.{html,njk,md,js}"],
   theme: {
     extend: {
+      aspectRatio: {
+        '21/9': '21 / 9',
+        '21/8': '20 / 7',
+        '3/4':  '3 / 4',
+      },
       screens: {
         'tn': '400px',
       }
@@ -26,7 +31,7 @@ module.exports = {
           "neutral-content": "#1e1e1e",
           "base-100": "#ffffff",
           "base-200": "#f2f2f2",
-          "base-300": "#bebebe",
+          "base-300": "#e5e5e5",
           "base-content": "#161516",
           "info": "#4283c3",
           "info-content": "#000416",
@@ -46,11 +51,11 @@ module.exports = {
           "secondary-content": "#000a16",
           "accent": "#f14c4c",
           "accent-content": "#000000",
-          "neutral": "#181818",
+          "neutral": "#1a1a1a",
           "neutral-content": "#ccccc9",
           "base-100": "#1f1f1f",
-          "base-200": "#181818",
-          "base-300": "#171717",
+          "base-200": "#1a1a1a",
+          "base-300": "#141414",
           "base-content": "#d0d0d0",
           "info": "#4283c3",
           "info-content": "#ffffff",

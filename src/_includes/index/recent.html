@@ -1,85 +1,16 @@
-<div class="not-prose">
-  <!-- Recent Photos -->
-  <div class="mb-10">
-    <div class="card bg-base-200 shadow-xl h-1/2 rounded-xl overflow-hidden">
-      <!-- navbar -->
-      <div class="navbar pl-4">
-        <div class="navbar-start">
-          <div class="text-md font-bold">
-            Recent Photos
-          </div>
-        </div>
-        <div class="navbar-end">
-          <!-- button view Photos -->
-          <a aria-label="Lihat semua Photos" href="/photos" class="btn btn-ghost btn-circle">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="h-5 w-5"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor">
-              <polyline
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                points="15 3 21 3 21 9"></polyline>
-              <polyline
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                points="9 21 3 21 3 15"></polyline>
-              <line
-                x1="21"
-                y1="3"
-                x2="14"
-                y2="10"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"></line>
-              <line
-                x1="3"
-                y1="21"
-                x2="10"
-                y2="14"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"></line>
-            </svg>
-          </a>
-        </div>
-      </div>
-      <!-- content -->
-      <div class="carousel carousel-center">
-        {% for photos in collections.recentPhotos %}
-        <!-- link to post -->
-        <div id="item{{ forloop.index }}" class="carousel-item">
-          <a href="{{ photos.url }}" class="block">
-            <!-- thumbnail -->
-            <img src="{{ photos.data.thumbnail }}" alt="Image" class="aspect-square h-80 w-auto object-cover duration-300 ease-in-out hover:opacity-60">
-          </a>
-        </div>
-        {% endfor %}
-      </div>
-      <!-- indicator carousel -->
-      <div class="absolute bottom-2 left-1/2 transform -translate-x-1/2 z-10 flex gap-2 py-2">
-        {% for photos in collections.recentPhotos %}
-          <a aria-label="indicator item" href="#item{{ forloop.index }}" class="btn btn-circle btn-xs">{{ forloop.index }}</a>
-        {% endfor %}
-      </div>
-    </div>
-  </div>
-  <!-- Recent Blog -->
-  <div class="card rounded-xl overflow-hidden border border-base-200 shadow-xl dark:border-none dark:bg-base-200">
+<!-- Recent Photos -->
+<div class="mb-8 mt-2">
+  <div class="card bg-base-200 dark:bg-base-300 shadow-xl dark:shadow-none h-1/2 rounded-xl overflow-hidden">
     <!-- navbar -->
-    <div class="navbar pl-4 dark:border-b-2 bg-base-200 dark:border-base-100">
+    <div class="navbar pl-4">
       <div class="navbar-start">
-        <div class="text-md font-bold">
-          Recent Blog
-        </div>
+        <h2 class="text-md font-bold">
+          Foto Kegiatan Terbaru
+        </h2>
       </div>
       <div class="navbar-end">
-        <!-- button view Blog -->
-        <a aria-label="Lihat semua Blog" href="/blog" class="btn btn-ghost btn-circle">
+        <!-- button view Photos -->
+        <a title="Gallery" aria-label="Lihat semua Foto" href="/photos" class="btn btn-ghost btn-circle">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             class="h-5 w-5"
@@ -117,16 +48,83 @@
       </div>
     </div>
     <!-- content -->
-    <div class="px-4 py-2 flex flex-col gap-1">
-      {% for post in collections.recentPosts %}
-      <div>
-        <p class="text-lg font-bold mb-2 text-primary">
-          <a class="link link-hover block" href="{{ post.url }}">{{ post.data.title }}</a>
-        </p>
-        <p class="text-sm sm:text-md mb-2">{{ post.data.description }}</p>
-        <p class="text-sm">{{ post.data.date | date: "%a, %d %b %Y" }}</p>
+    <div class="carousel carousel-center gap-0.5 bg-base-100">
+      {% for photos in collections.recentPhotos %}
+      <!-- link to post -->
+      <div id="item{{ forloop.index }}" class="carousel-item">
+        <a href="{{ photos.url }}" class="block bg-white" title="{{ photos.data.title }}" aria-label="{{ photos.data.title }}">
+          <!-- thumbnail -->
+          <img src="{{ photos.data.thumbnail }}" alt="Image" class="aspect-square h-80 w-auto object-cover duration-300 ease-in-out hover:opacity-80">
+        </a>
       </div>
       {% endfor %}
     </div>
+    <!-- indicator carousel -->
+    <div class="absolute bottom-2 left-1/2 transform -translate-x-1/2 z-10 flex gap-2 py-2">
+      {% for photos in collections.recentPhotos %}
+        <a aria-label="indicator item" href="#item{{ forloop.index }}" class="btn btn-circle btn-xs" title="Item Gambar">{{ forloop.index }}</a>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+<!-- Recent Blog -->
+<div class="card rounded-xl overflow-hidden border border-base-200 shadow-xl dark:shadow-none dark:border-none dark:bg-base-200">
+  <!-- navbar -->
+  <div class="navbar pl-4 bg-base-200 dark:bg-base-300">
+    <div class="navbar-start">
+      <h2 class="text-md font-bold">
+        Blog Terbaru
+      </h2>
+    </div>
+    <div class="navbar-end">
+      <!-- button view Blog -->
+      <a title="Semua Blog" aria-label="Lihat semua Blog" href="/blog" class="btn btn-ghost btn-circle">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-5 w-5"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor">
+          <polyline
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            points="15 3 21 3 21 9"></polyline>
+          <polyline
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            points="9 21 3 21 3 15"></polyline>
+          <line
+            x1="21"
+            y1="3"
+            x2="14"
+            y2="10"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"></line>
+          <line
+            x1="3"
+            y1="21"
+            x2="10"
+            y2="14"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"></line>
+        </svg>
+      </a>
+    </div>
+  </div>
+  <!-- content -->
+  <div class="p-4 flex flex-col gap-4">
+    {% for post in collections.recentPosts %}
+    <div>
+      <h3 class="text-lg font-bold mb-2 text-primary">
+        <a title="{{ post.data.title }}" class="link link-hover block" href="{{ post.url }}">{{ post.data.title }}</a>
+      </h3>
+      <p class="text-sm sm:text-md mb-2 prose max-w-none">{{ post.data.description }}</p>
+      <p class="text-sm">{{ post.data.date | date: "%a, %d %b %Y" }}</p>
+    </div>
+    {% endfor %}
   </div>
 </div>
