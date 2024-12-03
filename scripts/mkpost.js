@@ -65,7 +65,7 @@ layout: ${post_layouts[type]}
 title: ${title.toLowerCase().replace(/(?:^|\s)\w/g, (m) => m.toUpperCase())}
 description: TODO
 keyword: TODO
-cover: /src/asset/blog/
+cover: /asset/blog/
 date: ${new Date().toISOString().split("T")[0]}
 tags:
  - TODO
@@ -80,8 +80,8 @@ title: ${title.toLowerCase().replace(/(?:^|\s)\w/g, (m) => m.toUpperCase())}
 description: TODO
 keyword: TODO
 cover:
-  - url: /src/asset/photos/
-thumbnail: /src/asset/photos/thumbnail/
+  - url: /asset/photos/
+thumbnail: /asset/photos/thumbnail/
 date: ${new Date().toISOString().split("T")[0]}
 tags:
   - TODO
