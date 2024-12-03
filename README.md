@@ -16,6 +16,7 @@ Powered by:
 - Lazy loading of images
 - DaisyUI integration
 - Carousel post gallery
+- Simple comment system
 
 ### Like my work? Gimme a cup coffee 😉
 [![PayPal](https://img.shields.io/badge/PayPal-00457C?style=for-the-badge&logo=paypal&logoColor=white)](https://paypal.me/aflasio) 
