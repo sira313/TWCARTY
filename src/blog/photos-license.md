@@ -1,7 +1,7 @@
 ---
 layout: main/post-blog.html 
 title: License of images
-description: All photos here is downloaded from https://pexels.com that can be downloaded and used for free.
+description: All photos here are downloaded from https://pexels.com that can be downloaded and used for free.
 keyword: License
 date: 2024-08-04
 tags:
@@ -10,7 +10,7 @@ tags:
 
 #### Legal Simplicity
 
-All photos here is downloaded from [Pexels](https://pexels.com) that can be downloaded and used for free.
+All photos here are downloaded from [Pexels](https://pexels.com) that can be downloaded and used for free.
 
 #### What is allowed? 👌
 

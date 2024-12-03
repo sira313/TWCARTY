@@ -66,16 +66,25 @@ async function send_comment(e) {
 		});
 		if (error) throw new Error("Server error");
 
-		form.elements["description"].value = ""; // reset comment box
-		if (comments_shown) load_comments().catch((e) => console.error(e)); // load newly added comment
-		localStorage.setItem(ls_user_key, JSON.stringify({ name, email })); // store user name and email to use again latter
+		form.elements["description"].value = ""; // Reset komentar
 
-		// TODO: success message
+		// Menampilkan pesan sukses
+		const success_message = document.createElement("p");
+		success_message.className = "text-success mt-4";
+		success_message.innerText =
+			"Comment submitted successfully, awaiting admin approval.";
+		form.appendChild(success_message);
+
+		// Hapus pesan sukses setelah beberapa detik
+		setTimeout(() => success_message.remove(), 5000);
+
+		if (comments_shown) load_comments().catch((e) => console.error(e)); // Load komentar baru
+		localStorage.setItem(ls_user_key, JSON.stringify({ name, email })); // Simpan data user di localStorage
 	} catch (err) {
-		// TODO: error message
+		// TODO: Pesan error jika gagal
 		alert(`Failed to comment`);
 		console.error(
-			`Error while sending a comment: ${err.message || "Unkown error"}`
+			`Error while sending a comment: ${err.message || "Unknown error"}`
 		);
 	} finally {
 		submit_btn.disabled = false;
@@ -122,7 +131,7 @@ async function load_comments() {
 	const { data, error } = await db
 		.from("comments")
 		.select("name,description,created_at")
-		.order("created_at")
+		.order("created_at", { ascending: false }) // Mengubah menjadi descending
 		.eq("slug", location.pathname)
 		.or(`hidden.is.null,hidden.eq.false`);
 	if (error) throw error;
