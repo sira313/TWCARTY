@@ -10,7 +10,8 @@ tags:
 ---
 
 
-Implementing a comment system for your website doesn’t have to be complicated. With **Supabase** as the database, this simple yet powerful comment system offers seamless integration, flexibility, and full customization to suit your specific needs. Whether you’re building a blog, a portfolio site, or a community platform, this solution gives you complete control over how comments are stored, displayed, and managed—without relying on third-party services.
+This starter includes a built-in comment system, thanks to my friend Mustofa-id for helping me set it up. The comment system uses Supabase as the database.
+
 > Here we go
 
 ### Supabase
