@@ -58,8 +58,6 @@ This starter includes a built-in comment system, thanks to my friend [Mustofa-ID
    USING (hidden = false);
    ```
 
----
-
 ### Configure the Comment System
 
 1. **Get Supabase Project URL and API Key**  
