@@ -43,6 +43,8 @@ layout: main/base.html
         </a>
       </div>
       <div class="navbar-end">
+        <!-- comment -->
+        {% include "post/commentbutton.html" %}
         <!-- share -->
         {% include "post/sharebutton.html" %}
       </div>
@@ -107,6 +109,8 @@ layout: main/base.html
   			  </a>
         </div>
         <div class="navbar-end">
+          <!-- comment -->
+        {% include "post/commentbutton.html" %}
           <!-- share -->
           {% include "post/sharebutton.html" %}
         </div>
@@ -118,9 +122,6 @@ layout: main/base.html
           <div class="text-sm m-0">{{ date | date: "%a, %d %b %Y" }}</div>
           {{ content }}
         </div>
-
-        <!-- comments -->
-        {% include "post/comment.html" %}
       </div>
       <!-- bottom navbar -->
       {%- if collections.photos %}
@@ -177,3 +178,4 @@ layout: main/base.html
   </div>
 </div>
 {% include "post/sharemodal.html" %}
+{% include "post/comment-modal.html" %}

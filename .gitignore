@@ -3,3 +3,5 @@ _site
 .lazyimages.json
 .env
 !.env.example
+dashboard.html
+!dashboard.html.example
