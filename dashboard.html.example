@@ -19,7 +19,7 @@ This is to protect sensitive data or configurations that should remain private.
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="p-5 bg-base-100">
-  <h1 class="text-2xl font-bold mb-8">Comments</h1>
+  <h1 class="text-2xl font-bold mb-8">All Comments</h1>
   <div class="container mx-auto overflow-x-auto">
     <table class="table w-full">
       <thead>
@@ -39,6 +39,7 @@ This is to protect sensitive data or configurations that should remain private.
       </tbody>
     </table>
   </div>
+  <div id="pagination" class="mt-4 flex gap-2"></div>
 
   <!-- Modal -->
   <dialog id="confirmModal" class="modal">
@@ -55,126 +56,96 @@ This is to protect sensitive data or configurations that should remain private.
   <script>
     // Configuration settings
     const config = {
-      urlProject: "https://yourprojecturl.supabase.co", // Replace with your Supabase project URL
-      secretKey: "service_role-secret-key",             // Replace with your Supabase secret key
-      domain: "https://yourdomain"                      // Replace with your website domain, without / at the end
+      urlProject: "yourprojecturl.supabase.co",
+      secretKey: "your-service_role-secret",
+      domain: "https://twcarty.netlify.app", // without / at the end of link
     };
-
-    // Initialize Supabase with createClient
+  
     const db = supabase.createClient(config.urlProject, config.secretKey);
-
-    let commentToDelete = null; // Store the comment ID to be deleted
-
-    // Function to fetch comments data
-    async function fetchComments() {
+    const rowsPerPage = 20; // Number of rows per page
+    let currentPage = 1; // Current page number
+    let totalComments = 0; // Total comments count
+  
+    // Function to fetch comments data with paginasi
+    async function fetchComments(page = 1) {
       try {
-        const { data, error } = await db
+        // Calculate the offset and limit
+        const offset = (page - 1) * rowsPerPage;
+        const { data, error, count } = await db
           .from("comments")
-          .select("*")
-          .order("created_at", { ascending: false });
-
+          .select("*", { count: "exact" }) // Get total count of rows
+          .order("created_at", { ascending: false })
+          .range(offset, offset + rowsPerPage - 1);
+  
         if (error) throw error;
-
-        const tableBody = document.getElementById("commentsTable");
-        tableBody.innerHTML = "";
-
-        data.forEach(comment => {
-          const row = document.createElement("tr");
-          const description = comment.description.length > 160 ? comment.description.slice(0, 160) + '...' : comment.description;
-          const email = comment.email.length > 8 ? comment.email.slice(0, 8) + '...' : comment.email;
-
-          row.innerHTML = `
-            <td>${comment.id}</td>
-            <td>${new Date(comment.created_at).toLocaleString()}</td>
-            <td>${comment.name}</td>
-            <td><a href="mailto:${comment.email}" target="_blank" class="hover:underline text-primary">${email}</a></td>
-            <td>${description}</td>
-            <td><a target="_blank" class="hover:underline text-primary" href="${config.domain}${comment.slug}">${comment.slug}</a></td>
-            <td>
-              <select 
-                class="select select-bordered select-sm"
-                onchange="updateHidden(${comment.id}, this.value)">
-                <option value="false" ${!comment.hidden ? "selected" : ""}>FALSE</option>
-                <option value="true" ${comment.hidden ? "selected" : ""}>TRUE</option>
-              </select>
-            </td>
-            <td>
-              <button class="btn btn-error btn-sm" onclick="showConfirmModal(${comment.id})">Delete</button>
-            </td>
-          `;
-          tableBody.appendChild(row);
-        });
-
+  
+        totalComments = count; // Update the total number of comments
+        renderTable(data); // Render the table with fetched data
+        renderPagination(); // Render pagination buttons
       } catch (error) {
         console.error("Error fetching comments:", error);
       }
     }
-
-    // Function to update the hidden status
-    async function updateHidden(commentId, value) {
-      try {
-        const hidden = value === "true"; // Convert string value to boolean
-        const { data, error } = await db
-          .from("comments")
-          .update({ hidden }) // Update the "hidden" column with the new value
-          .eq("id", commentId); // Match the comment ID
-      
-        if (error) throw error;
-      
-        alert("Hidden status updated successfully!");
-        fetchComments(); // Reload the table to reflect changes
-      } catch (error) {
-        console.error("Error updating hidden status:", error);
-        alert("Failed to update hidden status.");
-      }
-    }
-
-    // Function to show the confirmation modal
-    function showConfirmModal(commentId) {
-      commentToDelete = commentId; // Store the comment ID to be deleted
-      const confirmModal = document.getElementById("confirmModal");
-      confirmModal.showModal();
-    }
-
-    // Function to close the confirmation modal
-    function closeConfirmModal() {
-      commentToDelete = null; // Reset the stored comment ID
-      const confirmModal = document.getElementById("confirmModal");
-      confirmModal.close();
-    }
-
-    // Function to delete a comment
-    async function deleteComment(commentId) {
-      try {
-        const { error } = await db
-          .from("comments")
-          .delete()
-          .eq("id", commentId);
-
-        if (error) throw error;
-
-        alert("Comment deleted successfully!");
-        fetchComments();
-      } catch (error) {
-        console.error("Error deleting comment:", error);
-        alert("Failed to delete comment.");
-      } finally {
-        closeConfirmModal(); // Close the modal after the operation
-      }
-    }
-
-    // Fetch data when the page loads
-    document.addEventListener("DOMContentLoaded", function () {
-      fetchComments();
-
-      // Add event listeners to the modal buttons
-      document.getElementById("modalYes").addEventListener("click", function () {
-        if (commentToDelete !== null) {
-          deleteComment(commentToDelete);
-        }
+  
+    // Function to render the comments table
+    function renderTable(data) {
+      const tableBody = document.getElementById("commentsTable");
+      tableBody.innerHTML = "";
+  
+      data.forEach((comment) => {
+        const row = document.createElement("tr");
+        const description =
+          comment.description.length > 160
+            ? comment.description.slice(0, 160) + "..."
+            : comment.description;
+        const email =
+          comment.email.length > 8 ? comment.email.slice(0, 8) + "..." : comment.email;
+  
+        row.innerHTML = `
+          <td>${comment.id}</td>
+          <td>${new Date(comment.created_at).toLocaleString()}</td>
+          <td>${comment.name}</td>
+          <td><a href="mailto:${comment.email}" target="_blank" class="hover:underline text-primary">${email}</a></td>
+          <td>${description}</td>
+          <td><a target="_blank" class="hover:underline text-primary" href="${config.domain}${comment.slug}">${comment.slug}</a></td>
+          <td>
+            <select 
+              class="select select-bordered select-sm"
+              onchange="updateHidden(${comment.id}, this.value)">
+              <option value="false" ${!comment.hidden ? "selected" : ""}>FALSE</option>
+              <option value="true" ${comment.hidden ? "selected" : ""}>TRUE</option>
+            </select>
+          </td>
+          <td>
+            <button class="btn btn-error btn-sm" onclick="showConfirmModal(${comment.id})">Delete</button>
+          </td>
+        `;
+        tableBody.appendChild(row);
       });
-
-      document.getElementById("modalNo").addEventListener("click", closeConfirmModal);
+    }
+  
+    // Function to render pagination buttons
+    function renderPagination() {
+      const paginationContainer = document.getElementById("pagination");
+      paginationContainer.innerHTML = "";
+  
+      const totalPages = Math.ceil(totalComments / rowsPerPage);
+  
+      for (let i = 1; i <= totalPages; i++) {
+        const button = document.createElement("button");
+        button.textContent = i;
+        button.className = `btn btn-sm ${i === currentPage ? "btn-primary" : "btn-secondary"}`;
+        button.addEventListener("click", () => {
+          currentPage = i;
+          fetchComments(currentPage);
+        });
+        paginationContainer.appendChild(button);
+      }
+    }
+  
+    // Fetch comments when the page loads
+    document.addEventListener("DOMContentLoaded", function () {
+      fetchComments(currentPage);
     });
   </script>
 </body>
