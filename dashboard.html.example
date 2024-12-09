@@ -10,6 +10,7 @@ This is to protect sensitive data or configurations that should remain private.
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -18,8 +19,9 @@ This is to protect sensitive data or configurations that should remain private.
   <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.14/dist/full.min.css" rel="stylesheet" type="text/css" />
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
+
 <body class="p-5 bg-base-100">
-  <h1 class="text-2xl font-bold mb-8">All Comments</h1>
+  <h1 class="text-2xl font-bold mb-8">Comments</h1>
   <div class="container mx-auto overflow-x-auto">
     <table class="table w-full">
       <thead>
@@ -34,15 +36,13 @@ This is to protect sensitive data or configurations that should remain private.
           <th>Actions</th>
         </tr>
       </thead>
-      <tbody id="commentsTable">
-        <!-- Data rows will be dynamically appended here -->
-      </tbody>
+      <tbody id="commentsTable"></tbody>
     </table>
   </div>
   <div id="pagination" class="mt-4 flex gap-2"></div>
 
   <!-- Modal -->
-  <dialog id="confirmModal" class="modal">
+  <dialog id="showConfirmModal" class="modal">
     <div class="modal-box">
       <h3 class="text-lg font-bold">Are you sure?</h3>
       <p class="py-4">Do you really want to delete this comment? This action cannot be undone.</p>
@@ -54,64 +54,52 @@ This is to protect sensitive data or configurations that should remain private.
   </dialog>
 
   <script>
-    // Configuration settings
     const config = {
-      urlProject: "yourprojecturl.supabase.co",
-      secretKey: "your-service_role-secret",
-      domain: "https://twcarty.netlify.app", // without / at the end of link
+      urlProject: "https://yourprojecturl.supabase.co",
+      secretKey: "yoursecretkey",
+      domain: "https://yourdomain.com",
+      // domain must be without / at the end of link
     };
-  
+
     const db = supabase.createClient(config.urlProject, config.secretKey);
-    const rowsPerPage = 20; // Number of rows per page
-    let currentPage = 1; // Current page number
-    let totalComments = 0; // Total comments count
-  
-    // Function to fetch comments data with paginasi
+    const rowsPerPage = 20;
+    let currentPage = 1;
+    let totalComments = 0;
+
     async function fetchComments(page = 1) {
       try {
-        // Calculate the offset and limit
         const offset = (page - 1) * rowsPerPage;
         const { data, error, count } = await db
           .from("comments")
-          .select("*", { count: "exact" }) // Get total count of rows
+          .select("*", { count: "exact" })
           .order("created_at", { ascending: false })
           .range(offset, offset + rowsPerPage - 1);
-  
+
         if (error) throw error;
-  
-        totalComments = count; // Update the total number of comments
-        renderTable(data); // Render the table with fetched data
-        renderPagination(); // Render pagination buttons
+
+        totalComments = count || 0;
+        renderTable(data || []);
+        renderPagination();
       } catch (error) {
-        console.error("Error fetching comments:", error);
+        alert(`Error fetching comments: ${error.message}`);
       }
     }
-  
-    // Function to render the comments table
+
     function renderTable(data) {
       const tableBody = document.getElementById("commentsTable");
       tableBody.innerHTML = "";
-  
+
       data.forEach((comment) => {
         const row = document.createElement("tr");
-        const description =
-          comment.description.length > 160
-            ? comment.description.slice(0, 160) + "..."
-            : comment.description;
-        const email =
-          comment.email.length > 8 ? comment.email.slice(0, 8) + "..." : comment.email;
-  
         row.innerHTML = `
           <td>${comment.id}</td>
           <td>${new Date(comment.created_at).toLocaleString()}</td>
           <td>${comment.name}</td>
-          <td><a href="mailto:${comment.email}" target="_blank" class="hover:underline text-primary">${email}</a></td>
-          <td>${description}</td>
+          <td><a href="mailto:${comment.email}" target="_blank" class="hover:underline text-primary">${truncate(comment.email, 8)}</a></td>
+          <td>${truncate(comment.description, 160)}</td>
           <td><a target="_blank" class="hover:underline text-primary" href="${config.domain}${comment.slug}">${comment.slug}</a></td>
           <td>
-            <select 
-              class="select select-bordered select-sm"
-              onchange="updateHidden(${comment.id}, this.value)">
+            <select class="select select-bordered select-sm" onchange="updateHidden(${comment.id}, this.value)">
               <option value="false" ${!comment.hidden ? "selected" : ""}>FALSE</option>
               <option value="true" ${comment.hidden ? "selected" : ""}>TRUE</option>
             </select>
@@ -123,14 +111,66 @@ This is to protect sensitive data or configurations that should remain private.
         tableBody.appendChild(row);
       });
     }
-  
-    // Function to render pagination buttons
+
+    function truncate(text, length) {
+      return text && text.length > length ? text.slice(0, length) + "..." : text;
+    }
+
+    function showConfirmModal(commentId) {
+      const modal = document.getElementById("showConfirmModal");
+      const modalYes = document.getElementById("modalYes");
+      const modalNo = document.getElementById("modalNo");
+
+      if (!modal || !modalYes || !modalNo) {
+        alert("Error: Modal elements not found!");
+        return;
+      }
+
+      modal.showModal();
+
+      const confirmDelete = async () => {
+        try {
+          const { error } = await db
+            .from("comments")
+            .delete()
+            .eq("id", commentId);
+
+          if (error) throw error;
+
+          alert(`Comment ID ${commentId} successfully deleted.`);
+          modal.close();
+          fetchComments(currentPage);
+        } catch (error) {
+          alert(`Error deleting comment: ${error.message}`);
+        }
+      };
+
+      modalYes.onclick = confirmDelete;
+      modalNo.onclick = () => modal.close();
+    }
+
+    async function updateHidden(commentId, newValue) {
+      try {
+        const hiddenValue = newValue === "true";
+        const { error } = await db
+          .from("comments")
+          .update({ hidden: hiddenValue })
+          .eq("id", commentId);
+
+        if (error) throw error;
+
+        alert(`Comment ID ${commentId} hidden status updated to ${hiddenValue}.`);
+      } catch (error) {
+        alert(`Error updating hidden status: ${error.message}`);
+      }
+    }
+
     function renderPagination() {
       const paginationContainer = document.getElementById("pagination");
       paginationContainer.innerHTML = "";
-  
+
       const totalPages = Math.ceil(totalComments / rowsPerPage);
-  
+
       for (let i = 1; i <= totalPages; i++) {
         const button = document.createElement("button");
         button.textContent = i;
@@ -142,11 +182,11 @@ This is to protect sensitive data or configurations that should remain private.
         paginationContainer.appendChild(button);
       }
     }
-  
-    // Fetch comments when the page loads
-    document.addEventListener("DOMContentLoaded", function () {
+
+    document.addEventListener("DOMContentLoaded", () => {
       fetchComments(currentPage);
     });
   </script>
 </body>
+
 </html>
