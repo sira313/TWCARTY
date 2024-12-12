@@ -11,15 +11,48 @@ let comments_shown = false;
 
 const BLACKLISTED_WORDS = [
 	// Offensive words
-	"stupid", "idiot", "dumb", "moron", "jerk", "ugly", "loser", "freak", 
-	"psycho", "trash", "scum", "pathetic", "worthless", "horrible", "crazy", 
-	"insane", "lazy", "weird", "clown", "annoying", 
+	"stupid",
+	"idiot",
+	"dumb",
+	"moron",
+	"jerk",
+	"ugly",
+	"loser",
+	"freak",
+	"psycho",
+	"trash",
+	"scum",
+	"pathetic",
+	"worthless",
+	"horrible",
+	"crazy",
+	"insane",
+	"lazy",
+	"weird",
+	"clown",
+	"annoying",
 
 	// Spam words
-	"click here", "free", "promo", "discount", "best", "cheap", "contact now", 
-	"sign up here", "guaranteed", "join group", "like and subscribe", "follow me", 
-	"whatsapp me", "get rich quick", "money transfer", "win a prize", 
-	"easy investment", "quick loan", "https://", "http://"
+	"click here",
+	"free",
+	"promo",
+	"discount",
+	"best",
+	"cheap",
+	"contact now",
+	"sign up here",
+	"guaranteed",
+	"join group",
+	"like and subscribe",
+	"follow me",
+	"whatsapp me",
+	"get rich quick",
+	"money transfer",
+	"win a prize",
+	"easy investment",
+	"quick loan",
+	"https://",
+	"http://",
 ];
 
 /**
@@ -86,7 +119,9 @@ async function send_comment(e) {
 	} catch (err) {
 		alert(`Failed to submit the comment.`);
 		console.error(
-			`An error occurred while submitting the comment: ${err.message || "Unknown error"}`
+			`An error occurred while submitting the comment: ${
+				err.message || "Unknown error"
+			}`
 		);
 	} finally {
 		submit_btn.disabled = false;
@@ -106,7 +141,7 @@ async function load_comments() {
 
 	const { data, error } = await db
 		.from("comments")
-		.select("name,description,created_at")
+		.select("id,name,description,created_at")
 		.order("created_at", { ascending: false })
 		.eq("slug", location.pathname)
 		.or(`hidden.is.null,hidden.eq.false`);
@@ -120,15 +155,54 @@ async function load_comments() {
 	container.innerHTML = ``;
 	for (const comment of data) {
 		const comment_el = document.createElement("div");
+		comment_el.id = `comment-bubble-${comment.id}`;
 		comment_el.innerHTML = `
 			<p>
 				<strong class="text-secondary">${comment.name}</strong> &#8211;
-				<em class="text-xs">${new Date(comment.created_at).toLocaleString()}</em>
+				<em class="text-xs">
+					${new Date(comment.created_at).toLocaleString()}
+				</em> &#8211;
+				<button
+					class="text-xs font-bold italic hover:underline"
+					onclick="reply_comment(${comment.id})"
+				>
+					Reply
+				</button>
 			</p>
 			<p>${comment.description}</p>
 		`;
 		container.appendChild(comment_el);
 	}
+}
+
+/**
+ * Reply a comment by its id
+ *
+ * @param {string} id
+ */
+function reply_comment(id) {
+	const form_id = `comment-reply-${id}`;
+	if (document.getElementById(form_id)) return;
+
+	const comment_form = document.getElementById("comment-form");
+	if (!comment_form) return;
+
+	/** @type {HTMLFormElement} */
+	const reply_form = comment_form.cloneNode(true);
+	reply_form.id = form_id;
+	reply_form.classList?.add("ml-5");
+	reply_form.elements["Submit"].innerText = "Reply";
+
+	const reply_to_el = document.createElement("input");
+	reply_to_el.name = "reply_to";
+	reply_to_el.value = id;
+	reply_to_el.hidden = true;
+	reply_form.appendChild(reply_to_el);
+
+	const comment_bubble = document.getElementById(`comment-bubble-${id}`);
+	comment_bubble?.insertAdjacentElement("afterend", reply_form);
+
+	console.log(id);
 }
 
 /**
@@ -151,7 +225,9 @@ async function see_comments(e) {
 	} catch (err) {
 		alert(`Failed to load comments.`);
 		console.error(
-			`An error occurred while loading comments: ${err.message || "Unknown error"}`
+			`An error occurred while loading comments: ${
+				err.message || "Unknown error"
+			}`
 		);
 	} finally {
 		btn.disabled = false;
