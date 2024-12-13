@@ -173,7 +173,8 @@ async function load_comments() {
 				</em> &#8211;
 				<button
 					class="text-xs font-bold italic hover:underline"
-					onclick="reply_comment(${comment.id})"
+					onclick="reply_comment(this)"
+					data-comment-id="${comment.id}"
 				>
 					Reply
 				</button>
@@ -187,14 +188,16 @@ async function load_comments() {
 /**
  * Reply a comment by its id
  *
- * @param {number} id
+ * @param {HTMLButtonElement} btn
  */
-function reply_comment(id) {
+function reply_comment(btn) {
+	const id = btn.dataset["commentId"];
 	const form_id = `comment-reply-${id}`;
 	const existing_reply_form = document.getElementById(form_id);
 	if (existing_reply_form) {
 		existing_reply_form.nextElementSibling.remove();
 		existing_reply_form.remove();
+		btn.innerText = "Reply";
 		return;
 	}
 
@@ -216,6 +219,7 @@ function reply_comment(id) {
 
 	const comment_bubble = document.getElementById(`comment-bubble-${id}`);
 	comment_bubble?.insertAdjacentElement("afterend", reply_form);
+	btn.innerText = "Hide reply";
 
 	load_replies(id).catch(console.error);
 }
@@ -250,11 +254,11 @@ async function load_replies(id) {
 		for (const comment of data) {
 			const comment_el = document.createElement("div");
 			comment_el.innerHTML = `
-			<p>
-			<strong class="text-secondary">${comment.name}</strong> &#8211;
-			<em class="text-xs">${new Date(comment.created_at).toLocaleString()}</em>
-			</p>
-			<p>${comment.description}</p>
+				<p>
+					<strong class="text-secondary">${comment.name}</strong> &#8211;
+					<em class="text-xs">${new Date(comment.created_at).toLocaleString()}</em>
+				</p>
+				<p>${comment.description}</p>
 			`;
 			container.appendChild(comment_el);
 		}
