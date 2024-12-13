@@ -244,26 +244,29 @@ async function load_replies(id) {
 		.eq("slug", location.pathname)
 		.eq("reply_to", id)
 		.or(`hidden.is.null,hidden.eq.false`);
-	if (error) throw error;
 
-	if (data?.length) {
-		info_el.remove();
-		reply_form.nextElementSibling?.remove();
-		const container = document.createElement("section");
-		container.className = `flex flex-col gap-4 ml-6`;
-		for (const comment of data) {
-			const comment_el = document.createElement("div");
-			comment_el.innerHTML = `
-				<p>
-					<strong class="text-secondary">${comment.name}</strong> &#8211;
-					<em class="text-xs">${new Date(comment.created_at).toLocaleString()}</em>
-				</p>
-				<p>${comment.description}</p>
-			`;
-			container.appendChild(comment_el);
-		}
-		reply_form.insertAdjacentElement("afterend", container);
+	if (error) throw error;
+	if (!data?.length) {
+		info_el.innerHTML = `<em class="text-sm ml-5">No reply</em>`;
+		return;
 	}
+
+	info_el.remove();
+	reply_form.nextElementSibling?.remove();
+	const container = document.createElement("section");
+	container.className = `flex flex-col gap-4 ml-6`;
+	for (const comment of data) {
+		const comment_el = document.createElement("div");
+		comment_el.innerHTML = `
+			<p>
+				<strong class="text-secondary">${comment.name}</strong> &#8211;
+				<em class="text-xs">${new Date(comment.created_at).toLocaleString()}</em>
+			</p>
+			<p>${comment.description}</p>
+		`;
+		container.appendChild(comment_el);
+	}
+	reply_form.insertAdjacentElement("afterend", container);
 }
 
 /**
