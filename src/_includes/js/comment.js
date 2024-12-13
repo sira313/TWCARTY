@@ -71,6 +71,7 @@ async function send_comment(e) {
 	const name = fd.get("name")?.toString();
 	const email = fd.get("email")?.toString();
 	const description = fd.get("description")?.toString();
+	const reply_to = fd.get("reply_to")?.toString() || null;
 
 	if (!name || !description) {
 		alert("Please fill in your name and comment.");
@@ -98,6 +99,7 @@ async function send_comment(e) {
 			name,
 			email,
 			description,
+			reply_to,
 		});
 		if (error) throw new Error("Server error");
 
@@ -113,16 +115,22 @@ async function send_comment(e) {
 		// Remove success message after a few seconds
 		setTimeout(() => success_message.remove(), 5000);
 
-		if (comments_shown) load_comments().catch((e) => console.error(e)); // Load new comments
-		await update_comment_count(); // Update comment count
+		if (comments_shown) {
+			if (reply_to) {
+				load_replies(reply_to).catch(console.error);
+			} else {
+				load_comments().catch(console.error); // Load new comments
+			}
+		}
+		update_comment_count(); // Update comment count
 		localStorage.setItem(ls_user_key, JSON.stringify({ name, email })); // Save user data to localStorage
 	} catch (err) {
-		alert(`Failed to submit the comment.`);
 		console.error(
 			`An error occurred while submitting the comment: ${
 				err.message || "Unknown error"
 			}`
 		);
+		alert(`Failed to submit the comment.`);
 	} finally {
 		submit_btn.disabled = false;
 		submit_btn.innerHTML = `Submit`;
@@ -144,6 +152,7 @@ async function load_comments() {
 		.select("id,name,description,created_at")
 		.order("created_at", { ascending: false })
 		.eq("slug", location.pathname)
+		.is("reply_to", null)
 		.or(`hidden.is.null,hidden.eq.false`);
 	if (error) throw error;
 
@@ -178,7 +187,7 @@ async function load_comments() {
 /**
  * Reply a comment by its id
  *
- * @param {string} id
+ * @param {number} id
  */
 function reply_comment(id) {
 	const form_id = `comment-reply-${id}`;
@@ -192,6 +201,7 @@ function reply_comment(id) {
 	reply_form.id = form_id;
 	reply_form.classList?.add("ml-5");
 	reply_form.elements["Submit"].innerText = "Reply";
+	reply_form.onsubmit = send_comment;
 
 	const reply_to_el = document.createElement("input");
 	reply_to_el.name = "reply_to";
@@ -202,7 +212,44 @@ function reply_comment(id) {
 	const comment_bubble = document.getElementById(`comment-bubble-${id}`);
 	comment_bubble?.insertAdjacentElement("afterend", reply_form);
 
-	console.log(id);
+	load_replies(id).catch(console.error);
+}
+
+/**
+ * Load comment replies by parent id
+ *
+ * @param {number} id
+ */
+async function load_replies(id) {
+	const reply_form = document.getElementById(`comment-reply-${id}`);
+	if (!reply_form) return;
+
+	const { data, error } = await db
+		.from("comments")
+		.select("name,description,created_at")
+		.order("created_at", { ascending: false })
+		.eq("slug", location.pathname)
+		.eq("reply_to", id)
+		.or(`hidden.is.null,hidden.eq.false`);
+	if (error) throw error;
+
+	if (data?.length) {
+		reply_form.nextElementSibling?.remove();
+		const container = document.createElement("section");
+		container.className = `flex flex-col gap-4 ml-6`;
+		for (const comment of data) {
+			const comment_el = document.createElement("div");
+			comment_el.innerHTML = `
+			<p>
+			<strong class="text-secondary">${comment.name}</strong> &#8211;
+			<em class="text-xs">${new Date(comment.created_at).toLocaleString()}</em>
+			</p>
+			<p>${comment.description}</p>
+			`;
+			container.appendChild(comment_el);
+		}
+		reply_form.insertAdjacentElement("afterend", container);
+	}
 }
 
 /**
@@ -223,12 +270,12 @@ async function see_comments(e) {
 		comments_shown = true;
 		btn.classList.add("hidden");
 	} catch (err) {
-		alert(`Failed to load comments.`);
 		console.error(
 			`An error occurred while loading comments: ${
 				err.message || "Unknown error"
 			}`
 		);
+		alert(`Failed to load comments.`);
 	} finally {
 		btn.disabled = false;
 		btn.innerHTML = `See all comments`;
@@ -251,7 +298,7 @@ async function update_comment_count() {
 		if (error) throw error;
 
 		// Format comment count
-		const display_count = count > 99 ? "99+" : count.toString();
+		const display_count = count > 99 ? "99+" : count?.toString() || "0";
 
 		// Update or hide indicators
 		indicators.forEach((indicator) => {

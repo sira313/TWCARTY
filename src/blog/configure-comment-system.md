@@ -36,6 +36,8 @@ This starter includes a built-in comment system, thanks to my friend [Mustofa-ID
        hidden boolean null,
        constraint comments_pkey primary key (id)
    );
+
+   alter table comments add column reply_to bigint references comments (id);
    ```
 
 4. **Run the Query**  
