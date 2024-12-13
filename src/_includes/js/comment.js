@@ -87,7 +87,7 @@ async function send_comment(e) {
 	}
 
 	/** @type {HTMLButtonElement} */
-	const submit_btn = form.elements["Submit"];
+	const submit_btn = form.elements["submit"];
 	if (submit_btn.disabled) return;
 
 	try {
@@ -133,7 +133,7 @@ async function send_comment(e) {
 		alert(`Failed to submit the comment.`);
 	} finally {
 		submit_btn.disabled = false;
-		submit_btn.innerHTML = `Submit`;
+		submit_btn.innerHTML = reply_to ? "Reply" : "Send";
 	}
 }
 
@@ -191,7 +191,12 @@ async function load_comments() {
  */
 function reply_comment(id) {
 	const form_id = `comment-reply-${id}`;
-	if (document.getElementById(form_id)) return;
+	const existing_reply_form = document.getElementById(form_id);
+	if (existing_reply_form) {
+		existing_reply_form.nextElementSibling.remove();
+		existing_reply_form.remove();
+		return;
+	}
 
 	const comment_form = document.getElementById("comment-form");
 	if (!comment_form) return;
@@ -200,7 +205,7 @@ function reply_comment(id) {
 	const reply_form = comment_form.cloneNode(true);
 	reply_form.id = form_id;
 	reply_form.classList?.add("ml-5");
-	reply_form.elements["Submit"].innerText = "Reply";
+	reply_form.elements["submit"].innerText = "Reply";
 	reply_form.onsubmit = send_comment;
 
 	const reply_to_el = document.createElement("input");
@@ -224,6 +229,10 @@ async function load_replies(id) {
 	const reply_form = document.getElementById(`comment-reply-${id}`);
 	if (!reply_form) return;
 
+	const info_el = document.createElement("div");
+	info_el.innerHTML = `<span class="loading loading-dots loading-md ml-5"></span>`;
+	reply_form.insertAdjacentElement("afterend", info_el);
+
 	const { data, error } = await db
 		.from("comments")
 		.select("name,description,created_at")
@@ -234,6 +243,7 @@ async function load_replies(id) {
 	if (error) throw error;
 
 	if (data?.length) {
+		info_el.remove();
 		reply_form.nextElementSibling?.remove();
 		const container = document.createElement("section");
 		container.className = `flex flex-col gap-4 ml-6`;
