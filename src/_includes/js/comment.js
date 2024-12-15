@@ -207,7 +207,7 @@ function reply_comment(btn) {
 	/** @type {HTMLFormElement} */
 	const reply_form = comment_form.cloneNode(true);
 	reply_form.id = form_id;
-	reply_form.classList?.add("ml-5");
+	reply_form.classList?.add("pl-5", "border-l-4", "border-base-200");
 	reply_form.elements["submit"].innerText = "Reply";
 	reply_form.onsubmit = send_comment;
 
@@ -253,7 +253,7 @@ async function load_replies(id) {
 
 	info_el.remove();
 	const container = document.createElement("section");
-	container.className = `flex flex-col gap-4 ml-6`;
+	container.className = `flex flex-col gap-4 pl-6 border-l-4 border-base-200`;
 	for (const comment of data) {
 		const comment_el = document.createElement("div");
 		comment_el.innerHTML = `
