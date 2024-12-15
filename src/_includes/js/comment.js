@@ -252,7 +252,6 @@ async function load_replies(id) {
 	}
 
 	info_el.remove();
-	reply_form.nextElementSibling?.remove();
 	const container = document.createElement("section");
 	container.className = `flex flex-col gap-4 ml-6`;
 	for (const comment of data) {
