@@ -252,7 +252,11 @@ async function load_replies(id) {
 	}
 
 	info_el.remove();
+
+	const container_id = `reply-list-container-${id}`;
+	document.getElementById(container_id)?.remove();
 	const container = document.createElement("section");
+	container.id = container_id;
 	container.className = `flex flex-col gap-4 pl-6 border-l-4 border-base-200`;
 	for (const comment of data) {
 		const comment_el = document.createElement("div");
