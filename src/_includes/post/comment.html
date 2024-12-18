@@ -51,8 +51,8 @@
 		<!-- NOTE: keep all template element hidden -->
 
 		<!-- comment item template -->
-		<section id="comment-list-item-[[id]]" class="py-2" hidden>
-			<p>
+		<section id="comment-list-item-[[id]]" class="py-2 chat chat-start" hidden>
+			<p class="chat-header">
 				<strong class="text-secondary"> [[name]] </strong> &#8211;
 				<em class="text-xs" title="[[created_at]]"> [[relative_time]] </em>
 				&#8211;
@@ -64,7 +64,7 @@
 					Reply
 				</button>
 			</p>
-			<p>[[description]]</p>
+			<p class="chat-bubble mt-2">[[description]]</p>
 		</section>
 
 		<!-- reply form is copied from comment form above and will be inserted here -->
@@ -73,7 +73,7 @@
 		<!-- reply container template -->
 		<article
 			id="reply-list-container-[[id]]"
-			class="flex flex-col gap-4 pl-6 py-2 border-l-4 border-base-200"
+			class="flex flex-col gap-4 pl-4 pt-4 mb-4 border-l-4 border-base-200"
 			hidden
 		>
 			<!-- reply item template -->

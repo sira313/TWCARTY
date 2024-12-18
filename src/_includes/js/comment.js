@@ -197,7 +197,7 @@ function reply_comment(btn) {
 	/** @type {HTMLFormElement} */
 	const reply_form = comment_form.cloneNode(true);
 	reply_form.id = form_id;
-	reply_form.classList?.add("pl-4", "border-l-4", "border-base-200");
+	reply_form.classList?.add("pl-4", "border-l-4", "border-base-200", "mt-4");
 	reply_form.elements["submit"].innerText = "Reply";
 	reply_form.elements["reply_to"].value = id;
 	reply_form.onsubmit = send_comment;
