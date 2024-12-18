@@ -9,6 +9,10 @@ const db = supabase.createClient(window.SUPABASE_URL, window.SUPABASE_KEY);
 const ls_user_key = "COMMENT_USER";
 let comments_shown = false;
 
+const COMMENT_ITEM_TEMPLATE = get_template("comment-list-item-[[id]]");
+const REPLY_ITEM_TEMPLATE = get_template("reply-list-item-[[id]]");
+const REPLY_CONTAINER_TEMPLATE = get_template("reply-list-container-[[id]]");
+
 const BLACKLISTED_WORDS = [
 	// Offensive words
 	"stupid",
@@ -163,24 +167,10 @@ async function load_comments() {
 
 	container.innerHTML = ``;
 	for (const comment of data) {
-		const comment_el = document.createElement("div");
-		comment_el.id = `comment-bubble-${comment.id}`;
-		comment_el.innerHTML = `
-			<p>
-				<strong class="text-secondary">${comment.name}</strong> &#8211;
-				<em class="text-xs">
-					${new Date(comment.created_at).toLocaleString()}
-				</em> &#8211;
-				<button
-					class="text-xs font-bold italic hover:underline"
-					onclick="reply_comment(this)"
-					data-comment-id="${comment.id}"
-				>
-					Reply
-				</button>
-			</p>
-			<p>${comment.description}</p>
-		`;
+		// simple datetime format, you can change date format here.
+		comment.created_at = new Date(comment.created_at).toLocaleString();
+		comment.relative_time = relative_time(comment.created_at);
+		const comment_el = replace_placeholders(COMMENT_ITEM_TEMPLATE, comment);
 		container.appendChild(comment_el);
 	}
 }
@@ -209,16 +199,11 @@ function reply_comment(btn) {
 	reply_form.id = form_id;
 	reply_form.classList?.add("pl-4", "border-l-4", "border-base-200");
 	reply_form.elements["submit"].innerText = "Reply";
+	reply_form.elements["reply_to"].value = id;
 	reply_form.onsubmit = send_comment;
 
-	const reply_to_el = document.createElement("input");
-	reply_to_el.name = "reply_to";
-	reply_to_el.value = id;
-	reply_to_el.hidden = true;
-	reply_form.appendChild(reply_to_el);
-
-	const comment_bubble = document.getElementById(`comment-bubble-${id}`);
-	comment_bubble?.insertAdjacentElement("afterend", reply_form);
+	const comment_item = document.getElementById(`comment-list-item-${id}`);
+	comment_item?.insertAdjacentElement("afterend", reply_form);
 	btn.innerText = "Hide reply";
 
 	load_replies(id).catch(console.error);
@@ -255,18 +240,13 @@ async function load_replies(id) {
 
 	const container_id = `reply-list-container-${id}`;
 	document.getElementById(container_id)?.remove();
-	const container = document.createElement("section");
-	container.id = container_id;
-	container.className = `flex flex-col gap-4 pl-4 border-l-4 border-base-200`;
-	for (const comment of data) {
-		const comment_el = document.createElement("div");
-		comment_el.innerHTML = `
-			<p>
-				<strong class="text-secondary">${comment.name}</strong> &#8211;
-				<em class="text-xs">${new Date(comment.created_at).toLocaleString()}</em>
-			</p>
-			<p>${comment.description}</p>
-		`;
+
+	const container = replace_placeholders(REPLY_CONTAINER_TEMPLATE, { id });
+	for (const reply of data) {
+		// simple datetime format, you can change date format here.
+		reply.created_at = new Date(reply.created_at).toLocaleString();
+		reply.relative_time = relative_time(reply.created_at);
+		const comment_el = replace_placeholders(REPLY_ITEM_TEMPLATE, reply);
 		container.appendChild(comment_el);
 	}
 	reply_form.insertAdjacentElement("afterend", container);
@@ -336,6 +316,74 @@ async function update_comment_count() {
 			indicator.classList.add("hidden");
 		});
 	}
+}
+
+/**
+ * Fill custom template placeholders with actual values
+ *
+ * @param {string} raw
+ * @param {object} data
+ */
+function replace_placeholders(raw, data) {
+	// replace all [[ ... ]] with values of data
+	const filled = new String(raw).replace(/\[\[([^\]]+)\]\]/g, (match, key) => {
+		return key in data ? data[key] : match;
+	});
+
+	const parser = new DOMParser();
+	const doc = parser.parseFromString(filled, "text/html");
+	return doc.body.firstElementChild;
+}
+
+/**
+ *
+ * @param {string} id
+ * @returns {string}
+ */
+function get_template(id) {
+	const el = document.getElementById(id);
+	if (!el) throw new Error(`Template with given id (#${id}) was not found`);
+	const template = el.cloneNode(true);
+	template.hidden = false;
+	el.remove();
+	return template.outerHTML;
+}
+
+/**
+ * Relative time from now
+ *
+ * @param {Date | string} date
+ * @returns {string}
+ */
+function relative_time(date) {
+	date = typeof date === "string" ? new Date(date) : date;
+	const now = new Date();
+	const diffInSeconds = Math.floor((now - date) / 1000); // Difference in seconds
+
+	// Time unit values
+	const units = [
+		{ label: "second", value: 1 },
+		{ label: "minute", value: 60 },
+		{ label: "hour", value: 3600 },
+		{ label: "day", value: 86400 },
+		{ label: "month", value: 2592000 }, // ~30 days
+		{ label: "year", value: 31536000 }, // ~365 days
+	];
+
+	// Loop through the units and determine the most appropriate one
+	for (let i = units.length - 1; i >= 0; i--) {
+		const unitValue = units[i].value;
+		const unitLabel = units[i].label;
+
+		// Check if the difference is greater than the unit value
+		if (diffInSeconds >= unitValue) {
+			const unitCount = Math.floor(diffInSeconds / unitValue);
+			const plural = unitCount !== 1 ? `${unitLabel}s` : unitLabel;
+			return `${unitCount} ${plural} ago`;
+		}
+	}
+
+	return "Just now"; // If the difference is less than a second
 }
 
 // Event listener on page load

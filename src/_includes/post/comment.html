@@ -1,6 +1,4 @@
-<div class="text-md prose font-bold my-4">
-	Leave your comment below
-</div>
+<div class="text-md prose font-bold my-4">Leave your comment below</div>
 <section>
 	<form
 		id="comment-form"
@@ -36,7 +34,11 @@
 			minlength="7"
 		></textarea>
 
-		<button class="btn btn-primary w-28 mt-2" type="submit" name="submit">Send</button>
+		<input name="reply_to" hidden />
+
+		<button class="btn btn-primary w-28 mt-2" type="submit" name="submit">
+			Send
+		</button>
 	</form>
 </section>
 
@@ -45,9 +47,51 @@
 		See comments
 	</button>
 
-	<article id="comment-list-container" class="flex flex-col gap-4 mt-6"></article>
+	<article id="comment-list-container" class="flex flex-col mt-6">
+		<!-- NOTE: keep all template element hidden -->
+
+		<!-- comment item template -->
+		<section id="comment-list-item-[[id]]" class="py-2" hidden>
+			<p>
+				<strong class="text-secondary"> [[name]] </strong> &#8211;
+				<em class="text-xs" title="[[created_at]]"> [[relative_time]] </em>
+				&#8211;
+				<button
+					class="text-xs font-bold italic hover:underline"
+					onclick="reply_comment(this)"
+					data-comment-id="[[id]]"
+				>
+					Reply
+				</button>
+			</p>
+			<p>[[description]]</p>
+		</section>
+
+		<!-- reply form is copied from comment form above and will be inserted here -->
+		<!-- form reply styling can be done in comment.js > reply_comment() > reply_form -->
+
+		<!-- reply container template -->
+		<article
+			id="reply-list-container-[[id]]"
+			class="flex flex-col gap-4 pl-6 py-2 border-l-4 border-base-200"
+			hidden
+		>
+			<!-- reply item template -->
+			<section id="reply-list-item-[[id]]" hidden>
+				<p>
+					<strong class="text-secondary">[[name]]</strong> &#8211;
+					<em class="text-xs" title="[[created_at]]">[[relative_time]]</em>
+				</p>
+				<p>[[description]]</p>
+			</section>
+		</article>
+	</article>
 </section>
 
-<script>window.SUPABASE_URL = "{{ SUPABASE_URL }}";window.SUPABASE_KEY = "{{ SUPABASE_KEY }}";</script>    
+<script>
+	window.SUPABASE_URL = "{{ SUPABASE_URL }}";
+	window.SUPABASE_KEY = "{{ SUPABASE_KEY }}";
+</script>
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="/asset/js/comment.js"></script>
