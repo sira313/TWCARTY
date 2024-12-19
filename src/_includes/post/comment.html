@@ -1,3 +1,9 @@
+<style>
+	[data-hidden="true"] {
+		display: none;
+	}
+</style>
+
 <div class="text-md prose font-bold my-4">Leave your comment below</div>
 <section>
 	<form
@@ -55,7 +61,15 @@
 			<div class="card-body p-3">
 				<div class="flex justify-between items-center">
 					<p>
-						<strong class="text-secondary"> [[name]] </strong> &#8211;
+						<strong class="text-secondary"> [[name]] </strong>
+						<span
+							class="text-primary"
+							title="Verified user"
+							data-hidden="[[!verified]]"
+						>
+							&starf;
+						</span>
+						&#8211;
 						<em class="text-xs" title="[[created_at]]"> [[relative_time]] </em>
 					</p>
 					<button
@@ -68,7 +82,7 @@
 				</div>
 				<p>[[description]]</p>
 			</div>
-		</section>		
+		</section>
 
 		<!-- reply form is copied from comment form above and will be inserted here -->
 		<!-- form reply styling can be done in comment.js > reply_comment() > reply_form -->
@@ -83,7 +97,15 @@
 			<section id="reply-list-item-[[id]]" class="card bg-base-200" hidden>
 				<div class="card-body p-3">
 					<p>
-						<strong class="text-secondary">[[name]]</strong> &#8211;
+						<strong class="text-secondary">[[name]]</strong>
+						<span
+							class="text-primary"
+							title="Verified user"
+							data-hidden="[[!verified]]"
+						>
+							&starf;
+						</span>
+						&#8211;
 						<em class="text-xs" title="[[created_at]]">[[relative_time]]</em>
 					</p>
 					<p>[[description]]</p>
