@@ -152,12 +152,11 @@ async function load_comments() {
 	}
 
 	const { data, error } = await db
-		.from("comments")
-		.select("id,name,description,created_at")
-		.order("created_at", { ascending: false })
+		.from("comments_view")
+		.select("id,name,description,created_at,verified")
 		.eq("slug", location.pathname)
 		.is("reply_to", null)
-		.or(`hidden.is.null,hidden.eq.false`);
+		.order("created_at", { ascending: false });
 	if (error) throw error;
 
 	if (!data?.length) {
@@ -168,8 +167,8 @@ async function load_comments() {
 	container.innerHTML = ``;
 	for (const comment of data) {
 		// simple datetime format, you can change date format here.
-		comment.created_at = new Date(comment.created_at).toLocaleString();
 		comment.relative_time = relative_time(comment.created_at);
+		comment.created_at = new Date(comment.created_at).toLocaleString();
 		const comment_el = replace_placeholders(COMMENT_ITEM_TEMPLATE, comment);
 		container.appendChild(comment_el);
 	}
@@ -223,12 +222,11 @@ async function load_replies(id) {
 	reply_form.insertAdjacentElement("afterend", info_el);
 
 	const { data, error } = await db
-		.from("comments")
-		.select("name,description,created_at")
-		.order("created_at", { ascending: false })
+		.from("comments_view")
+		.select("name,description,created_at,verified")
 		.eq("slug", location.pathname)
 		.eq("reply_to", id)
-		.or(`hidden.is.null,hidden.eq.false`);
+		.order("created_at", { ascending: false });
 
 	if (error) throw error;
 	if (!data?.length) {
@@ -244,8 +242,8 @@ async function load_replies(id) {
 	const container = replace_placeholders(REPLY_CONTAINER_TEMPLATE, { id });
 	for (const reply of data) {
 		// simple datetime format, you can change date format here.
-		reply.created_at = new Date(reply.created_at).toLocaleString();
 		reply.relative_time = relative_time(reply.created_at);
+		reply.created_at = new Date(reply.created_at).toLocaleString();
 		const comment_el = replace_placeholders(REPLY_ITEM_TEMPLATE, reply);
 		container.appendChild(comment_el);
 	}
@@ -327,7 +325,23 @@ async function update_comment_count() {
 function replace_placeholders(raw, data) {
 	// replace all [[ ... ]] with values of data
 	const filled = new String(raw).replace(/\[\[([^\]]+)\]\]/g, (match, key) => {
-		return key in data ? data[key] : match;
+		let negated = false;
+
+		// Check if the key starts with '!'
+		if (key.startsWith("!")) {
+			negated = true;
+			key = key.slice(1); // Remove '!' from the key
+		}
+
+		// Get the value from data
+		let value = key in data ? data[key] : "";
+
+		// If negation is true, negate the value
+		if (negated) {
+			value = !value;
+		}
+
+		return value;
 	});
 
 	const parser = new DOMParser();
