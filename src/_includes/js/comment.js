@@ -151,18 +151,12 @@ async function load_comments() {
 		return;
 	}
 
-	console.log(
-		window.COMMENT_VERIFIED_EMAILS,
-		typeof window.COMMENT_VERIFIED_EMAILS
-	);
-
 	const { data, error } = await db
-		.from("comments")
-		.select("id,name,description,created_at")
-		.order("created_at", { ascending: false })
+		.from("comments_view")
+		.select("id,name,description,created_at,verified")
 		.eq("slug", location.pathname)
 		.is("reply_to", null)
-		.or(`hidden.is.null,hidden.eq.false`);
+		.order("created_at", { ascending: false });
 	if (error) throw error;
 
 	if (!data?.length) {
@@ -228,12 +222,11 @@ async function load_replies(id) {
 	reply_form.insertAdjacentElement("afterend", info_el);
 
 	const { data, error } = await db
-		.from("comments")
-		.select("name,description,created_at")
-		.order("created_at", { ascending: false })
+		.from("comments_view")
+		.select("name,description,created_at,verified")
 		.eq("slug", location.pathname)
 		.eq("reply_to", id)
-		.or(`hidden.is.null,hidden.eq.false`);
+		.order("created_at", { ascending: false });
 
 	if (error) throw error;
 	if (!data?.length) {
@@ -341,7 +334,7 @@ function replace_placeholders(raw, data) {
 		}
 
 		// Get the value from data
-		let value = key in data ? data[key] : match;
+		let value = key in data ? data[key] : "";
 
 		// If negation is true, negate the value
 		if (negated) {

@@ -38,6 +38,22 @@ This starter includes a built-in comment system, thanks to my friend [Mustofa-ID
    );
 
    alter table comments add column reply_to bigint references comments (id);
+
+   create table verified_users (email varchar unique not null);
+
+   create view comments_view as 
+   select
+      c.id,
+      c.slug,
+      c.name,
+      c.description,
+      c.reply_to,
+      c.created_at,
+      v.email is not null verified
+   from comments c
+   left join verified_users v on v.email = c.email
+   where (c.hidden is null or c.hidden = false);
+
    ```
 
 4. **Run the Query**  
@@ -47,17 +63,17 @@ This starter includes a built-in comment system, thanks to my friend [Mustofa-ID
    Set up policies to allow users to insert and view comments. Run the following queries in the **`SQL Editor`**:
 
    ```sql
-   -- Allow users to create comments
-   CREATE POLICY "Allow insert for all users"
-   ON comments
-   FOR INSERT
-   WITH CHECK (true); 
+   create policy "Enable insert with email check"
+   on comments as permissive for insert to anon
+   with check (email not in (select email from verified_users));
 
-   -- Allow users to read all comments that are not hidden
-   CREATE POLICY "Allow select for all users"
-   ON comments
-   FOR SELECT
-   USING (hidden = false);
+   create policy "Allow select for all users"
+   on comments for select
+   using (hidden = false);
+
+   alter policy "Allow select for authenticated users only"
+   on verified_users
+   to authenticated using (true);
    ```
 
 ### Configure the Comment System
