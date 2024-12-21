@@ -1,150 +1,192 @@
-<!-- index.html -->
+<!-- 
+IMPORTANT WARNING:
+
+1. Copy "dashboard.html.example" to "dashboard.html" before making any modifications.
+2. NEVER edit the "dashboard.html.example" file directly.
+3. DO NOT push, publish, or deploy the "dashboard.html" file to any repository or server.
+
+This is to protect sensitive data or configurations that should remain private.
+-->
+
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dashboard Komentar</title>
+  <title>Comments System</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.0.5"></script>
+  <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.14/dist/full.min.css" rel="stylesheet" type="text/css" />
   <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://cdn.jsdelivr.net/npm/daisyui@4.10.0/dist/full.min.css" rel="stylesheet">
 </head>
-<body class="bg-gray-100">
-  <div class="container mx-auto p-4">
-    <h1 class="text-2xl font-bold mb-4">Dashboard Komentar</h1>
 
-    <div class="overflow-x-auto">
-      <table class="table w-full bg-white shadow-md rounded-lg">
-        <thead>
-          <tr>
-            <th class="bg-gray-200">ID</th>
-            <th class="bg-gray-200">Tanggal</th>
-            <th class="bg-gray-200">Nama</th>
-            <th class="bg-gray-200">Email</th>
-            <th class="bg-gray-200">Komentar</th>
-            <th class="bg-gray-200">Slug</th>
-            <th class="bg-gray-200">Status</th>
-            <th class="bg-gray-200">Aksi</th>
-          </tr>
-        </thead>
-        <tbody id="commentTable">
-          <!-- Data komentar akan di-load di sini -->
-        </tbody>
-      </table>
-    </div>
+<body class="p-5 bg-base-100">
+  <h1 class="text-2xl font-bold mb-8">Comments</h1>
+  <div class="container mx-auto overflow-x-auto">
+    <table class="table w-full">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Created At</th>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Description</th>
+          <th>Slug</th>
+          <th>Hidden</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody id="commentsTable"></tbody>
+    </table>
   </div>
+  <div id="pagination" class="mt-4 flex gap-2"></div>
+
+  <!-- Modal -->
+  <dialog id="showConfirmModal" class="modal">
+    <div class="modal-box">
+      <h3 class="text-lg font-bold">Are you sure?</h3>
+      <p class="py-4">Do you really want to delete this comment? This action cannot be undone.</p>
+      <div class="modal-action">
+        <button id="modalYes" class="btn btn-error">Yes</button>
+        <button id="modalNo" class="btn">No</button>
+      </div>
+    </div>
+  </dialog>
 
   <script>
-    // Ganti dengan kredensial Supabase kamu
-    const SUPABASE_URL = "https://your-supabase-url.supabase.co";
-    const SUPABASE_KEY = "your-supabase-secret-key";
+    const config = {
+      urlProject: "https://yoursupabaseurl.supabase.co",
+      secretKey: "your-secret-key",
+      domain: "https://yourdomain.com",
+      // domain must be without / at the end of link
+    };
 
-    async function fetchComments() {
+    const db = supabase.createClient(config.urlProject, config.secretKey);
+    const rowsPerPage = 20;
+    let currentPage = 1;
+    let totalComments = 0;
+
+    async function fetchComments(page = 1) {
       try {
-        const response = await fetch(`${SUPABASE_URL}/rest/v1/comments`, {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            'apikey': SUPABASE_KEY,
-            'Authorization': `Bearer ${SUPABASE_KEY}`
-          }
-        });
+        const offset = (page - 1) * rowsPerPage;
+        const { data, error, count } = await db
+          .from("comments")
+          .select("*", { count: "exact" })
+          .order("created_at", { ascending: false })
+          .range(offset, offset + rowsPerPage - 1);
 
-        if (!response.ok) {
-          throw new Error('Gagal mengambil data komentar');
-        }
+        if (error) throw error;
 
-        const comments = await response.json();
-        renderComments(comments);
+        totalComments = count || 0;
+        renderTable(data || []);
+        renderPagination();
       } catch (error) {
-        console.error('Error:', error);
+        alert(`Error fetching comments: ${error.message}`);
       }
     }
 
-    async function fetchVerifiedUsers() {
-      try {
-        const response = await fetch(`${SUPABASE_URL}/rest/v1/verified_users`, {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            'apikey': SUPABASE_KEY,
-            'Authorization': `Bearer ${SUPABASE_KEY}`
-          }
-        });
+    function renderTable(data) {
+      const tableBody = document.getElementById("commentsTable");
+      tableBody.innerHTML = "";
 
-        if (!response.ok) {
-          throw new Error('Gagal mengambil data pengguna terverifikasi');
-        }
-
-        const verifiedUsers = await response.json();
-        return verifiedUsers.map(user => user.email);
-      } catch (error) {
-        console.error('Error:', error);
-        return [];
-      }
-    }
-
-    async function renderComments(comments) {
-      const verifiedUsers = await fetchVerifiedUsers();
-      const commentTable = document.getElementById('commentTable');
-      commentTable.innerHTML = '';
-
-      comments.forEach(comment => {
-        const isVerified = verifiedUsers.includes(comment.email);
-        commentTable.innerHTML += `
-          <tr class="${comment.hidden ? 'bg-red-50' : 'bg-green-50'}">
-            <td>${comment.id}</td>
-            <td>${new Date(comment.created_at).toLocaleString()}</td>
-            <td>${comment.name}</td>
-            <td class="${isVerified ? 'text-blue-500 font-bold' : ''}">${comment.email}</td>
-            <td>${comment.description}</td>
-            <td>${comment.slug}</td>
-            <td>${comment.hidden ? 'Tersembunyi' : 'Tampil'}</td>
-            <td>
-              <button onclick="deleteComment(${comment.id})" class="btn btn-sm btn-outline btn-error">Hapus</button>
-              <button onclick="toggleVisibility(${comment.id}, ${comment.hidden})" class="btn btn-sm btn-outline btn-success">
-                ${comment.hidden ? 'Tampilkan' : 'Sembunyikan'}
-              </button>
-            </td>
-          </tr>
+      data.forEach((comment) => {
+        const row = document.createElement("tr");
+        row.innerHTML = `
+          <td>${comment.id}</td>
+          <td>${new Date(comment.created_at).toLocaleString()}</td>
+          <td>${comment.name}</td>
+          <td><a href="mailto:${comment.email}" target="_blank" class="hover:underline text-primary">${truncate(comment.email, 8)}</a></td>
+          <td>${truncate(comment.description, 160)}</td>
+          <td><a target="_blank" class="hover:underline text-primary" href="${config.domain}${comment.slug}">${comment.slug}</a></td>
+          <td>
+            <select class="select select-bordered select-sm" onchange="updateHidden(${comment.id}, this.value)">
+              <option value="false" ${!comment.hidden ? "selected" : ""}>FALSE</option>
+              <option value="true" ${comment.hidden ? "selected" : ""}>TRUE</option>
+            </select>
+          </td>
+          <td>
+            <button class="btn btn-error btn-sm" onclick="showConfirmModal(${comment.id})">Delete</button>
+          </td>
         `;
+        tableBody.appendChild(row);
       });
     }
 
-    async function deleteComment(id) {
+    function truncate(text, length) {
+      return text && text.length > length ? text.slice(0, length) + "..." : text;
+    }
+
+    function showConfirmModal(commentId) {
+      const modal = document.getElementById("showConfirmModal");
+      const modalYes = document.getElementById("modalYes");
+      const modalNo = document.getElementById("modalNo");
+
+      if (!modal || !modalYes || !modalNo) {
+        alert("Error: Modal elements not found!");
+        return;
+      }
+
+      modal.showModal();
+
+      const confirmDelete = async () => {
+        try {
+          const { error } = await db
+            .from("comments")
+            .delete()
+            .eq("id", commentId);
+
+          if (error) throw error;
+
+          alert(`Comment ID ${commentId} successfully deleted.`);
+          modal.close();
+          fetchComments(currentPage);
+        } catch (error) {
+          alert(`Error deleting comment: ${error.message}`);
+        }
+      };
+
+      modalYes.onclick = confirmDelete;
+      modalNo.onclick = () => modal.close();
+    }
+
+    async function updateHidden(commentId, newValue) {
       try {
-        await fetch(`${SUPABASE_URL}/rest/v1/comments?id=eq.${id}`, {
-          method: 'DELETE',
-          headers: {
-            'apikey': SUPABASE_KEY,
-            'Authorization': `Bearer ${SUPABASE_KEY}`
-          }
-        });
-        alert('Komentar berhasil dihapus');
-        fetchComments();
+        const hiddenValue = newValue === "true";
+        const { error } = await db
+          .from("comments")
+          .update({ hidden: hiddenValue })
+          .eq("id", commentId);
+
+        if (error) throw error;
+
+        alert(`Comment ID ${commentId} hidden status updated to ${hiddenValue}.`);
       } catch (error) {
-        console.error('Error:', error);
+        alert(`Error updating hidden status: ${error.message}`);
       }
     }
 
-    async function toggleVisibility(id, currentStatus) {
-      try {
-        await fetch(`${SUPABASE_URL}/rest/v1/comments?id=eq.${id}`, {
-          method: 'PATCH',
-          headers: {
-            'Content-Type': 'application/json',
-            'apikey': SUPABASE_KEY,
-            'Authorization': `Bearer ${SUPABASE_KEY}`
-          },
-          body: JSON.stringify({ hidden: !currentStatus })
+    function renderPagination() {
+      const paginationContainer = document.getElementById("pagination");
+      paginationContainer.innerHTML = "";
+
+      const totalPages = Math.ceil(totalComments / rowsPerPage);
+
+      for (let i = 1; i <= totalPages; i++) {
+        const button = document.createElement("button");
+        button.textContent = i;
+        button.className = `btn btn-sm ${i === currentPage ? "btn-primary" : "btn-secondary"}`;
+        button.addEventListener("click", () => {
+          currentPage = i;
+          fetchComments(currentPage);
         });
-        alert('Status komentar diperbarui');
-        fetchComments();
-      } catch (error) {
-        console.error('Error:', error);
+        paginationContainer.appendChild(button);
       }
     }
 
-    fetchComments();
+    document.addEventListener("DOMContentLoaded", () => {
+      fetchComments(currentPage);
+    });
   </script>
 </body>
+
 </html>
