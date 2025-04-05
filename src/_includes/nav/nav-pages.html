@@ -1,26 +1,25 @@
 <!-- navbar -->
-<div class="the-navbar">
+<div class="the-navbar gap-2">
   <!-- back home -->
-  <div class="dropdown dropdown-start mr-2 md:mr-0">
-    <div tabindex="0" role="button" class="btn btn-ghost btn-circle avatar online">
-      <div class="w-10 rounded-full">
-        <img
-          alt="Profile"
-          src="{{ profile }}" />
-      </div>
-    </div>
-    <ul
-      tabindex="0"
-      class="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow-xl border border-base-200">
-      {% for item in links.items %}
-      <li>
-        <a href="{{ item.url }}">
-          {{ item.name }}
-        </a>
-      </li>
-      {% endfor %}
-    </ul>
-  </div>
+  <a aria-label="home" href="/" class="btn btn-ghost btn-circle">
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      class="h-5 w-5"
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke="currentColor">
+      <path
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="2"
+        d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+      <polyline
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="2"
+        points="9 22 9 12 15 12 15 22" />
+    </svg>
+  </a>
   <!-- Simple search -->
   <div class="grow">
     {% include "search/search.html" %}
