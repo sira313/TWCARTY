@@ -54,7 +54,7 @@ document.getElementById('search-input').addEventListener('input', async function
         displaySearchResults(results);
         resultsContainer.classList.remove('hidden'); // Show results container when there are results
       } else {
-        resultsContainer.innerHTML = '<p class="text-error text-center">Tidak ditemukan apa-apa</p>';
+        resultsContainer.innerHTML = '<p class="text-error text-center">Did not found any</p>';
         resultsContainer.classList.remove('hidden'); // Show the container with no results message
       }
     } else {
