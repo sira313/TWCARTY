@@ -1,46 +1,71 @@
 /* styles.css */
-@import 'tailwindcss/base';
-@import 'tailwindcss/components';
-@import 'tailwindcss/utilities';
+@import 'tailwindcss';
+@plugin 'daisyui';
 
-:root {
-  scroll-behavior: smooth;
+@theme {
+  --aspect-21\/9: 21 / 9;
+  --aspect-21\/8: 20 / 7;
+  --aspect-3\/4: 3 / 4;
+
+  --breakpoint-tn: 400px;
 }
 
-/* Ini berlaku untuk semua browser */
-body {
-  scroll-padding-top: 5rem;
-}
+/*
+  The default border color has changed to `currentcolor` in Tailwind CSS v4,
+  so we've added these compatibility styles to make sure everything still
+  looks the same as it did with Tailwind CSS v3.
 
-/* CSS khusus untuk Firefox */
-@-moz-document url-prefix() {
-  :root {
-      scroll-padding-top: 5rem;
+  If we ever want to remove these styles, we need to add an explicit border
+  color utility to any element that depends on these defaults.
+*/
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-gray-200, currentcolor);
   }
+}
+
+@utility prose {
+  & kbd {
+    @apply text-base-content; /* Warna teks dalam kbd */
+  }
+  & pre {
+    @apply bg-base-200 text-base-content;
+  }
+  & code:not(pre > code) {
+    @apply bg-primary text-base-100;
+  }
+}
+@utility the-navbar {
+  @apply sticky flex top-0 z-50 navbar bg-base-100/80 px-4 border-b border-base-200 backdrop-blur-sm;
+}
+@utility text-hidden {
+  @apply hidden;
+}
+@utility the-card {
+  @apply card rounded-none sm:rounded-xl bg-base-100 shadow-xl w-full md:max-w-3xl 2xl:max-w-4xl mx-auto min-h-screen sm:min-h-min flex flex-col sm:flex-none;
+}
+@utility the-photos-card {
+  @apply card rounded-none sm:rounded-xl bg-base-100 shadow-xl w-full md:max-w-3xl 2xl:max-w-4xl mx-auto sm:card-side min-h-screen sm:max-h-[500px] sm:min-h-[500px] 2xl:max-h-[600px] 2xl:min-h-[600px] flex flex-col;
 }
 
 @layer utilities {
-  .prose kbd {
-    @apply text-base-content; /* Warna teks dalam kbd */
+  :root {
+    scroll-behavior: smooth;
   }
-}
-@layer components {
-  .the-navbar {
-    @apply sticky flex-row top-0 z-50 navbar bg-base-100 px-4 border-b border-base-200 backdrop-blur bg-opacity-80;
+
+  /* Ini berlaku untuk semua browser */
+  body {
+    scroll-padding-top: 5rem;
   }
-  .text-hidden {
-    @apply hidden
-  }
-  .the-card {
-    @apply card rounded-none sm:rounded-xl bg-base-100 shadow-xl w-full md:max-w-3xl 2xl:max-w-4xl mx-auto min-h-screen sm:min-h-min flex flex-col sm:flex-none;
-  }
-  .the-photos-card {
-    @apply card rounded-none sm:rounded-xl bg-base-100 shadow-xl w-full md:max-w-3xl 2xl:max-w-4xl mx-auto sm:card-side min-h-screen sm:max-h-[500px] sm:min-h-[500px] 2xl:max-h-[600px] 2xl:min-h-[600px] flex flex-col;
-  }
-  .prose pre {
-    @apply bg-base-200 text-base-content;
-  }
-  .prose code:not(pre > code) {
-    @apply bg-primary text-base-100;
+
+  /* CSS khusus untuk Firefox */
+  @-moz-document url-prefix() {
+    :root {
+      scroll-padding-top: 5rem;
+    }
   }
 }

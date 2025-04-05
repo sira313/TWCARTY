@@ -1,6 +1,6 @@
 <!-- navbar -->
 <div class="sticky top-0 z-50">
-  <div class="flex-row navbar bg-base-100 px-4 border-b border-base-200 backdrop-blur bg-opacity-80">
+  <div class="flex-row navbar bg-base-100/80 px-4 border-b border-base-200 backdrop-blur-sm">
     <!-- back home -->
     <div class="dropdown dropdown-start mr-2 md:mr-0">
       <div tabindex="0" role="button" class="btn btn-ghost btn-circle avatar online">
@@ -12,7 +12,7 @@
       </div>
       <ul
         tabindex="0"
-        class="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow-xl border border-base-200">
+        class="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow-xl border border-base-200">
         {% for item in links.items %}
         <li>
           <a href="{{ item.url }}">
@@ -23,7 +23,7 @@
       </ul>
     </div>
     <!-- Simple search -->
-    <div class="flex-grow">
+    <div class="grow">
       {% include "search/search-global.html" %}
     </div>
     <!-- Menu large -->
@@ -96,7 +96,7 @@
           </div>
           <ul
             tabindex="0"
-            class="menu menu-md dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow-xl border border-base-200">
+            class="menu menu-md dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow-xl border border-base-200">
             {% for item in nav-mobile.items %}
             <li><a href="{{ item.url }}">{{ item.name }}</a></li>
             {% endfor %}
@@ -105,5 +105,5 @@
       </div>
     </div>
   </div>
-  <div class="my-2 mx-8 rounded-xl card-body max-h-[250px] overflow-y-auto flex flex-col gap-6 hidden bg-base-200 backdrop-blur bg-opacity-80 shadow-xl" id="search-results"></div>
+  <div class="my-2 mx-8 rounded-xl card-body max-h-[250px] overflow-y-auto flex flex-col gap-6 hidden bg-base-200/80 backdrop-blur-sm shadow-xl" id="search-results"></div>
 </div>

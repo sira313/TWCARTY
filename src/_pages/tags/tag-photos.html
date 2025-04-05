@@ -39,7 +39,7 @@ eleventyComputed:
 				</svg>
 			</a>
 			<!-- simple search -->
-			<div class="flex-grow">
+			<div class="grow">
 				{% include "search/search.html" %}
 			</div>
 			<!-- back to posts -->
@@ -118,7 +118,7 @@ eleventyComputed:
 				</div>
 				<ul
 					tabindex="0"
-					class="menu menu-md dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow-xl">
+					class="menu menu-md dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow-xl">
 					{% for tag in collections.photosTags %}	
 					<li><a href="/photos/tag/{{ tag | slugify }}">{{ tag }}</a></li>
 					{% endfor %}
@@ -126,7 +126,7 @@ eleventyComputed:
 			</div>
 		</div>
 		<!-- content -->
-		<div class="flex-grow">
+		<div class="grow">
 			<div id="results-list" class="grid grid-cols-3 gap-0.5">
 				<p id="no-results" class="p-8 col-span-3 text-center text-gray-500 hidden">Did not found any</p>
 				{% for photos in collections[tag] reversed %}

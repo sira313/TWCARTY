@@ -68,7 +68,7 @@ layout: main/base.html
       {% endif %}
     </div>
     <!-- description -->
-    <div class="sm:w-1/2 flex-grow flex flex-col overflow-hidden">
+    <div class="sm:w-1/2 grow flex flex-col overflow-hidden">
       <!-- top navbar -->
       <div class="navbar bg-base-100 rounded-t-xl px-4 hidden sm:block border-b border-base-200">
         <div class="navbar-start">
@@ -116,7 +116,7 @@ layout: main/base.html
         </div>
       </div>
       <!-- content -->
-      <div class="card-body sm:overflow-y-auto flex-grow">
+      <div class="card-body sm:overflow-y-auto grow">
         <div class="prose max-w-none">
           <h3>{{ title }}</h3>
           <div class="text-sm m-0">{{ date | date: "%a, %d %b %Y" }}</div>

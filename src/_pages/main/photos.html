@@ -15,7 +15,7 @@ permalink: /photos/
 		<!-- navbar -->
 		{% include "nav/nav-photos.html" %}
 		<!-- content -->
-		<div class="flex-grow">
+		<div class="grow">
 			<div id="results-list" class="grid grid-cols-3 gap-0.5">
 				<p id="no-results" class="p-8 col-span-3 text-center text-error hidden">Did not found any.</p>
 				{% for photos in collections.photos reversed %}

@@ -11,7 +11,7 @@
     </div>
     <ul
       tabindex="0"
-      class="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow-xl border border-base-200">
+      class="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow-xl border border-base-200">
       {% for item in links.items %}
       <li>
         <a href="{{ item.url }}">
@@ -22,7 +22,7 @@
     </ul>
   </div>
   <!-- Simple search -->
-  <div class="flex-grow">
+  <div class="grow">
     {% include "search/search.html" %}
   </div>
   <!-- Menu large -->
@@ -95,7 +95,7 @@
         </div>
         <ul
           tabindex="0"
-          class="menu menu-md dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow-xl border border-base-200">
+          class="menu menu-md dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow-xl border border-base-200">
           {% for item in nav-mobile.items %}
           <li><a href="{{ item.url }}">{{ item.name }}</a></li>
           {% endfor %}
