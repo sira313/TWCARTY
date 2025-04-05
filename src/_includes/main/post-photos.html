@@ -4,51 +4,7 @@ layout: main/base.html
 <div class="sm:container m-0 p-0 sm:mx-auto sm:px-4 md:px-10">
   <div class="the-photos-card">
     <!-- top navbar on mobile -->
-    <div class="the-navbar sm:hidden">
-      <div class="navbar-start">
-        <!-- back to posts -->
-        <a aria-label="back" href="/photos" class="btn btn-ghost btn-circle">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            class="h-5 w-5"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor">
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M3 3h7v7H3V3zM14 3h7v7h-7V3zM3 14h7v7H3v-7zM14 14h7v7h-7v-7z" />
-          </svg>
-        </a>
-        <!-- back home -->
-        <a aria-label="home" href="/" class="btn btn-ghost btn-circle">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            class="h-5 w-5"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor">
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
-            <polyline
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              points="9 22 9 12 15 12 15 22" />
-          </svg>
-        </a>
-      </div>
-      <div class="navbar-end">
-        <!-- comment -->
-        {% include "post/commentbutton.html" %}
-        <!-- share -->
-        {% include "post/sharebutton.html" %}
-      </div>
-    </div>
+    {% include "nav/nav-post-photos-mobile.html" %}
     <!-- cover -->
     <div class="sm:w-1/2 flex items-center justify-center bg-black rounded-none sm:rounded-l-xl overflow-hidden relative">
       <div class="carousel w-full">
@@ -70,51 +26,7 @@ layout: main/base.html
     <!-- description -->
     <div class="sm:w-1/2 grow flex flex-col overflow-hidden">
       <!-- top navbar -->
-      <div class="navbar bg-base-100 rounded-t-xl px-4 hidden sm:block border-b border-base-200">
-        <div class="navbar-start">
-          <!-- back to posts -->
-          <a aria-label="back" href="/photos" class="btn btn-ghost btn-circle">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="h-5 w-5"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor">
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M3 3h7v7H3V3zM14 3h7v7h-7V3zM3 14h7v7H3v-7zM14 14h7v7h-7v-7z" />
-            </svg>
-          </a>
-          <!-- back home -->
-  			  <a aria-label="home" href="/" class="btn btn-ghost btn-circle">
-  			  	<svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="h-5 w-5"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor">
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
-              <polyline
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                points="9 22 9 12 15 12 15 22" />
-            </svg>
-  			  </a>
-        </div>
-        <div class="navbar-end">
-          <!-- comment -->
-        {% include "post/commentbutton.html" %}
-          <!-- share -->
-          {% include "post/sharebutton.html" %}
-        </div>
-      </div>
+      {% include "nav/nav-post-photos-desktop.html" %}
       <!-- content -->
       <div class="card-body sm:overflow-y-auto grow">
         <div class="prose max-w-none">
