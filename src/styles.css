@@ -1,6 +1,7 @@
 /* styles.css */
 @import 'tailwindcss';
 @plugin 'daisyui';
+@plugin '@tailwindcss/typography';
 
 @theme {
   --aspect-21\/9: 21 / 9;
@@ -36,7 +37,7 @@
     @apply bg-base-200 text-base-content;
   }
   & code:not(pre > code) {
-    @apply bg-primary text-base-100;
+    @apply bg-primary text-secondary;
   }
 }
 @utility the-navbar {
