@@ -12,33 +12,40 @@
 		action="."
 		method="post"
 	>
-		<div class="flex w-full gap-3">
-			<input
-				class="input border-none rounded-lg bg-base-200 w-full"
-				type="text"
-				name="name"
-				spellcheck="false"
-				placeholder="Full name"
-				required
-			/>
-
-			<input
-				class="input border-none rounded-lg bg-base-200 w-full"
-				type="email"
-				name="email"
-				spellcheck="false"
-				placeholder="Email (opsional)"
-			/>
+		<div class="flex gap-3">
+			<label class="w-full floating-label">
+				<span>Full name</span>
+				<input
+					class="input border-none rounded-lg bg-base-200"
+					type="text"
+					name="name"
+					spellcheck="false"
+					placeholder="Full name"
+					required
+				/>
+			</label>
+			<label class="w-full floating-label">
+				<span>Email (optional)</span>
+				<input
+					class="input border-none rounded-lg bg-base-200 w-full"
+					type="email"
+					name="email"
+					spellcheck="false"
+					placeholder="Email (optional)"
+				/>
+			</label>
 		</div>
-
-		<textarea
-			class="textarea border-none rounded-lg bg-base-200 w-full mt-3"
-			name="description"
-			placeholder="Type your comment"
-			rows="3"
-			required
-			minlength="7"
-		></textarea>
+		<label class="w-full floating-label mt-3">
+			<span>Type your comment</span>
+			<textarea
+				class="textarea border-none rounded-lg bg-base-200 w-full"
+				name="description"
+				placeholder="Type your comment"
+				rows="3"
+				required
+				minlength="7"
+			></textarea>
+		</label>
 
 		<input name="reply_to" hidden />
 

@@ -10,7 +10,7 @@ module.exports = function(eleventyConfig) {
   
   // lazyImages and Files Minifier
   eleventyConfig.addPlugin(lazyImagesPlugin, {
-    appendInitScript: false, // Menonaktifkan penyertaan otomatis script lazysizes dari CDN
+    appendInitScript: false, // disable cdn script
   });
   eleventyConfig.addPlugin(eleventyPluginFilesMinifier);
 
@@ -18,11 +18,12 @@ module.exports = function(eleventyConfig) {
   eleventyConfig.addWatchTarget("tailwind.config.js");
 
   // Global data for root
+  eleventyConfig.addGlobalData("lang", "en"); // your lang attribute
   eleventyConfig.addGlobalData("rootTitle", "Apoxicam");
   eleventyConfig.addGlobalData("rootURL", "https://twcarty.netlify.app");
-  eleventyConfig.addGlobalData("SUPABASE_URL", process.env.SUPABASE_URL);
-  eleventyConfig.addGlobalData("SUPABASE_KEY", process.env.SUPABASE_KEY);
   eleventyConfig.addGlobalData("quotes", "<i>No one comes to your website to be entertained. They have questions they think you can answer. Content answers questions.</i><br /><b>― Jay Baer</b>")
+  eleventyConfig.addGlobalData("SUPABASE_URL", process.env.SUPABASE_URL);
+  eleventyConfig.addGlobalData("SUPABASE_KEY", process.env.SUPABASE_KEY)
 
   // Bypass dir
   const passthroughCopies = ["src/robots.txt", "src/asset/", "src/CNAME"];
