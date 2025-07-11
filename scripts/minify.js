@@ -1,6 +1,5 @@
 const extname = require("path").extname;
-
-const jsmin = require("./jsmin");
+const jsmin = require("./jsmin"); // Asumsi jsmin juga CommonJS
 
 module.exports = async (content, outputPath) => {
   const ext = extname(outputPath);
