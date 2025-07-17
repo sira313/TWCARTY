@@ -12,12 +12,8 @@ if (process.env.NODE_ENV?.toLocaleLowerCase() !== "production") {
 
 export default function (eleventyConfig) {
   // minifier js
-  // Menggunakan import dinamis dan menunggu hasilnya
-  import("./scripts/minify.js") // *** Tambahkan .js di sini ***
+  import("./scripts/minify.js")
     .then((minifyModule) => {
-      // Jika minify.js CommonJS dan menggunakan module.exports, maka minifyModule adalah fungsi itu sendiri
-      // Jika tidak, itu mungkin di bawah properti 'default' jika Node.js menganggapnya ES module.
-      // Cara paling aman adalah memeriksa keduanya.
       eleventyConfig.addTransform(
         "minify",
         minifyModule.default || minifyModule
