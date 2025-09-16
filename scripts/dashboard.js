@@ -1,15 +1,33 @@
 // scripts/dashboard.js
 import express from "express";
 import bodyParser from "body-parser";
-import { readdirSync, readFileSync, writeFileSync, unlinkSync } from "fs";
-import { resolve, join } from "path";
+import { readdirSync, readFileSync, writeFileSync, unlinkSync, statSync, mkdirSync, rmdirSync } from "fs";
+import { resolve, join, dirname, basename } from "path";
+import multer from "multer";
 
 const app = express();
 const PORT = 3000;
+const SRC_DIR = resolve("src");
+const ASSET_DIR = resolve("src/asset"); // Direktori root baru untuk explorer
+
+// Konfigurasi Multer untuk file upload ke ASSET_DIR
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    // Path tujuan upload diambil dari form, di-resolve terhadap ASSET_DIR
+    const uploadPath = join(ASSET_DIR, req.body.path || "/");
+    cb(null, uploadPath);
+  },
+  filename: function (req, file, cb) {
+    // Gunakan nama file asli
+    cb(null, file.originalname);
+  },
+});
+const upload = multer({ storage: storage });
+
 
 // Middleware
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(express.static(resolve("public"))); // Untuk aset statis jika ada
+app.use(express.static(resolve("public")));
 
 // Konfigurasi direktori post
 const postDirs = {
@@ -62,6 +80,8 @@ function createHtmlShell(title, content) {
             <li class="menu-title"><span>Manage Content</span></li>
             <li><a href="/dashboard/blog">✍️ Blog Posts</a></li>
             <li><a href="/dashboard/photos">🖼️ Photo Galleries</a></li>
+            <li class="menu-title"><span>Utilities</span></li>
+            <li><a href="/dashboard/explorer">🗂️ File Explorer</a></li>
           </ul>
         </div>
       </div>
@@ -69,7 +89,7 @@ function createHtmlShell(title, content) {
       <dialog id="delete_modal" class="modal">
         <div class="modal-box">
           <h3 class="font-bold text-lg">Confirm Deletion</h3>
-          <p class="py-4">Are you sure you want to delete this post? This action cannot be undone.</p>
+          <p class="py-4">Are you sure you want to delete this item? This action cannot be undone.</p>
           <div class="modal-action">
             <form method="dialog">
               <button class="btn">Cancel</button>
@@ -81,10 +101,26 @@ function createHtmlShell(title, content) {
         </div>
       </dialog>
       <script>
-        function confirmDelete(actionUrl) {
+        function confirmDelete(actionUrl, isFileExplorer = false) {
           const modal = document.getElementById('delete_modal');
           const form = document.getElementById('delete_form');
-          form.action = actionUrl;
+          if (isFileExplorer) {
+            // Untuk file explorer, action-nya berbeda
+            form.action = '/dashboard/explorer/delete';
+            // Tambahkan input hidden untuk path
+            let pathInput = form.querySelector('input[name="path"]');
+            if (!pathInput) {
+              pathInput = document.createElement('input');
+              pathInput.type = 'hidden';
+              pathInput.name = 'path';
+              form.appendChild(pathInput);
+            }
+            pathInput.value = actionUrl;
+          } else {
+            form.action = actionUrl;
+            let pathInput = form.querySelector('input[name="path"]');
+            if (pathInput) pathInput.remove();
+          }
           modal.showModal();
         }
       </script>
@@ -92,7 +128,7 @@ function createHtmlShell(title, content) {
     </html>
   `;
 }
-
+// ... existing getPosts, parseFrontmatter, createMarkdownContent functions ...
 /**
  * Membaca semua post dari direktori dan mengekstrak judul dari frontmatter.
  * @param {string} type - 'blog' or 'photos'
@@ -217,7 +253,7 @@ app.get("/dashboard", (req, res) => {
       <div class="hero-content text-center">
         <div class="max-w-md">
           <h1 class="text-5xl font-bold">Welcome Back!</h1>
-          <p class="py-6">Manage your content with ease. Use the menu to navigate between your blog posts and photo galleries.</p>
+          <p class="py-6">Manage your content with ease. Use the menu to navigate between your blog posts, photo galleries, and the file explorer.</p>
           <label for="my-drawer" class="btn btn-primary drawer-button xl:hidden">Open Menu</label>
         </div>
       </div>
@@ -227,10 +263,166 @@ app.get("/dashboard", (req, res) => {
 });
 
 
+// --- File Explorer Routes (MOVED UP) ---
+app.get("/dashboard/explorer", (req, res) => {
+    const relativePath = req.query.path || "/";
+    const currentPath = resolve(ASSET_DIR, relativePath.substring(1));
+
+    // Security check: Pastikan path masih di dalam ASSET_DIR
+    if (!currentPath.startsWith(ASSET_DIR)) {
+        return res.status(400).send("Invalid path");
+    }
+
+    const breadcrumbs = relativePath.split('/').filter(Boolean);
+
+    const files = readdirSync(currentPath).map(file => {
+        const stats = statSync(join(currentPath, file));
+        return {
+            name: file,
+            isDirectory: stats.isDirectory(),
+            // FIX: Ganti backslash dengan forward slash untuk URL
+            path: join(relativePath, file).replace(/\\/g, '/')
+        };
+    }).sort((a, b) => { // Sort folders first, then by name
+        if (a.isDirectory !== b.isDirectory) {
+            return a.isDirectory ? -1 : 1;
+        }
+        return a.name.localeCompare(b.name);
+    });
+
+    const fileList = files.map(f => `
+      <tr>
+        <td>
+          <a href="${f.isDirectory ? `/dashboard/explorer?path=${f.path}` : '#'}" class="flex items-center gap-2 link ${f.isDirectory ? 'link-primary' : ''}">
+            ${f.isDirectory ? '📁' : '📄'} ${f.name}
+          </a>
+        </td>
+        <td class="text-right">
+          <button onclick="confirmDelete('${f.path}', true)" class="btn btn-xs btn-ghost text-error">Delete</button>
+        </td>
+      </tr>
+    `).join('');
+    
+    const breadcrumbLinks = breadcrumbs.map((part, index) => {
+        const path = '/' + breadcrumbs.slice(0, index + 1).join('/');
+        return `<li><a href="/dashboard/explorer?path=${path}">${part}</a></li>`;
+    }).join('');
+
+    const content = `
+        <div class="text-sm breadcrumbs">
+            <ul>
+                <li><a href="/dashboard/explorer?path=/">asset</a></li>
+                ${breadcrumbLinks}
+            </ul>
+        </div>
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-4">
+            <div class="lg:col-span-2 card bg-base-200 shadow-lg">
+                <div class="card-body">
+                    <h2 class="card-title">Files in ${relativePath === '/' ? '/asset' : `/asset${relativePath}`}</h2>
+                    <div class="overflow-x-auto">
+                        <table class="table">
+                            <tbody>${fileList.length > 0 ? fileList : '<tr><td class="text-center italic opacity-75">Folder is empty</td></tr>'}</tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="space-y-6">
+                <div class="card bg-base-200 shadow-lg">
+                    <div class="card-body">
+                        <h2 class="card-title">Upload File</h2>
+                        <form action="/dashboard/explorer/upload" method="post" enctype="multipart/form-data" class="space-y-4">
+                            <input type="hidden" name="path" value="${relativePath}" />
+                            <div class="form-control">
+                               <input type="file" name="file" class="file-input file-input-bordered w-full" required />
+                            </div>
+                            <button type="submit" class="btn btn-primary w-full">Upload</button>
+                        </form>
+                    </div>
+                </div>
+                <div class="card bg-base-200 shadow-lg">
+                    <div class="card-body">
+                        <h2 class="card-title">Create Folder</h2>
+                        <form action="/dashboard/explorer/new-folder" method="post" class="space-y-4">
+                            <input type="hidden" name="path" value="${relativePath}" />
+                            <div class="form-control">
+                                <input type="text" name="folderName" placeholder="New folder name" class="input input-bordered w-full" required />
+                            </div>
+                            <button type="submit" class="btn btn-secondary w-full">Create</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+
+    res.send(createHtmlShell("File Explorer", content));
+});
+
+app.post('/dashboard/explorer/upload', upload.single('file'), (req, res) => {
+    // Redirect kembali ke path tempat file diupload
+    res.redirect(`/dashboard/explorer?path=${req.body.path || '/'}`);
+});
+
+app.post('/dashboard/explorer/new-folder', (req, res) => {
+    const { path, folderName } = req.body;
+    if (!folderName) return res.status(400).send("Folder name is required.");
+
+    const fullPath = join(ASSET_DIR, path || '/', folderName);
+    
+    // Security check
+    if (!fullPath.startsWith(ASSET_DIR)) {
+        return res.status(400).send("Invalid path.");
+    }
+
+    try {
+        mkdirSync(fullPath);
+        res.redirect(`/dashboard/explorer?path=${path || '/'}`);
+    } catch(err) {
+        console.error(err);
+        res.status(500).send("Failed to create directory.");
+    }
+});
+
+app.post('/dashboard/explorer/delete', (req, res) => {
+    const relativePath = req.body.path;
+    if (!relativePath) return res.status(400).send("Path is required.");
+
+    const fullPath = resolve(ASSET_DIR, relativePath.substring(1));
+
+    // Security check
+    if (!fullPath.startsWith(ASSET_DIR)) {
+        return res.status(400).send("Invalid path");
+    }
+
+    try {
+        const stats = statSync(fullPath);
+        if (stats.isDirectory()) {
+            // Hanya hapus folder jika kosong
+            if (readdirSync(fullPath).length === 0) {
+                rmdirSync(fullPath);
+            } else {
+                return res.status(400).send("Folder is not empty.");
+            }
+        } else {
+            unlinkSync(fullPath);
+        }
+        
+        // Redirect ke folder parent dari item yang dihapus
+        const parentDir = dirname(relativePath);
+        res.redirect(`/dashboard/explorer?path=${parentDir}`);
+    } catch(err) {
+        console.error(err);
+        res.status(500).send("Failed to delete item.");
+    }
+});
+
+
 // 🟢 Menampilkan daftar post dalam tabel
 app.get("/dashboard/:type", (req, res) => {
   const { type } = req.params;
+  // This check now correctly ignores 'explorer' because that route is handled above
   if (!postDirs[type]) return res.status(404).send("Invalid type");
+
 
   const posts = getPosts(type);
   const tableRows = posts.map(p => `
@@ -333,7 +525,6 @@ app.get("/dashboard/:type/new", (req, res) => {
   res.send(createHtmlShell(`New ${type} Post`, renderForm(type)));
 });
 
-// 🟢 Menampilkan form edit dengan data yang sudah terisi
 app.get("/dashboard/:type/edit/:slug", (req, res) => {
     const { type, slug } = req.params;
     if (!postDirs[type]) return res.status(404).send("Invalid type");
@@ -349,8 +540,6 @@ app.get("/dashboard/:type/edit/:slug", (req, res) => {
     }
 });
 
-
-// 🟢 Menyimpan post baru
 app.post("/dashboard/:type/save", (req, res) => {
   const { type } = req.params;
   if (!postDirs[type]) return res.status(404).send("Invalid type");
@@ -363,26 +552,19 @@ app.post("/dashboard/:type/save", (req, res) => {
   res.redirect(`/dashboard/${type}`);
 });
 
-// 🟢 Mengupdate post yang ada
 app.post("/dashboard/:type/update/:slug", (req, res) => {
     const { type, slug } = req.params;
     if (!postDirs[type]) return res.status(404).send("Invalid type");
-
-    // Karena slug di-disable di form, kita ambil dari URL params
     const updatedBody = { ...req.body, slug: slug.replace('.md', '') };
-    
     const filePath = join(postDirs[type], slug);
     const markdownContent = createMarkdownContent(type, updatedBody);
-    
     writeFileSync(filePath, markdownContent);
     res.redirect(`/dashboard/${type}`);
 });
 
-// 🟢 Menghapus post
 app.post("/dashboard/:type/delete/:slug", (req, res) => {
   const { type, slug } = req.params;
   if (!postDirs[type]) return res.status(404).send("Invalid type");
-
   try {
     const filePath = join(postDirs[type], slug);
     unlinkSync(filePath);
@@ -392,7 +574,6 @@ app.post("/dashboard/:type/delete/:slug", (req, res) => {
     res.status(500).send("Failed to delete file.");
   }
 });
-
 
 // Menjalankan server
 app.listen(PORT, () =>
