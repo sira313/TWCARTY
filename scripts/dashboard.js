@@ -28,6 +28,9 @@ const upload = multer({ storage: storage });
 // Middleware
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(resolve("public")));
+// Sajikan direktori aset secara statis di path /assets
+app.use('/assets', express.static(ASSET_DIR));
+
 
 // Konfigurasi direktori post
 const postDirs = {
@@ -293,7 +296,9 @@ app.get("/dashboard/explorer", (req, res) => {
     const fileList = files.map(f => `
       <tr>
         <td>
-          <a href="${f.isDirectory ? `/dashboard/explorer?path=${f.path}` : '#'}" class="flex items-center gap-2 link ${f.isDirectory ? 'link-primary' : ''}">
+          <a href="${f.isDirectory ? `/dashboard/explorer?path=${f.path}` : `/assets${f.path}`}" 
+             ${f.isDirectory ? '' : `target="_blank" rel="noopener noreferrer"`} 
+             class="flex items-center gap-2 link ${f.isDirectory ? 'link-primary' : 'link-hover'}">
             ${f.isDirectory ? '📁' : '📄'} ${f.name}
           </a>
         </td>
