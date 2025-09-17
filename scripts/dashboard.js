@@ -2,12 +2,11 @@
 import express from "express";
 import bodyParser from "body-parser";
 import { readdirSync, readFileSync, writeFileSync, unlinkSync, statSync, mkdirSync, rmdirSync } from "fs";
-import { resolve, join, dirname, basename } from "path";
+import { resolve, join, dirname } from "path";
 import multer from "multer";
 
 const app = express();
 const PORT = 3000;
-const SRC_DIR = resolve("src");
 const ASSET_DIR = resolve("src/asset"); // Direktori root baru untuk explorer
 
 // Konfigurasi Multer untuk file upload ke ASSET_DIR
@@ -65,7 +64,7 @@ function createHtmlShell(title, content) {
           <div class="navbar sticky top-0 z-50 bg-base-300 shadow-lg w-full">
             <div class="flex-none">
               <label for="my-drawer" class="btn btn-square btn-ghost drawer-button xl:hidden" aria-label="open sidebar">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="inline-block w-5 h-5 stroke-current"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24" class="inline-block w-5 h-5 stroke-current"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
               </label>
             </div>
             <div class="flex-1">
@@ -108,9 +107,7 @@ function createHtmlShell(title, content) {
           const modal = document.getElementById('delete_modal');
           const form = document.getElementById('delete_form');
           if (isFileExplorer) {
-            // Untuk file explorer, action-nya berbeda
             form.action = '/dashboard/explorer/delete';
-            // Tambahkan input hidden untuk path
             let pathInput = form.querySelector('input[name="path"]');
             if (!pathInput) {
               pathInput = document.createElement('input');
@@ -511,7 +508,19 @@ const renderForm = (type, post = {}) => {
                   ${extraFields}
                   <div class="form-control">
                     <label class="label"><span class="label-text">Content (Markdown)</span></label>
-                    <textarea name="content" placeholder="# Your content here" class="textarea textarea-bordered h-64">${post.body || ''}</textarea>
+                    
+                    <div role="tablist" class="tabs tabs-lifted">
+                      <input type="radio" name="editor_tabs" role="tab" class="tab" aria-label="Write" checked />
+                      <div role="tabpanel" class="tab-content bg-base-100 border-base-300 rounded-box p-0">
+                        <textarea name="content" id="markdown-input" placeholder="# Your content here" class="textarea w-full h-96 rounded-box rounded-tl-none">${post.body || ''}</textarea>
+                      </div>
+
+                      <input type="radio" name="editor_tabs" role="tab" class="tab" aria-label="Preview" />
+                      <div role="tabpanel" class="tab-content bg-base-100 border-base-300 rounded-b-box rounded-tr-box p-6">
+                        <div id="markdown-preview" class="prose max-w-none prose-invert"></div>
+                      </div>
+                    </div>
+
                   </div>
                   <input type="hidden" name="date" value="${post.date || ''}" />
                   <div class="card-actions justify-end">
@@ -521,6 +530,24 @@ const renderForm = (type, post = {}) => {
             </div>
         </div>
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dompurify@2.4.0/dist/purify.min.js"></script>
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        const markdownInput = document.getElementById('markdown-input');
+        const markdownPreview = document.getElementById('markdown-preview');
+
+        function updatePreview() {
+          const rawHTML = marked.parse(markdownInput.value);
+          markdownPreview.innerHTML = DOMPurify.sanitize(rawHTML);
+        }
+
+        markdownInput.addEventListener('input', updatePreview);
+
+        // Initial preview
+        updatePreview();
+      });
+    </script>
   `;
 };
 
