@@ -53,8 +53,8 @@ function createHtmlShell(title, content) {
       <meta charset="UTF-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
       <title>${title} | Dashboard</title>
-      <link href="https://cdn.jsdelivr.net/npm/daisyui@latest/dist/full.css" rel="stylesheet" type="text/css" />
-      <script src="https://cdn.tailwindcss.com"></script>
+      <link href="https://cdn.jsdelivr.net/npm/daisyui@5" rel="stylesheet" type="text/css" />
+      <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     </head>
     <body class="bg-base-100 min-h-screen">
       <div class="drawer xl:drawer-open">
@@ -122,31 +122,6 @@ function createHtmlShell(title, content) {
             if (pathInput) pathInput.remove();
           }
           modal.showModal();
-        }
-
-        function copyToClipboard(text, buttonElement) {
-          const textarea = document.createElement('textarea');
-          textarea.value = text;
-          // Make the textarea invisible
-          textarea.style.position = 'absolute';
-          textarea.style.left = '-9999px';
-          document.body.appendChild(textarea);
-          textarea.select();
-          try {
-            document.execCommand('copy');
-            if (buttonElement) {
-              const originalText = buttonElement.innerHTML;
-              buttonElement.innerHTML = 'Copied!';
-              buttonElement.classList.add('btn-success');
-              setTimeout(() => {
-                buttonElement.innerHTML = originalText;
-                buttonElement.classList.remove('btn-success');
-              }, 1500);
-            }
-          } catch (err) {
-            console.error('Failed to copy text: ', err);
-          }
-          document.body.removeChild(textarea);
         }
       </script>
     </body>
@@ -259,7 +234,8 @@ cover:
 ${coverArray}
 thumbnail: ${thumbnail || ""}
 date: ${date}
-tags: ${tags ? `\n${tags.split(",").map(t => `  - ${t.trim()}`).join("\n")}` : "TODO"}
+tags:
+${tags ? tags.split(",").map(t => `  - ${t.trim()}`).join("\n") : "  - TODO"}
 ---
 
 ${content || "# TODO"}
@@ -325,10 +301,7 @@ app.get("/dashboard/explorer", (req, res) => {
           </a>
         </td>
         <td class="text-right">
-          <div class="flex items-center justify-end gap-2">
-            ${!f.isDirectory ? `<button onclick="copyToClipboard('/assets${f.path}', this)" class="btn btn-xs btn-outline btn-primary">Copy Link</button>` : ''}
-            <button onclick="confirmDelete('${f.path}', true)" class="btn btn-xs btn-outline text-error">Delete</button>
-          </div>
+          <button onclick="confirmDelete('${f.path}', true)" class="btn btn-xs btn-outline text-error">Delete</button>
         </td>
       </tr>
     `).join('');
@@ -502,17 +475,45 @@ const renderForm = (type, post = {}) => {
   let extraFields = "";
   if (type === "blog") {
     extraFields = `
-      <div class="form-control"><label class="label"><span class="label-text">Description</span></label><input name="description" placeholder="Post description" class="input input-bordered w-full" value="${post.description || ''}" /></div>
-      <div class="form-control"><label class="label"><span class="label-text">Keyword</span></label><input name="keyword" placeholder="SEO keywords" class="input input-bordered w-full" value="${post.keyword || ''}" /></div>
-      <div class="form-control"><label class="label"><span class="label-text">Tags (comma separated)</span></label><input name="tags" placeholder="e.g. tech, eleventy, js" class="input input-bordered w-full" value="${post.tags || ''}" /></div>
+      <fieldset class="contents">
+        <label class="grid gap-2 md:col-span-2">
+          <span class="text-sm font-medium">Description</span>
+          <input name="description" placeholder="Post description" class="input input-bordered w-full" value="${post.description || ''}" />
+        </label>
+        <label class="grid gap-2">
+          <span class="text-sm font-medium">Keyword</span>
+          <input name="keyword" placeholder="SEO keywords" class="input input-bordered w-full" value="${post.keyword || ''}" />
+        </label>
+        <label class="grid gap-2">
+          <span class="text-sm font-medium">Tags (comma separated)</span>
+          <input name="tags" placeholder="e.g. tech, eleventy, js" class="input input-bordered w-full" value="${post.tags || ''}" />
+        </label>
+      </fieldset>
     `;
   } else if (type === "photos") {
     extraFields = `
-      <div class="form-control"><label class="label"><span class="label-text">Description</span></label><input name="description" placeholder="Gallery description" class="input input-bordered w-full" value="${post.description || ''}" /></div>
-      <div class="form-control"><label class="label"><span class="label-text">Keyword</span></label><input name="keyword" placeholder="SEO keywords" class="input input-bordered w-full" value="${post.keyword || ''}" /></div>
-      <div class="form-control"><label class="label"><span class="label-text">Cover URLs (one per line)</span></label><textarea name="cover" placeholder="https://example.com/image1.jpg\nhttps://example.com/image2.jpg" class="textarea textarea-bordered h-24">${post.cover || ''}</textarea></div>
-      <div class="form-control"><label class="label"><span class="label-text">Thumbnail URL</span></label><input name="thumbnail" placeholder="https://example.com/thumb.jpg" class="input input-bordered w-full" value="${post.thumbnail || ''}" /></div>
-      <div class="form-control"><label class="label"><span class="label-text">Tags (comma separated)</span></label><input name="tags" placeholder="e.g. nature, travel" class="input input-bordered w-full" value="${post.tags || ''}" /></div>
+      <fieldset class="contents">
+        <label class="grid gap-2">
+          <span class="text-sm font-medium">Description</span>
+          <input name="description" placeholder="Gallery description" class="input input-bordered w-full" value="${post.description || ''}" />
+        </label>
+        <label class="grid gap-2">
+          <span class="text-sm font-medium">Keyword</span>
+          <input name="keyword" placeholder="SEO keywords" class="input input-bordered w-full" value="${post.keyword || ''}" />
+        </label>
+        <label class="grid gap-2 md:col-span-2">
+          <span class="text-sm font-medium">Cover URLs (one per line)</span>
+          <textarea name="cover" placeholder="https://example.com/image1.jpg\\nhttps://example.com/image2.jpg" class="textarea textarea-bordered h-24 w-full">${post.cover || ''}</textarea>
+        </label>
+        <label class="grid gap-2">
+          <span class="text-sm font-medium">Thumbnail URL</span>
+          <input name="thumbnail" placeholder="https://example.com/thumb.jpg" class="input input-bordered w-full" value="${post.thumbnail || ''}" />
+        </label>
+        <label class="grid gap-2">
+          <span class="text-sm font-medium">Tags (comma separated)</span>
+          <input name="tags" placeholder="e.g. nature, travel" class="input input-bordered w-full" value="${post.tags || ''}" />
+        </label>
+      </fieldset>
     `;
   }
   
@@ -523,30 +524,32 @@ const renderForm = (type, post = {}) => {
             <div class="card-body">
                 <h1 class="card-title text-2xl mb-4">${isNew ? `New ${type} Post` : `Edit "${post.title}"`}</h1>
                 <form method="post" action="${actionUrl}" class="space-y-4">
-                  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div class="form-control">
-                      <label class="label"><span class="label-text">Slug (filename without .md)</span></label>
+                  <fieldset class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <label class="grid gap-2">
+                      <span class="text-sm font-medium">Slug (filename without .md)</span>
                       <input name="slug" placeholder="my-awesome-post" class="input input-bordered w-full" required value="${isNew ? '' : post.slug.replace('.md', '')}" ${isNew ? '' : 'disabled'} />
-                    </div>
-                    <div class="form-control">
-                      <label class="label"><span class="label-text">Title</span></label>
+                    </label>
+                    <label class="grid gap-2">
+                      <span class="text-sm font-medium">Title</span>
                       <input name="title" placeholder="My Awesome Post" class="input input-bordered w-full" required value="${post.title || ''}" />
-                    </div>
-                  </div>
-                  ${extraFields}
+                    </label>
+                    ${extraFields}
+                  </fieldset>
+
                   <div class="form-control">
                     <label class="label"><span class="label-text">Content (Markdown)</span></label>
                     
-                    <div role="tablist" class="tabs tabs-lifted">
-                      <input type="radio" name="editor_tabs" role="tab" class="tab" aria-label="Write" checked />
-                      <div role="tabpanel" class="tab-content bg-base-100 border-base-300 rounded-box p-0">
-                        <textarea name="content" id="markdown-input" placeholder="# Your content here" class="textarea w-full h-96 rounded-box rounded-tl-none">${post.body || ''}</textarea>
+                    <div role="tablist" class="tabs tabs-box">
+                      <a role="tab" class="tab tab-active" data-target="write-panel">Write</a>
+                      <a role="tab" class="tab" data-target="preview-panel">Preview</a>
+                    </div>
+                    
+                    <div class="bg-base-100 border-base-300 border rounded-box relative">
+                      <div id="write-panel">
+                        <textarea name="content" id="markdown-input" placeholder="# Your content here" class="textarea textarea-bordered w-full h-96 rounded--box">${post.body || ''}</textarea>
                       </div>
-
-                      <input type="radio" name="editor_tabs" role="tab" class="tab" aria-label="Preview" />
-                      <div role="tabpanel" class="tab-content bg-base-100 border-base-300 rounded-b-box rounded-tr-box p-6">
-                        <div id="markdown-preview" class="prose max-w-none prose-invert"></div>
-                      </div>
+                      <div id="preview-panel" class="p-6 prose max-w-none prose-invert hidden">
+                        </div>
                     </div>
 
                   </div>
@@ -563,7 +566,9 @@ const renderForm = (type, post = {}) => {
     <script>
       document.addEventListener('DOMContentLoaded', function() {
         const markdownInput = document.getElementById('markdown-input');
-        const markdownPreview = document.getElementById('markdown-preview');
+        const markdownPreview = document.getElementById('preview-panel');
+        const tabs = document.querySelectorAll('[role="tablist"] [role="tab"]');
+        const writePanel = document.getElementById('write-panel');
 
         function updatePreview() {
           const rawHTML = marked.parse(markdownInput.value);
@@ -571,6 +576,23 @@ const renderForm = (type, post = {}) => {
         }
 
         markdownInput.addEventListener('input', updatePreview);
+
+        tabs.forEach(tab => {
+          tab.addEventListener('click', (e) => {
+            e.preventDefault();
+            tabs.forEach(t => t.classList.remove('tab-active'));
+            tab.classList.add('tab-active');
+
+            if (tab.dataset.target === 'write-panel') {
+              writePanel.classList.remove('hidden');
+              markdownPreview.classList.add('hidden');
+            } else {
+              writePanel.classList.add('hidden');
+              markdownPreview.classList.remove('hidden');
+              updatePreview();
+            }
+          });
+        });
 
         // Initial preview
         updatePreview();
@@ -639,3 +661,4 @@ app.post("/dashboard/:type/delete/:slug", (req, res) => {
 app.listen(PORT, () =>
   console.log(`🚀 Dashboard running at http://localhost:${PORT}/dashboard`)
 );
+
