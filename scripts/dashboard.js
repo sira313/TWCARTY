@@ -1,7 +1,7 @@
 // scripts/dashboard.js
 import express from "express";
 import bodyParser from "body-parser";
-import { readdirSync, readFileSync, writeFileSync, unlinkSync, statSync, mkdirSync, rmdirSync } from "fs";
+import { readdirSync, readFileSync, writeFileSync, unlinkSync, statSync, mkdirSync, rmdirSync, existsSync } from "fs";
 import { resolve, join, dirname } from "path";
 import multer from "multer";
 
@@ -503,7 +503,7 @@ const renderForm = (type, post = {}) => {
         </label>
         <label class="grid gap-2 md:col-span-2">
           <span class="text-sm font-medium">Cover URLs (one per line)</span>
-          <textarea name="cover" placeholder="https://example.com/image1.jpg\\nhttps://example.com/image2.jpg" class="textarea textarea-bordered h-24 w-full">${post.cover || ''}</textarea>
+          <textarea name="cover" placeholder="https://example.com/image1.jpg\\nhttps://example.com/image2.jpg" class="textarea textarea-bordered h-24">${post.cover || ''}</textarea>
         </label>
         <label class="grid gap-2">
           <span class="text-sm font-medium">Thumbnail URL</span>
@@ -539,14 +539,14 @@ const renderForm = (type, post = {}) => {
                   <div class="form-control">
                     <label class="label"><span class="label-text">Content (Markdown)</span></label>
                     
-                    <div role="tablist" class="tabs tabs-box">
+                    <div role="tablist" class="tabs tabs-lifted">
                       <a role="tab" class="tab tab-active" data-target="write-panel">Write</a>
                       <a role="tab" class="tab" data-target="preview-panel">Preview</a>
                     </div>
                     
-                    <div class="bg-base-100 border-base-300 border rounded-box relative">
+                    <div class="bg-base-100 border-base-300 border rounded-b-box rounded-tr-box relative">
                       <div id="write-panel">
-                        <textarea name="content" id="markdown-input" placeholder="# Your content here" class="textarea textarea-bordered w-full h-96 rounded--box">${post.body || ''}</textarea>
+                        <textarea name="content" id="markdown-input" placeholder="# Your content here" class="textarea textarea-bordered w-full h-96 rounded-b-box rounded-tr-box">${post.body || ''}</textarea>
                       </div>
                       <div id="preview-panel" class="p-6 prose max-w-none prose-invert hidden">
                         </div>
@@ -645,7 +645,7 @@ app.post("/dashboard/:type/update/:slug", (req, res) => {
 });
 
 app.post("/dashboard/:type/delete/:slug", (req, res) => {
-  const { type } = req.params;
+  const { type, slug } = req.params;
   if (!postDirs[type]) return res.status(404).send("Invalid type");
   try {
     const filePath = join(postDirs[type], slug);
