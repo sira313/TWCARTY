@@ -29,6 +29,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(resolve("public")));
 // Sajikan direktori aset secara statis di path /assets
 app.use('/assets', express.static(ASSET_DIR));
+app.use('/dashboard-assets', express.static(resolve('scripts/dashboard-assets')));
 
 
 // Konfigurasi direktori post
@@ -53,8 +54,8 @@ function createHtmlShell(title, content) {
       <meta charset="UTF-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
       <title>${title} | Dashboard</title>
-      <link href="https://cdn.jsdelivr.net/npm/daisyui@5" rel="stylesheet" type="text/css" />
-      <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+      <link href="/dashboard-assets/style.css" rel="stylesheet" type="text/css" />
+      <script src="/dashboard-assets/tailwind.js"></script>
     </head>
     <body class="bg-base-100 min-h-screen">
       <div class="drawer xl:drawer-open">
@@ -560,8 +561,8 @@ const renderForm = (type, post = {}) => {
             </div>
         </div>
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/dompurify@2.4.0/dist/purify.min.js"></script>
+    <script src="/dashboard-assets/marked.min.js"></script>
+    <script src="/dashboard-assets/purify.min.js"></script>
     <script>
       document.addEventListener('DOMContentLoaded', function() {
         const markdownInput = document.getElementById('markdown-input');
