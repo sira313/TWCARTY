@@ -7,9 +7,9 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "eleventy --serve",
     "build": "eleventy",
-    "build:css": "npx @tailwindcss/cli -i ./scripts/dashboard/styles.css -o ./scripts/dashboard/dashboard-assets/style.css --minify",
-    "dashboard": "node scripts/dashboard/dashboard.mjs",
-    "dashboard:dev": "pnpm run build:css && pnpm run dashboard"
+    "build:css": "npx @tailwindcss/cli -i ./scripts/cms/styles.css -o ./scripts/cms/cms-assets/style.css --minify",
+    "cms": "node scripts/cms/cms.mjs",
+    "cms:dev": "pnpm run build:css && pnpm run cms"
   },
   "keywords": [],
   "author": "",

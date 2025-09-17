@@ -1,8 +1,8 @@
 ---
 layout: main/post-blog.html
-title: "Simple CMS Dashboard"
-description: "A simple CMS dashboard for static sites. Edit, preview, and manage content easily with a modern UI powered by Tailwind CSS and DaisyUI."
-keyword: "CMS, Dashboard, eleventy, ssg"
+title: Simple CMS
+description: A simple CMS for static sites. Edit, preview, and manage content easily with a modern UI powered by Tailwind CSS and DaisyUI.
+keyword: CMS, Dashboard, eleventy, ssg
 date: 2025-09-17
 tags:
   - Tutorial

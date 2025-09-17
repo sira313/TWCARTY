@@ -1,4 +1,4 @@
-// scripts/dashboard.js
+// scripts/cms.js
 import express from "express";
 import bodyParser from "body-parser";
 import { readdirSync, readFileSync, writeFileSync, unlinkSync, statSync, mkdirSync, rmdirSync, existsSync } from "fs";
@@ -29,7 +29,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(resolve("public")));
 // Sajikan direktori aset secara statis di path /assets
 app.use('/assets', express.static(ASSET_DIR));
-app.use('/dashboard-assets', express.static(resolve('scripts/dashboard/dashboard-assets')));
+app.use('/cms-assets', express.static(resolve('scripts/cms/cms-assets')));
 
 
 // Konfigurasi direktori post
@@ -54,7 +54,7 @@ function createHtmlShell(title, content) {
       <meta charset="UTF-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
       <title>${title} | Dashboard</title>
-      <link href="/dashboard-assets/style.css" rel="stylesheet" type="text/css" />
+      <link href="/cms-assets/style.css" rel="stylesheet" type="text/css" />
     </head>
     <body class="bg-base-100 min-h-screen">
       <div class="drawer xl:drawer-open">
@@ -68,7 +68,7 @@ function createHtmlShell(title, content) {
               </label>
             </div>
             <div class="flex-1">
-              <a href="/dashboard" class="btn btn-ghost text-xl">🚀 Eleventy Dashboard</a>
+              <a href="/cms" class="btn btn-ghost text-xl">🚀 Simple CMS</a>
             </div>
           </div>
           <!-- Page Content -->
@@ -80,10 +80,10 @@ function createHtmlShell(title, content) {
           <label for="my-drawer" aria-label="close sidebar" class="drawer-overlay"></label>
           <ul class="menu p-4 w-80 min-h-full bg-base-200 text-base-content">
             <li class="menu-title"><span>Manage Content</span></li>
-            <li><a href="/dashboard/blog">✍️ Blog Posts</a></li>
-            <li><a href="/dashboard/photos">🖼️ Photo Galleries</a></li>
+            <li><a href="/cms/blog">✍️ Blog Posts</a></li>
+            <li><a href="/cms/photos">🖼️ Photo Galleries</a></li>
             <li class="menu-title"><span>Utilities</span></li>
-            <li><a href="/dashboard/explorer">🗂️ File Explorer</a></li>
+            <li><a href="/cms/explorer">🗂️ File Explorer</a></li>
           </ul>
         </div>
       </div>
@@ -107,7 +107,7 @@ function createHtmlShell(title, content) {
           const modal = document.getElementById('delete_modal');
           const form = document.getElementById('delete_form');
           if (isFileExplorer) {
-            form.action = '/dashboard/explorer/delete';
+            form.action = '/cms/explorer/delete';
             let pathInput = form.querySelector('input[name="path"]');
             if (!pathInput) {
               pathInput = document.createElement('input');
@@ -211,9 +211,9 @@ function createMarkdownContent(type, body) {
   if (type === "blog") {
     return `---
 layout: main/post-blog.html
-title: "${title}"
-description: "${description || "TODO"}"
-keyword: "${keyword || ""}"
+title: ${title}
+description: ${description || "TODO"}
+keyword: ${keyword || ""}
 date: ${date}
 tags:
 ${tags ? tags.split(",").map((t) => `  - ${t.trim()}`).join("\n") : "  - TODO"}
@@ -227,9 +227,9 @@ ${content || "# TODO"}
       : "";
     return `---
 layout: main/post-photos.html
-title: "${title}"
-description: "${description || "TODO"}"
-keyword: "${keyword || ""}"
+title: ${title}
+description: ${description || "TODO"}
+keyword: ${keyword || ""}
 cover:
 ${coverArray}
 thumbnail: ${thumbnail || ""}
@@ -247,8 +247,8 @@ ${content || "# TODO"}
 
 // --- Routes ---
 
-// 🟢 Halaman utama dashboard
-app.get("/dashboard", (req, res) => {
+// 🟢 Halaman utama cms
+app.get("/cms", (req, res) => {
   const content = `
     <div class="hero min-h-[calc(100vh-12rem)] bg-base-200 rounded-box">
       <div class="hero-content text-center">
@@ -265,7 +265,7 @@ app.get("/dashboard", (req, res) => {
 
 
 // --- File Explorer Routes (MOVED UP) ---
-app.get("/dashboard/explorer", (req, res) => {
+app.get("/cms/explorer", (req, res) => {
     const relativePath = req.query.path || "/";
     const currentPath = resolve(ASSET_DIR, relativePath.substring(1));
 
@@ -294,7 +294,7 @@ app.get("/dashboard/explorer", (req, res) => {
     const fileList = files.map(f => `
       <tr>
         <td>
-          <a href="${f.isDirectory ? `/dashboard/explorer?path=${f.path}` : `/assets${f.path}`}" 
+          <a href="${f.isDirectory ? `/cms/explorer?path=${f.path}` : `/assets${f.path}`}" 
              ${f.isDirectory ? '' : `target="_blank" rel="noopener noreferrer"`} 
              class="flex items-center gap-2 link ${f.isDirectory ? 'link-primary' : 'link-hover'}">
             ${f.isDirectory ? '📁' : '📄'} ${f.name}
@@ -308,13 +308,13 @@ app.get("/dashboard/explorer", (req, res) => {
     
     const breadcrumbLinks = breadcrumbs.map((part, index) => {
         const path = '/' + breadcrumbs.slice(0, index + 1).join('/');
-        return `<li><a href="/dashboard/explorer?path=${path}">${part}</a></li>`;
+        return `<li><a href="/cms/explorer?path=${path}">${part}</a></li>`;
     }).join('');
 
     const content = `
         <div class="text-sm breadcrumbs">
             <ul>
-                <li><a href="/dashboard/explorer?path=/">asset</a></li>
+                <li><a href="/cms/explorer?path=/">asset</a></li>
                 ${breadcrumbLinks}
             </ul>
         </div>
@@ -333,7 +333,7 @@ app.get("/dashboard/explorer", (req, res) => {
                 <div class="card bg-base-200 shadow-lg">
                     <div class="card-body">
                         <h2 class="card-title">Upload File</h2>
-                        <form action="/dashboard/explorer/upload" method="post" enctype="multipart/form-data" class="space-y-4">
+                        <form action="/cms/explorer/upload" method="post" enctype="multipart/form-data" class="space-y-4">
                             <input type="hidden" name="path" value="${relativePath}" />
                             <div class="form-control">
                                <input type="file" name="file" class="file-input file-input-bordered w-full" required />
@@ -345,7 +345,7 @@ app.get("/dashboard/explorer", (req, res) => {
                 <div class="card bg-base-200 shadow-lg">
                     <div class="card-body">
                         <h2 class="card-title">Create Folder</h2>
-                        <form action="/dashboard/explorer/new-folder" method="post" class="space-y-4">
+                        <form action="/cms/explorer/new-folder" method="post" class="space-y-4">
                             <input type="hidden" name="path" value="${relativePath}" />
                             <div class="form-control">
                                 <input type="text" name="folderName" placeholder="New folder name" class="input input-bordered w-full" required />
@@ -361,12 +361,12 @@ app.get("/dashboard/explorer", (req, res) => {
     res.send(createHtmlShell("File Explorer", content));
 });
 
-app.post('/dashboard/explorer/upload', upload.single('file'), (req, res) => {
+app.post('/cms/explorer/upload', upload.single('file'), (req, res) => {
     // Redirect kembali ke path tempat file diupload
-    res.redirect(`/dashboard/explorer?path=${req.body.path || '/'}`);
+    res.redirect(`/cms/explorer?path=${req.body.path || '/'}`);
 });
 
-app.post('/dashboard/explorer/new-folder', (req, res) => {
+app.post('/cms/explorer/new-folder', (req, res) => {
     const { path, folderName } = req.body;
     if (!folderName) return res.status(400).send("Folder name is required.");
 
@@ -379,14 +379,14 @@ app.post('/dashboard/explorer/new-folder', (req, res) => {
 
     try {
         mkdirSync(fullPath);
-        res.redirect(`/dashboard/explorer?path=${path || '/'}`);
+        res.redirect(`/cms/explorer?path=${path || '/'}`);
     } catch(err) {
         console.error(err);
         res.status(500).send("Failed to create directory.");
     }
 });
 
-app.post('/dashboard/explorer/delete', (req, res) => {
+app.post('/cms/explorer/delete', (req, res) => {
     const relativePath = req.body.path;
     if (!relativePath) return res.status(400).send("Path is required.");
 
@@ -412,7 +412,7 @@ app.post('/dashboard/explorer/delete', (req, res) => {
         
         // Redirect ke folder parent dari item yang dihapus
         const parentDir = dirname(relativePath);
-        res.redirect(`/dashboard/explorer?path=${parentDir}`);
+        res.redirect(`/cms/explorer?path=${parentDir}`);
     } catch(err) {
         console.error(err);
         res.status(500).send("Failed to delete item.");
@@ -421,7 +421,7 @@ app.post('/dashboard/explorer/delete', (req, res) => {
 
 
 // 🟢 Menampilkan daftar post dalam tabel
-app.get("/dashboard/:type", (req, res) => {
+app.get("/cms/:type", (req, res) => {
   const { type } = req.params;
   // This check now correctly ignores 'explorer' because that route is handled above
   if (!postDirs[type]) return res.status(404).send("Invalid type");
@@ -433,8 +433,8 @@ app.get("/dashboard/:type", (req, res) => {
       <td class="font-medium">${p.title}</td>
       <td class="text-right">
         <div class="flex justify-end gap-2">
-          <a href="/dashboard/${type}/edit/${p.slug}" class="btn btn-sm btn-outline btn-info">Edit</a>
-          <button onclick="confirmDelete('/dashboard/${type}/delete/${p.slug}')" class="btn btn-sm btn-outline btn-error">Delete</button>
+          <a href="/cms/${type}/edit/${p.slug}" class="btn btn-sm btn-outline btn-info">Edit</a>
+          <button onclick="confirmDelete('/cms/${type}/delete/${p.slug}')" class="btn btn-sm btn-outline btn-error">Delete</button>
         </div>
       </td>
     </tr>
@@ -443,7 +443,7 @@ app.get("/dashboard/:type", (req, res) => {
   const content = `
     <div class="flex justify-between items-center mb-6">
       <h1 class="text-3xl font-bold capitalize">${type} Posts</h1>
-      <a href="/dashboard/${type}/new" class="btn btn-primary">+ New ${type} Post</a>
+      <a href="/cms/${type}/new" class="btn btn-primary">+ New ${type} Post</a>
     </div>
     <div class="card bg-base-200 shadow-lg">
         <div class="card-body">
@@ -470,7 +470,7 @@ app.get("/dashboard/:type", (req, res) => {
 // 🟢 Form untuk post baru atau edit
 const renderForm = (type, post = {}) => {
   const isNew = !post.slug;
-  const actionUrl = isNew ? `/dashboard/${type}/save` : `/dashboard/${type}/update/${post.slug}`;
+  const actionUrl = isNew ? `/cms/${type}/save` : `/cms/${type}/update/${post.slug}`;
   
   let extraFields = "";
   if (type === "blog") {
@@ -519,7 +519,7 @@ const renderForm = (type, post = {}) => {
   
   return `
     <div class="max-w-5xl mx-auto">
-        <a href="/dashboard/${type}" class="btn btn-link mb-4">← Back to ${type} list</a>
+        <a href="/cms/${type}" class="btn btn-link mb-4">← Back to ${type} list</a>
         <div class="card bg-base-200 shadow-lg">
             <div class="card-body">
                 <h1 class="card-title text-2xl mb-4">${isNew ? `New ${type} Post` : `Edit "${post.title}"`}</h1>
@@ -560,8 +560,8 @@ const renderForm = (type, post = {}) => {
             </div>
         </div>
     </div>
-    <script src="/dashboard-assets/marked.min.js"></script>
-    <script src="/dashboard-assets/purify.min.js"></script>
+    <script src="/cms-assets/marked.min.js"></script>
+    <script src="/cms-assets/purify.min.js"></script>
     <script>
       document.addEventListener('DOMContentLoaded', function() {
         const markdownInput = document.getElementById('markdown-input');
@@ -600,13 +600,13 @@ const renderForm = (type, post = {}) => {
   `;
 };
 
-app.get("/dashboard/:type/new", (req, res) => {
+app.get("/cms/:type/new", (req, res) => {
   const { type } = req.params;
   if (!postDirs[type]) return res.status(404).send("Invalid type");
   res.send(createHtmlShell(`New ${type} Post`, renderForm(type)));
 });
 
-app.get("/dashboard/:type/edit/:slug", (req, res) => {
+app.get("/cms/:type/edit/:slug", (req, res) => {
     const { type, slug } = req.params;
     if (!postDirs[type]) return res.status(404).send("Invalid type");
     
@@ -621,7 +621,7 @@ app.get("/dashboard/:type/edit/:slug", (req, res) => {
     }
 });
 
-app.post("/dashboard/:type/save", (req, res) => {
+app.post("/cms/:type/save", (req, res) => {
   const { type } = req.params;
   if (!postDirs[type]) return res.status(404).send("Invalid type");
   
@@ -630,26 +630,26 @@ app.post("/dashboard/:type/save", (req, res) => {
   const markdownContent = createMarkdownContent(type, req.body);
   
   writeFileSync(filePath, markdownContent);
-  res.redirect(`/dashboard/${type}`);
+  res.redirect(`/cms/${type}`);
 });
 
-app.post("/dashboard/:type/update/:slug", (req, res) => {
+app.post("/cms/:type/update/:slug", (req, res) => {
     const { type, slug } = req.params;
     if (!postDirs[type]) return res.status(404).send("Invalid type");
     const updatedBody = { ...req.body, slug: slug.replace('.md', '') };
     const filePath = join(postDirs[type], slug);
     const markdownContent = createMarkdownContent(type, updatedBody);
     writeFileSync(filePath, markdownContent);
-    res.redirect(`/dashboard/${type}`);
+    res.redirect(`/cms/${type}`);
 });
 
-app.post("/dashboard/:type/delete/:slug", (req, res) => {
+app.post("/cms/:type/delete/:slug", (req, res) => {
   const { type, slug } = req.params;
   if (!postDirs[type]) return res.status(404).send("Invalid type");
   try {
     const filePath = join(postDirs[type], slug);
     unlinkSync(filePath);
-    res.redirect(`/dashboard/${type}`);
+    res.redirect(`/cms/${type}`);
   } catch (error) {
     console.error(error);
     res.status(500).send("Failed to delete file.");
@@ -658,6 +658,6 @@ app.post("/dashboard/:type/delete/:slug", (req, res) => {
 
 // Menjalankan server
 app.listen(PORT, () =>
-  console.log(`🚀 Dashboard running at http://localhost:${PORT}/dashboard`)
+  console.log(`🚀 Dashboard running at http://localhost:${PORT}/cms`)
 );
 
