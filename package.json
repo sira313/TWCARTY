@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "eleventy --serve",
     "build": "eleventy",
-    "dashboard": "node scripts/dashboard.js"
+    "dashboard": "node scripts/dashboard/dashboard.js"
   },
   "keywords": [],
   "author": "",
@@ -23,8 +23,10 @@
     "dotenv": "^17.2.2",
     "eleventy-plugin-lazyimages": "^2.1.2",
     "express": "^5.1.0",
+    "marked": "^16.3.0",
     "multer": "^2.0.2",
     "postcss": "^8.5.6",
+    "purify": "^3.5.0",
     "tailwindcss": "^4.1.13",
     "terser": "^5.44.0"
   },

@@ -29,7 +29,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(resolve("public")));
 // Sajikan direktori aset secara statis di path /assets
 app.use('/assets', express.static(ASSET_DIR));
-app.use('/dashboard-assets', express.static(resolve('scripts/dashboard-assets')));
+app.use('/dashboard-assets', express.static(resolve('scripts/dashboard/dashboard-assets')));
 
 
 // Konfigurasi direktori post
