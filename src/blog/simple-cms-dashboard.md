@@ -32,14 +32,14 @@ The dashboard lets you create, edit, and manage your website’s content from a 
    pnpm install
    ```
 
-2. **Start the Dashboard**
+2. **Start the CMS**
    ```
-   pnpm run dashboard:dev
+   pnpm run cms:dev
    ```
    This will build the CSS and start the dashboard server.
 
 3. **Open the Dashboard**
-   Visit [http://localhost:3000/dashboard](http://localhost:3000/dashboard) in your browser.
+   Visit [http://localhost:3000/cms](http://localhost:3000/cms) in your browser.
 
 4. **Create or Edit Content**
    Use the dashboard interface to add new posts, edit existing ones, and upload images.
