@@ -123,6 +123,31 @@ function createHtmlShell(title, content) {
           }
           modal.showModal();
         }
+
+        function copyToClipboard(text, buttonElement) {
+          const textarea = document.createElement('textarea');
+          textarea.value = text;
+          // Make the textarea invisible
+          textarea.style.position = 'absolute';
+          textarea.style.left = '-9999px';
+          document.body.appendChild(textarea);
+          textarea.select();
+          try {
+            document.execCommand('copy');
+            if (buttonElement) {
+              const originalText = buttonElement.innerHTML;
+              buttonElement.innerHTML = 'Copied!';
+              buttonElement.classList.add('btn-success');
+              setTimeout(() => {
+                buttonElement.innerHTML = originalText;
+                buttonElement.classList.remove('btn-success');
+              }, 1500);
+            }
+          } catch (err) {
+            console.error('Failed to copy text: ', err);
+          }
+          document.body.removeChild(textarea);
+        }
       </script>
     </body>
     </html>
@@ -300,7 +325,10 @@ app.get("/dashboard/explorer", (req, res) => {
           </a>
         </td>
         <td class="text-right">
-          <button onclick="confirmDelete('${f.path}', true)" class="btn btn-xs btn-outline text-error">Delete</button>
+          <div class="flex items-center justify-end gap-2">
+            ${!f.isDirectory ? `<button onclick="copyToClipboard('/assets${f.path}', this)" class="btn btn-xs btn-outline btn-primary">Copy Link</button>` : ''}
+            <button onclick="confirmDelete('${f.path}', true)" class="btn btn-xs btn-outline text-error">Delete</button>
+          </div>
         </td>
       </tr>
     `).join('');
@@ -595,7 +623,7 @@ app.post("/dashboard/:type/update/:slug", (req, res) => {
 });
 
 app.post("/dashboard/:type/delete/:slug", (req, res) => {
-  const { type, slug } = req.params;
+  const { type } = req.params;
   if (!postDirs[type]) return res.status(404).send("Invalid type");
   try {
     const filePath = join(postDirs[type], slug);
@@ -611,4 +639,3 @@ app.post("/dashboard/:type/delete/:slug", (req, res) => {
 app.listen(PORT, () =>
   console.log(`🚀 Dashboard running at http://localhost:${PORT}/dashboard`)
 );
-
