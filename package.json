@@ -4,12 +4,12 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build:css": "npx @tailwindcss/cli -i ./scripts/dashboard/styles.css -o ./scripts/dashboard/dashboard-assets/style.css --minify",
-    "dashboard:dev": "pnpm run build:css && pnpm run dashboard",
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "eleventy --serve",
     "build": "eleventy",
-    "dashboard": "node scripts/dashboard/dashboard.mjs"
+    "build:css": "npx @tailwindcss/cli -i ./scripts/dashboard/styles.css -o ./scripts/dashboard/dashboard-assets/style.css --minify",
+    "dashboard": "node scripts/dashboard/dashboard.mjs",
+    "dashboard:dev": "pnpm run build:css && pnpm run dashboard"
   },
   "keywords": [],
   "author": "",
