@@ -300,8 +300,9 @@ app.get("/cms/explorer", (req, res) => {
             ${f.isDirectory ? '📁' : '📄'} ${f.name}
           </a>
         </td>
-        <td class="text-right">
+        <td class="text-right flex gap-2 justify-end">
           <button onclick="confirmDelete('${f.path}', true)" class="btn btn-xs btn-outline text-error">Delete</button>
+          ${!f.isDirectory ? `<button onclick="copyLink('/assets${f.path}')" class="btn btn-xs btn-outline btn-info">Copy Link</button>` : ''}
         </td>
       </tr>
     `).join('');
@@ -356,6 +357,16 @@ app.get("/cms/explorer", (req, res) => {
                 </div>
             </div>
         </div>
+        <script>
+          function copyLink(link) {
+            navigator.clipboard.writeText(link).then(function() {
+              // Optional: show a toast or alert
+              alert('Copied: ' + link);
+            }, function(err) {
+              alert('Failed to copy link');
+            });
+          }
+        </script>
     `;
 
     res.send(createHtmlShell("File Explorer", content));
