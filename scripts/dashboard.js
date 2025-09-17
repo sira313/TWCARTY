@@ -300,7 +300,7 @@ app.get("/dashboard/explorer", (req, res) => {
           </a>
         </td>
         <td class="text-right">
-          <button onclick="confirmDelete('${f.path}', true)" class="btn btn-xs btn-ghost text-error">Delete</button>
+          <button onclick="confirmDelete('${f.path}', true)" class="btn btn-xs btn-outline text-error">Delete</button>
         </td>
       </tr>
     `).join('');
