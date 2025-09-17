@@ -1,0 +1,4 @@
+@import 'tailwindcss';
+@source "./public/*.{html,js}";
+@plugin 'daisyui';
+@plugin '@tailwindcss/typography';

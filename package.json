@@ -4,6 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "build:css": "npx @tailwindcss/cli -i ./scripts/dashboard/styles.css -o ./scripts/dashboard/dashboard-assets/style.css --minify",
+    "dashboard:dev": "pnpm run build:css && pnpm run dashboard",
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "eleventy --serve",
     "build": "eleventy",
@@ -16,6 +18,7 @@
   "dependencies": {
     "@11ty/eleventy": "^3.1.2",
     "@sherby/eleventy-plugin-files-minifier": "^1.1.1",
+    "@tailwindcss/cli": "4.1.13",
     "@tailwindcss/postcss": "^4.1.13",
     "@tailwindcss/typography": "^0.5.16",
     "body-parser": "^2.2.0",
@@ -29,6 +32,5 @@
     "purify": "^3.5.0",
     "tailwindcss": "^4.1.13",
     "terser": "^5.44.0"
-  },
-  "type": "module"
+  }
 }

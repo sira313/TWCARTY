@@ -55,7 +55,6 @@ function createHtmlShell(title, content) {
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
       <title>${title} | Dashboard</title>
       <link href="/dashboard-assets/style.css" rel="stylesheet" type="text/css" />
-      <script src="/dashboard-assets/tailwind.js"></script>
     </head>
     <body class="bg-base-100 min-h-screen">
       <div class="drawer xl:drawer-open">
@@ -504,7 +503,7 @@ const renderForm = (type, post = {}) => {
         </label>
         <label class="grid gap-2 md:col-span-2">
           <span class="text-sm font-medium">Cover URLs (one per line)</span>
-          <textarea name="cover" placeholder="https://example.com/image1.jpg\\nhttps://example.com/image2.jpg" class="textarea textarea-bordered h-24">${post.cover || ''}</textarea>
+          <textarea name="cover" placeholder="https://example.com/image1.jpg\\nhttps://example.com/image2.jpg" class="textarea textarea-bordered h-24 w-full">${post.cover || ''}</textarea>
         </label>
         <label class="grid gap-2">
           <span class="text-sm font-medium">Thumbnail URL</span>
@@ -547,9 +546,9 @@ const renderForm = (type, post = {}) => {
                     
                     <div class="bg-base-100 border-base-300 border rounded-box relative">
                       <div id="write-panel">
-                        <textarea name="content" id="markdown-input" placeholder="# Your content here" class="textarea textarea-bordered w-full h-96 rounded-box">${post.body || ''}</textarea>
+                        <textarea name="content" id="markdown-input" placeholder="# Your content here" class="textarea textarea-bordered w-full h-100 rounded-box">${post.body || ''}</textarea>
                       </div>
-                      <div id="preview-panel" class="p-6 prose max-w-none hidden"></div>
+                      <div id="preview-panel" class="p-6 prose max-w-none hidden h-100 overflow-y-auto"></div>
                     </div>
 
                   </div>
