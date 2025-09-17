@@ -9,7 +9,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "eleventy --serve",
     "build": "eleventy",
-    "dashboard": "node scripts/dashboard/dashboard.js"
+    "dashboard": "node scripts/dashboard/dashboard.mjs"
   },
   "keywords": [],
   "author": "",
