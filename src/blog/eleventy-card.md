@@ -2,7 +2,7 @@
 layout: main/post-blog.html
 title: Eleventy Card
 description: Eleventy Card is a starter project for photographers and artists to showcase their work and blog content.
-keywords: Eleventy, Bulma
+keyword: 
 date: 2024-05-02
 tags:
   - Hello World
@@ -18,6 +18,7 @@ tags:
 - Built-in DaisyUI integration
 - Carousel for photo galleries
 - Simple comment system included
+- Simple CMS
 
 ### Getting Started
 
@@ -51,8 +52,15 @@ Basic knowledge of:
 
 4. **Run the project**
    ```bash
-   pnpm run dev
+   pnpm run all:dev
    ```
+
+<div role="alert" class="alert alert-success not-prose">
+  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="h-6 w-6 shrink-0 stroke-current">
+    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+  </svg>
+  <span>Now, we have a simple CMS run locally. You can open it after run the command above in <a class="font-bold link" href="http://localhost:3000/cms">http://localhost:3000/cms</a></span>
+</div>
 
 ### Project Structure
 
@@ -144,6 +152,14 @@ Located in `src/_pages/`:
 - `blog.html` – blog listing
 
 ### Creating Posts
+
+<div role="alert" class="alert alert-success not-prose">
+  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="h-6 w-6 shrink-0 stroke-current">
+    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+  </svg>
+  <span>There is new way to post. We have a simple CMS run locally. <a class="link" href="/blog/simple-cms-dashboard/">READ HERE</a></span>
+</div>
+
 
 Use the helper script to automate post creation:
 
