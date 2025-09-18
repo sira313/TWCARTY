@@ -142,11 +142,20 @@ function getPosts(type) {
     .map((f) => {
       const content = readFileSync(join(dir, f), "utf8");
       const titleMatch = content.match(/^title:\s*(.*)/m);
+      const dateMatch = content.match(/^date:\s*(.*)/m);
       return {
         slug: f,
-        title: titleMatch ? titleMatch[1].replace(/"/g, '') : f, // Menghapus quote jika ada
+        title: titleMatch ? titleMatch[1].replace(/"/g, '') : f,
+        date: dateMatch ? dateMatch[1].trim() : "",
       };
-    }).sort((a, b) => a.title.localeCompare(b.title));
+    })
+    .sort((a, b) => {
+      // Sort descending by date (newest first)
+      if (a.date && b.date) {
+        return new Date(b.date) - new Date(a.date);
+      }
+      return 0;
+    });
 }
 
 /**
@@ -442,6 +451,7 @@ app.get("/cms/:type", (req, res) => {
   const tableRows = posts.map(p => `
     <tr>
       <td class="font-medium">${p.title}</td>
+      <td>${p.date || '-'}</td>
       <td class="text-right">
         <div class="flex justify-end gap-2">
           <a href="/cms/${type}/edit/${p.slug}" class="btn btn-sm btn-outline btn-info">Edit</a>
@@ -451,29 +461,30 @@ app.get("/cms/:type", (req, res) => {
     </tr>
   `).join("");
 
-  const content = `
-    <div class="flex justify-between items-center mb-6">
-      <h1 class="text-3xl font-bold capitalize">${type} Posts</h1>
-      <a href="/cms/${type}/new" class="btn btn-primary">+ New ${type} Post</a>
-    </div>
-    <div class="card bg-base-200 shadow-lg">
-        <div class="card-body">
-            <div class="overflow-x-auto">
-              <table class="table">
-                <thead>
-                  <tr>
-                    <th>Title</th>
-                    <th class="text-right">Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  ${tableRows || `<tr><td colspan="2" class="text-center">No posts found.</td></tr>`}
-                </tbody>
-              </table>
-            </div>
-        </div>
-    </div>
-  `;
+const content = `
+  <div class="flex justify-between items-center mb-6">
+    <h1 class="text-3xl font-bold capitalize">${type} Posts</h1>
+    <a href="/cms/${type}/new" class="btn btn-primary">+ New ${type} Post</a>
+  </div>
+  <div class="card bg-base-200 shadow-lg">
+      <div class="card-body">
+          <div class="overflow-x-auto">
+            <table class="table min-w-[500]">
+              <thead>
+                <tr>
+                  <th class="w-2/3">Title</th>
+                  <th>Date</th>
+                  <th class="text-right">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${tableRows || `<tr><td colspan="3" class="text-center">No posts found.</td></tr>`}
+              </tbody>
+            </table>
+          </div>
+      </div>
+  </div>
+`;
   res.send(createHtmlShell(`${type.toUpperCase()} Posts`, content));
 });
 
