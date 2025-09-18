@@ -10,7 +10,7 @@
     "build:css": "npx @tailwindcss/cli -i ./scripts/cms/styles.css -o ./scripts/cms/cms-assets/style.css --minify",
     "cms": "node scripts/cms/cms.mjs",
     "cms:dev": "pnpm run build:css && pnpm run cms",
-    "all:dev": "concurrently \"pnpm run dev\" \"pnpm run cms:dev\" && echo Open CMS at http://localhost:3000/cms && echo Open your website at http://localhost:8080"
+    "all:dev": "concurrently \"pnpm run dev\" \"pnpm run cms:dev\""
   },
   "keywords": [],
   "author": "",

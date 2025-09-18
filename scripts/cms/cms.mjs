@@ -448,9 +448,16 @@ app.get("/cms/:type", (req, res) => {
 
 
   const posts = getPosts(type);
-  const tableRows = posts.map(p => `
+  const tableRows = posts.map(p => {
+  // Ambil slug tanpa .md
+  const slugNoExt = p.slug.replace(/\.md$/, '');
+  // Buat link ke eleventy
+  const publicUrl = `http://localhost:8080/${type}/${slugNoExt}/`;
+  return `
     <tr>
-      <td class="font-medium">${p.title}</td>
+      <td class="font-medium w-1/2">
+        <a href="${publicUrl}" target="_blank" rel="noopener noreferrer" class="link link-primary">${p.title}</a>
+      </td>
       <td>${p.date || '-'}</td>
       <td class="text-right">
         <div class="flex justify-end gap-2">
@@ -459,7 +466,8 @@ app.get("/cms/:type", (req, res) => {
         </div>
       </td>
     </tr>
-  `).join("");
+  `;
+}).join("");
 
 const content = `
   <div class="flex justify-between items-center mb-6">
