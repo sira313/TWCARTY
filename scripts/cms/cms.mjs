@@ -84,6 +84,7 @@ function createHtmlShell(title, content) {
             <li><a href="/cms/photos">🖼️ Photo Galleries</a></li>
             <li class="menu-title"><span>Utilities</span></li>
             <li><a href="/cms/explorer">🗂️ File Explorer</a></li>
+            <li><a href="/cms/config">⚙️ Site Config</a></li>
           </ul>
         </div>
       </div>
@@ -440,7 +441,64 @@ app.post('/cms/explorer/delete', (req, res) => {
 });
 
 
-// 🟢 Menampilkan daftar post dalam tabel
+// --- Konfigurasi Halaman (pindahkan ke atas) ---
+app.get("/cms/config", (req, res) => {
+  const globalData = JSON.parse(readFileSync(resolve("src/_data/global.json"), "utf8"));
+  const content = `
+    <div class="max-w-5xl mx-auto">
+      <div class="card bg-base-200 p-4 md:p-6">
+        <h1 class="text-2xl font-bold mb-4">Site Config</h1>
+        <form method="post" action="/cms/config/save" class="space-y-4">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+          <label>
+            <span class="text-sm font-medium">Language</span>
+            <input name="lang" class="input input-bordered w-full" value="${globalData.lang}" />
+          </label>
+          <label>
+            <span class="text-sm font-medium">Site Title</span>
+            <input name="rootTitle" class="input input-bordered w-full" value="${globalData.rootTitle}" />
+          </label>
+        </div
+          <label class="grid gap-2">
+            <span class="text-sm font-medium">Site URL</span>
+            <input name="rootURL" class="input input-bordered w-full" value="${globalData.rootURL}" />
+          </label>
+          <label class="grid gap-2">
+            <span class="text-sm font-medium">Quotes</span>
+            <textarea name="quotes" class="textarea textarea-bordered w-full h-24">${globalData.quotes}</textarea>
+          </label>
+          <label class="grid gap-2">
+            <span class="text-sm font-medium">SUPABASE_URL</span>
+            <input name="SUPABASE_URL" class="input input-bordered w-full" value="${globalData.SUPABASE_URL}" />
+          </label>
+          <label class="grid gap-2">
+            <span class="text-sm font-medium">SUPABASE_KEY</span>
+            <input name="SUPABASE_KEY" class="input input-bordered w-full" value="${globalData.SUPABASE_KEY}" />
+          </label>
+          <div class="card-actions justify-end">
+            <button type="submit" class="btn btn-primary">Save Config</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  `;
+  res.send(createHtmlShell("Site Config", content));
+});
+
+app.post("/cms/config/save", (req, res) => {
+  const newConfig = {
+    lang: req.body.lang,
+    rootTitle: req.body.rootTitle,
+    rootURL: req.body.rootURL,
+    quotes: req.body.quotes,
+    SUPABASE_URL: req.body.SUPABASE_URL,
+    SUPABASE_KEY: req.body.SUPABASE_KEY
+  };
+  writeFileSync(resolve("src/_data/global.json"), JSON.stringify(newConfig, null, 2));
+  res.redirect("/cms/config");
+});
+
+// --- Daftar post ---
 app.get("/cms/:type", (req, res) => {
   const { type } = req.params;
   // This check now correctly ignores 'explorer' because that route is handled above
