@@ -8,6 +8,8 @@ import multer from "multer";
 const app = express();
 const PORT = 3000;
 const ASSET_DIR = resolve("src/asset"); // Direktori root baru untuk explorer
+const pageDir = resolve("src/_pages/main");
+const layoutDir = resolve("src/_includes/main");
 
 // Konfigurasi Multer untuk file upload ke ASSET_DIR
 const storage = multer.diskStorage({
@@ -85,6 +87,7 @@ function createHtmlShell(title, content) {
             <li class="menu-title"><span>Utilities</span></li>
             <li><a href="/cms/explorer">🗂️ File Explorer</a></li>
             <li><a href="/cms/config">⚙️ Site Config</a></li>
+            <li><a href="/cms/pages">📄 Pages</a></li>
           </ul>
         </div>
       </div>
@@ -273,8 +276,403 @@ app.get("/cms", (req, res) => {
   res.send(createHtmlShell("Dashboard", content));
 });
 
+// --- Daftar Halaman Statis (Pages) ---
+app.get("/cms/pages", (req, res) => {
+  const pages = getPages();
+  const tableRows = pages.map(p => {
+    const slugNoExt = p.slug.replace(/\.(md|html)$/, '');
+    const publicUrl = `http://localhost:8080/${slugNoExt}/`;
+    return `
+      <tr>
+        <td class="font-medium w-1/2">
+          <a href="${publicUrl}" target="_blank" rel="noopener noreferrer" class="link link-primary">${p.title}</a>
+        </td>
+        <td>${p.date || '-'}</td>
+        <td class="text-right">
+          <div class="flex justify-end gap-2">
+            <a href="/cms/pages/edit/${p.slug}" class="btn btn-sm btn-outline btn-info">Edit</a>
+            <button onclick="confirmDelete('/cms/pages/delete/${p.slug}')" class="btn btn-sm btn-outline btn-error">Delete</button>
+          </div>
+        </td>
+      </tr>
+    `;
+  }).join("");
 
-// --- File Explorer Routes (MOVED UP) ---
+  const content = `
+    <div class="flex justify-between items-center mb-6">
+      <h1 class="text-3xl font-bold">Pages</h1>
+      <a href="/cms/pages/new" class="btn btn-primary">+ New Page</a>
+    </div>
+    <div class="card bg-base-200 shadow-lg">
+        <div class="card-body">
+            <div class="overflow-x-auto">
+              <table class="table min-w-[500px]">
+                <thead>
+                  <tr>
+                    <th class="w-2/3">Title</th>
+                    <th>Date</th>
+                    <th class="text-right">Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  ${tableRows || `<tr><td colspan="3" class="text-center">No pages found.</td></tr>`}
+                </tbody>
+              </table>
+            </div>
+        </div>
+    </div>
+  `;
+  res.send(createHtmlShell("Pages", content));
+});
+
+app.get("/cms/pages/edit/:slug", (req, res) => {
+  const { slug } = req.params;
+  try {
+    const fileContent = readFileSync(join(pageDir, slug), "utf8");
+    const pageData = parseFrontmatter(fileContent);
+    pageData.slug = slug;
+    res.send(createHtmlShell(`Edit "${pageData.title}"`, renderPageForm(pageData)));
+  } catch (error) {
+    console.error(error);
+    res.status(404).send("File not found");
+  }
+});
+
+app.get("/cms/pages/new", (req, res) => {
+  res.send(createHtmlShell("New Page", renderPageForm()));
+});
+
+app.post("/cms/pages/save", (req, res) => {
+  const { slug } = req.body;
+  const filePath = join(pageDir, slug);
+  const pageContent = createPageContent(req.body);
+  writeFileSync(filePath, pageContent);
+  res.redirect(`/cms/pages`);
+});
+
+app.post("/cms/pages/update/:slug", (req, res) => {
+  const { slug } = req.params;
+  const updatedBody = { ...req.body, slug };
+  const filePath = join(pageDir, slug);
+  const pageContent = createPageContent(updatedBody);
+  writeFileSync(filePath, pageContent);
+  res.redirect(`/cms/pages`);
+});
+
+app.post("/cms/pages/delete/:slug", (req, res) => {
+  const { slug } = req.params;
+  try {
+    const filePath = join(pageDir, slug);
+    unlinkSync(filePath);
+    res.redirect(`/cms/pages`);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Failed to delete page.");
+  }
+});
+
+// --- Daftar post ---
+app.get("/cms/:type", (req, res) => {
+  const { type } = req.params;
+  // This check now correctly ignores 'explorer' because that route is handled above
+  if (!postDirs[type]) return res.status(404).send("Invalid type");
+
+
+  const posts = getPosts(type);
+  const tableRows = posts.map(p => {
+  // Ambil slug tanpa .md
+  const slugNoExt = p.slug.replace(/\.md$/, '');
+  // Buat link ke eleventy
+  const publicUrl = `http://localhost:8080/${type}/${slugNoExt}/`;
+  return `
+    <tr>
+      <td class="font-medium w-1/2">
+        <a href="${publicUrl}" target="_blank" rel="noopener noreferrer" class="link link-primary">${p.title}</a>
+      </td>
+      <td>${p.date || '-'}</td>
+      <td class="text-right">
+        <div class="flex justify-end gap-2">
+          <a href="/cms/${type}/edit/${p.slug}" class="btn btn-sm btn-outline btn-info">Edit</a>
+          <button onclick="confirmDelete('/cms/${type}/delete/${p.slug}')" class="btn btn-sm btn-outline btn-error">Delete</button>
+        </div>
+      </td>
+    </tr>
+  `;
+}).join("");
+
+const content = `
+  <div class="flex justify-between items-center mb-6">
+    <h1 class="text-3xl font-bold capitalize">${type} Posts</h1>
+    <a href="/cms/${type}/new" class="btn btn-primary">+ New ${type} Post</a>
+  </div>
+  <div class="card bg-base-200 shadow-lg">
+      <div class="card-body">
+          <div class="overflow-x-auto">
+            <table class="table min-w-[500]">
+              <thead>
+                <tr>
+                  <th class="w-2/3">Title</th>
+                  <th>Date</th>
+                  <th class="text-right">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${tableRows || `<tr><td colspan="3" class="text-center">No posts found.</td></tr>`}
+              </tbody>
+            </table>
+          </div>
+      </div>
+  </div>
+`;
+  res.send(createHtmlShell(`${type.toUpperCase()} Posts`, content));
+});
+
+
+// 🟢 Form untuk post baru atau edit
+const renderForm = (type, post = {}) => {
+  const isNew = !post.slug;
+  const actionUrl = isNew ? `/cms/${type}/save` : `/cms/${type}/update/${post.slug}`;
+  
+  let extraFields = "";
+  if (type === "blog") {
+    extraFields = `
+      <fieldset class="contents">
+        <label class="grid gap-2 md:col-span-2">
+          <span class="text-sm font-medium">Description</span>
+          <input name="description" placeholder="Post description" class="input input-bordered w-full" value="${post.description || ''}" />
+        </label>
+        <label class="grid gap-2">
+          <span class="text-sm font-medium">Keyword</span>
+          <input name="keyword" placeholder="SEO keywords" class="input input-bordered w-full" value="${post.keyword || ''}" />
+        </label>
+        <label class="grid gap-2">
+          <span class="text-sm font-medium">Tags (comma separated)</span>
+          <input name="tags" placeholder="e.g. tech, eleventy, js" class="input input-bordered w-full" value="${post.tags || ''}" />
+        </label>
+      </fieldset>
+    `;
+  } else if (type === "photos") {
+    extraFields = `
+      <fieldset class="contents">
+        <label class="grid gap-2">
+          <span class="text-sm font-medium">Description</span>
+          <input name="description" placeholder="Gallery description" class="input input-bordered w-full" value="${post.description || ''}" />
+        </label>
+        <label class="grid gap-2">
+          <span class="text-sm font-medium">Keyword</span>
+          <input name="keyword" placeholder="SEO keywords" class="input input-bordered w-full" value="${post.keyword || ''}" />
+        </label>
+        <label class="grid gap-2 md:col-span-2">
+          <span class="text-sm font-medium">Cover URLs (one per line)</span>
+          <textarea name="cover" placeholder="https://example.com/image1.jpg\\nhttps://example.com/image2.jpg" class="textarea textarea-bordered h-24 w-full">${post.cover || ''}</textarea>
+        </label>
+        <label class="grid gap-2">
+          <span class="text-sm font-medium">Thumbnail URL</span>
+          <input name="thumbnail" placeholder="https://example.com/thumb.jpg" class="input input-bordered w-full" value="${post.thumbnail || ''}" />
+        </label>
+        <label class="grid gap-2">
+          <span class="text-sm font-medium">Tags (comma separated)</span>
+          <input name="tags" placeholder="e.g. nature, travel" class="input input-bordered w-full" value="${post.tags || ''}" />
+        </label>
+      </fieldset>
+    `;
+  }
+  
+  return `
+    <div class="max-w-5xl mx-auto">
+        <a href="/cms/${type}" class="btn btn-link mb-4">← Back to ${type} list</a>
+        <div class="card bg-base-200 shadow-lg">
+            <div class="card-body">
+                <h1 class="card-title text-2xl mb-4">${isNew ? `New ${type} Post` : `Edit "${post.title}"`}</h1>
+                <form method="post" action="${actionUrl}" class="space-y-4">
+                  <fieldset class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <label class="grid gap-2">
+                      <span class="text-sm font-medium">Slug (filename without .md)</span>
+                      <input name="slug" placeholder="my-awesome-post" class="input input-bordered w-full" required value="${isNew ? '' : post.slug.replace('.md', '')}" ${isNew ? '' : 'disabled'} />
+                    </label>
+                    <label class="grid gap-2">
+                      <span class="text-sm font-medium">Title</span>
+                      <input name="title" placeholder="My Awesome Post" class="input input-bordered w-full" required value="${post.title || ''}" />
+                    </label>
+                    ${extraFields}
+                  </fieldset>
+                  <div class="form-control">
+                    <label class="label"><span class="label-text">Content (Markdown/HTML)</span></label>
+                    
+                    <div role="tablist" class="tabs tabs-box">
+                      <a role="tab" class="tab tab-active" data-target="write-panel">Write</a>
+                      <a role="tab" class="tab" data-target="preview-panel">Preview</a>
+                    </div>
+                    
+                    <div class="bg-base-100 border-base-300 border rounded-box relative">
+                      <div id="write-panel">
+                        <textarea name="content" id="markdown-input" placeholder="# Your content here" class="textarea textarea-bordered w-full h-100 rounded-box">${post.body || ''}</textarea>
+                      </div>
+                      <div id="preview-panel" class="p-6 prose max-w-none hidden h-100 overflow-y-auto"></div>
+                    </div>
+
+                  </div>
+                  <div class="card-actions justify-end">
+                    <button type="submit" class="btn btn-primary">${isNew ? 'Save Post' : 'Update Post'}</button>
+                  </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script src="/cms-assets/marked.min.js"></script>
+    <script src="/cms-assets/purify.min.js"></script>
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        const markdownInput = document.getElementById('markdown-input');
+        const markdownPreview = document.getElementById('preview-panel');
+        const tabs = document.querySelectorAll('[role="tablist"] [role="tab"]');
+        const writePanel = document.getElementById('write-panel');
+
+        function updatePreview() {
+          const rawHTML = marked.parse(markdownInput.value);
+          markdownPreview.innerHTML = DOMPurify.sanitize(rawHTML);
+        }
+
+        markdownInput.addEventListener('input', updatePreview);
+
+        tabs.forEach(tab => {
+          tab.addEventListener('click', (e) => {
+            e.preventDefault();
+            tabs.forEach(t => t.classList.remove('tab-active'));
+            tab.classList.add('tab-active');
+
+            if (tab.dataset.target === 'write-panel') {
+              writePanel.classList.remove('hidden');
+              markdownPreview.classList.add('hidden');
+            } else {
+              writePanel.classList.add('hidden');
+              markdownPreview.classList.remove('hidden');
+              updatePreview();
+            }
+          });
+        });
+
+        // Initial preview
+        updatePreview();
+      });
+    </script>
+  `;
+};
+
+app.get("/cms/:type/new", (req, res) => {
+  const { type } = req.params;
+  if (!postDirs[type]) return res.status(404).send("Invalid type");
+  res.send(createHtmlShell(`New ${type} Post`, renderForm(type)));
+});
+
+app.get("/cms/:type/edit/:slug", (req, res) => {
+    const { type, slug } = req.params;
+    if (!postDirs[type]) return res.status(404).send("Invalid type");
+    
+    try {
+        const fileContent = readFileSync(join(postDirs[type], slug), "utf8");
+        const postData = parseFrontmatter(fileContent);
+        postData.slug = slug;
+        res.send(createHtmlShell(`Edit ${postData.title}`, renderForm(type, postData)));
+    } catch (error) {
+        console.error(error);
+        res.status(404).send("File not found");
+    }
+});
+
+app.post("/cms/:type/save", (req, res) => {
+  const { type } = req.params;
+  if (!postDirs[type]) return res.status(404).send("Invalid type");
+  
+  const { slug } = req.body;
+  const filePath = join(postDirs[type], slug + ".md");
+  const markdownContent = createMarkdownContent(type, req.body);
+  
+  writeFileSync(filePath, markdownContent);
+  res.redirect(`/cms/${type}`);
+});
+
+app.post("/cms/:type/update/:slug", (req, res) => {
+    const { type, slug } = req.params;
+    if (!postDirs[type]) return res.status(404).send("Invalid type");
+    const updatedBody = { ...req.body, slug: slug.replace('.md', '') };
+    const filePath = join(postDirs[type], slug);
+    const markdownContent = createMarkdownContent(type, updatedBody);
+    writeFileSync(filePath, markdownContent);
+    res.redirect(`/cms/${type}`);
+});
+
+app.post("/cms/:type/delete/:slug", (req, res) => {
+  const { type, slug } = req.params;
+  if (!postDirs[type]) return res.status(404).send("Invalid type");
+  try {
+    const filePath = join(postDirs[type], slug);
+    unlinkSync(filePath);
+    res.redirect(`/cms/${type}`);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Failed to delete file.");
+  }
+});
+
+// --- Konfigurasi Halaman (pindahkan ke atas) ---
+app.get("/cms/config", (req, res) => {
+  const globalData = JSON.parse(readFileSync(resolve("src/_data/global.json"), "utf8"));
+  const content = `
+    <div class="max-w-5xl mx-auto">
+      <div class="card bg-base-200 p-4 md:p-6">
+        <h1 class="text-2xl font-bold mb-4">Site Config</h1>
+        <form method="post" action="/cms/config/save" class="space-y-4">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+            <label>
+              <span class="text-sm font-medium">Language</span>
+              <input name="lang" class="input input-bordered w-full" value="${globalData.lang}" />
+            </label>
+            <label>
+              <span class="text-sm font-medium">Site Title</span>
+              <input name="rootTitle" class="input input-bordered w-full" value="${globalData.rootTitle}" />
+            </label>
+          </div
+          <label class="grid gap-2">
+            <span class="text-sm font-medium">Site URL</span>
+            <input name="rootURL" class="input input-bordered w-full" value="${globalData.rootURL}" />
+          </label>
+          <label class="grid gap-2">
+            <span class="text-sm font-medium">Quotes</span>
+            <textarea name="quotes" class="textarea textarea-bordered w-full h-24">${globalData.quotes}</textarea>
+          </label>
+          <label class="grid gap-2">
+            <span class="text-sm font-medium">SUPABASE_URL</span>
+            <input name="SUPABASE_URL" class="input input-bordered w-full" value="${globalData.SUPABASE_URL}" />
+          </label>
+          <label class="grid gap-2">
+            <span class="text-sm font-medium">SUPABASE_KEY</span>
+            <input name="SUPABASE_KEY" class="input input-bordered w-full" value="${globalData.SUPABASE_KEY}" />
+          </label>
+          <div class="card-actions justify-end">
+            <button type="submit" class="btn btn-primary">Save Config</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  `;
+  res.send(createHtmlShell("Site Config", content));
+});
+
+app.post("/cms/config/save", (req, res) => {
+  const newConfig = {
+    lang: req.body.lang,
+    rootTitle: req.body.rootTitle,
+    rootURL: req.body.rootURL,
+    quotes: req.body.quotes,
+    SUPABASE_URL: req.body.SUPABASE_URL,
+    SUPABASE_KEY: req.body.SUPABASE_KEY
+  };
+  writeFileSync(resolve("src/_data/global.json"), JSON.stringify(newConfig, null, 2));
+  res.redirect("/cms/config");
+});
+
+// --- Route untuk Explorer ---
 app.get("/cms/explorer", (req, res) => {
     const relativePath = req.query.path || "/";
     const currentPath = resolve(ASSET_DIR, relativePath.substring(1));
@@ -441,208 +839,188 @@ app.post('/cms/explorer/delete', (req, res) => {
 });
 
 
-// --- Konfigurasi Halaman (pindahkan ke atas) ---
-app.get("/cms/config", (req, res) => {
-  const globalData = JSON.parse(readFileSync(resolve("src/_data/global.json"), "utf8"));
-  const content = `
-    <div class="max-w-5xl mx-auto">
-      <div class="card bg-base-200 p-4 md:p-6">
-        <h1 class="text-2xl font-bold mb-4">Site Config</h1>
-        <form method="post" action="/cms/config/save" class="space-y-4">
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
-          <label>
-            <span class="text-sm font-medium">Language</span>
-            <input name="lang" class="input input-bordered w-full" value="${globalData.lang}" />
-          </label>
-          <label>
-            <span class="text-sm font-medium">Site Title</span>
-            <input name="rootTitle" class="input input-bordered w-full" value="${globalData.rootTitle}" />
-          </label>
-        </div
-          <label class="grid gap-2">
-            <span class="text-sm font-medium">Site URL</span>
-            <input name="rootURL" class="input input-bordered w-full" value="${globalData.rootURL}" />
-          </label>
-          <label class="grid gap-2">
-            <span class="text-sm font-medium">Quotes</span>
-            <textarea name="quotes" class="textarea textarea-bordered w-full h-24">${globalData.quotes}</textarea>
-          </label>
-          <label class="grid gap-2">
-            <span class="text-sm font-medium">SUPABASE_URL</span>
-            <input name="SUPABASE_URL" class="input input-bordered w-full" value="${globalData.SUPABASE_URL}" />
-          </label>
-          <label class="grid gap-2">
-            <span class="text-sm font-medium">SUPABASE_KEY</span>
-            <input name="SUPABASE_KEY" class="input input-bordered w-full" value="${globalData.SUPABASE_KEY}" />
-          </label>
-          <div class="card-actions justify-end">
-            <button type="submit" class="btn btn-primary">Save Config</button>
+// --- Daftar Halaman Statis
+app.get("/cms/pages", (req, res) => {
+  const pages = getPages();
+  const tableRows = pages.map(p => {
+    const slugNoExt = p.slug.replace(/\.(md|html)$/, '');
+    const publicUrl = `http://localhost:8080/${slugNoExt}/`;
+    return `
+      <tr>
+        <td class="font-medium w-1/2">
+          <a href="${publicUrl}" target="_blank" rel="noopener noreferrer" class="link link-primary">${p.title}</a>
+        </td>
+        <td>${p.date || '-'}</td>
+        <td class="text-right">
+          <div class="flex justify-end gap-2">
+            <a href="/cms/pages/edit/${p.slug}" class="btn btn-sm btn-outline btn-info">Edit</a>
+            <button onclick="confirmDelete('/cms/pages/delete/${p.slug}')" class="btn btn-sm btn-outline btn-error">Delete</button>
           </div>
-        </form>
-      </div>
+        </td>
+      </tr>
+    `;
+  }).join("");
+
+  const content = `
+    <div class="flex justify-between items-center mb-6">
+      <h1 class="text-3xl font-bold">Pages</h1>
+      <a href="/cms/pages/new" class="btn btn-primary">+ New Page</a>
+    </div>
+    <div class="card bg-base-200 shadow-lg">
+        <div class="card-body">
+            <div class="overflow-x-auto">
+              <table class="table min-w-[500px]">
+                <thead>
+                  <tr>
+                    <th class="w-2/3">Title</th>
+                    <th>Date</th>
+                    <th class="text-right">Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  ${tableRows || `<tr><td colspan="3" class="text-center">No pages found.</td></tr>`}
+                </tbody>
+              </table>
+            </div>
+        </div>
     </div>
   `;
-  res.send(createHtmlShell("Site Config", content));
+  res.send(createHtmlShell("Pages", content));
 });
 
-app.post("/cms/config/save", (req, res) => {
-  const newConfig = {
-    lang: req.body.lang,
-    rootTitle: req.body.rootTitle,
-    rootURL: req.body.rootURL,
-    quotes: req.body.quotes,
-    SUPABASE_URL: req.body.SUPABASE_URL,
-    SUPABASE_KEY: req.body.SUPABASE_KEY
-  };
-  writeFileSync(resolve("src/_data/global.json"), JSON.stringify(newConfig, null, 2));
-  res.redirect("/cms/config");
-});
-
-// --- Daftar post ---
-app.get("/cms/:type", (req, res) => {
-  const { type } = req.params;
-  // This check now correctly ignores 'explorer' because that route is handled above
-  if (!postDirs[type]) return res.status(404).send("Invalid type");
-
-
-  const posts = getPosts(type);
-  const tableRows = posts.map(p => {
-  // Ambil slug tanpa .md
-  const slugNoExt = p.slug.replace(/\.md$/, '');
-  // Buat link ke eleventy
-  const publicUrl = `http://localhost:8080/${type}/${slugNoExt}/`;
-  return `
-    <tr>
-      <td class="font-medium w-1/2">
-        <a href="${publicUrl}" target="_blank" rel="noopener noreferrer" class="link link-primary">${p.title}</a>
-      </td>
-      <td>${p.date || '-'}</td>
-      <td class="text-right">
-        <div class="flex justify-end gap-2">
-          <a href="/cms/${type}/edit/${p.slug}" class="btn btn-sm btn-outline btn-info">Edit</a>
-          <button onclick="confirmDelete('/cms/${type}/delete/${p.slug}')" class="btn btn-sm btn-outline btn-error">Delete</button>
-        </div>
-      </td>
-    </tr>
-  `;
-}).join("");
-
-const content = `
-  <div class="flex justify-between items-center mb-6">
-    <h1 class="text-3xl font-bold capitalize">${type} Posts</h1>
-    <a href="/cms/${type}/new" class="btn btn-primary">+ New ${type} Post</a>
-  </div>
-  <div class="card bg-base-200 shadow-lg">
-      <div class="card-body">
-          <div class="overflow-x-auto">
-            <table class="table min-w-[500]">
-              <thead>
-                <tr>
-                  <th class="w-2/3">Title</th>
-                  <th>Date</th>
-                  <th class="text-right">Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                ${tableRows || `<tr><td colspan="3" class="text-center">No posts found.</td></tr>`}
-              </tbody>
-            </table>
-          </div>
-      </div>
-  </div>
-`;
-  res.send(createHtmlShell(`${type.toUpperCase()} Posts`, content));
-});
-
-
-// 🟢 Form untuk post baru atau edit
-const renderForm = (type, post = {}) => {
-  const isNew = !post.slug;
-  const actionUrl = isNew ? `/cms/${type}/save` : `/cms/${type}/update/${post.slug}`;
-  
-  let extraFields = "";
-  if (type === "blog") {
-    extraFields = `
-      <fieldset class="contents">
-        <label class="grid gap-2 md:col-span-2">
-          <span class="text-sm font-medium">Description</span>
-          <input name="description" placeholder="Post description" class="input input-bordered w-full" value="${post.description || ''}" />
-        </label>
-        <label class="grid gap-2">
-          <span class="text-sm font-medium">Keyword</span>
-          <input name="keyword" placeholder="SEO keywords" class="input input-bordered w-full" value="${post.keyword || ''}" />
-        </label>
-        <label class="grid gap-2">
-          <span class="text-sm font-medium">Tags (comma separated)</span>
-          <input name="tags" placeholder="e.g. tech, eleventy, js" class="input input-bordered w-full" value="${post.tags || ''}" />
-        </label>
-      </fieldset>
-    `;
-  } else if (type === "photos") {
-    extraFields = `
-      <fieldset class="contents">
-        <label class="grid gap-2">
-          <span class="text-sm font-medium">Description</span>
-          <input name="description" placeholder="Gallery description" class="input input-bordered w-full" value="${post.description || ''}" />
-        </label>
-        <label class="grid gap-2">
-          <span class="text-sm font-medium">Keyword</span>
-          <input name="keyword" placeholder="SEO keywords" class="input input-bordered w-full" value="${post.keyword || ''}" />
-        </label>
-        <label class="grid gap-2 md:col-span-2">
-          <span class="text-sm font-medium">Cover URLs (one per line)</span>
-          <textarea name="cover" placeholder="https://example.com/image1.jpg\\nhttps://example.com/image2.jpg" class="textarea textarea-bordered h-24 w-full">${post.cover || ''}</textarea>
-        </label>
-        <label class="grid gap-2">
-          <span class="text-sm font-medium">Thumbnail URL</span>
-          <input name="thumbnail" placeholder="https://example.com/thumb.jpg" class="input input-bordered w-full" value="${post.thumbnail || ''}" />
-        </label>
-        <label class="grid gap-2">
-          <span class="text-sm font-medium">Tags (comma separated)</span>
-          <input name="tags" placeholder="e.g. nature, travel" class="input input-bordered w-full" value="${post.tags || ''}" />
-        </label>
-      </fieldset>
-    `;
+app.get("/cms/pages/edit/:slug", (req, res) => {
+  const { slug } = req.params;
+  try {
+    const fileContent = readFileSync(join(pageDir, slug), "utf8");
+    const pageData = parseFrontmatter(fileContent);
+    pageData.slug = slug;
+    res.send(createHtmlShell(`Edit "${pageData.title}"`, renderPageForm(pageData)));
+  } catch (error) {
+    console.error(error);
+    res.status(404).send("File not found");
   }
-  
+});
+
+app.get("/cms/pages/new", (req, res) => {
+  res.send(createHtmlShell("New Page", renderPageForm()));
+});
+
+app.post("/cms/pages/save", (req, res) => {
+  const { slug } = req.body;
+  const filePath = join(pageDir, slug);
+  const pageContent = createPageContent(req.body);
+  writeFileSync(filePath, pageContent);
+  res.redirect(`/cms/pages`);
+});
+
+app.post("/cms/pages/update/:slug", (req, res) => {
+  const { slug } = req.params;
+  const updatedBody = { ...req.body, slug };
+  const filePath = join(pageDir, slug);
+  const pageContent = createPageContent(updatedBody);
+  writeFileSync(filePath, pageContent);
+  res.redirect(`/cms/pages`);
+});
+
+app.post("/cms/pages/delete/:slug", (req, res) => {
+  const { slug } = req.params;
+  try {
+    const filePath = join(pageDir, slug);
+    unlinkSync(filePath);
+    res.redirect(`/cms/pages`);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Failed to delete page.");
+  }
+});
+
+function getPages() {
+  return readdirSync(pageDir)
+    .filter(f => f.endsWith(".md") || f.endsWith(".html"))
+    .map(f => {
+      const content = readFileSync(join(pageDir, f), "utf8");
+      const titleMatch = content.match(/^title:\s*(.*)/m);
+      const dateMatch = content.match(/^date:\s*(.*)/m);
+      return {
+        slug: f,
+        title: titleMatch ? titleMatch[1].replace(/"/g, '') : f,
+        date: dateMatch ? dateMatch[1].trim() : "",
+      };
+    });
+}
+
+function getLayouts() {
+  return readdirSync(layoutDir)
+    .filter(f => f.endsWith(".html"))
+    .map(f => f);
+}
+
+function renderPageForm(page = {}) {
+  const isNew = !page.slug;
+  const actionUrl = isNew ? `/cms/pages/save` : `/cms/pages/update/${page.slug}`;
+  const layouts = getLayouts();
   return `
     <div class="max-w-5xl mx-auto">
-        <a href="/cms/${type}" class="btn btn-link mb-4">← Back to ${type} list</a>
+        <a href="/cms/pages" class="btn btn-link mb-4">← Back to pages list</a>
         <div class="card bg-base-200 shadow-lg">
             <div class="card-body">
-                <h1 class="card-title text-2xl mb-4">${isNew ? `New ${type} Post` : `Edit "${post.title}"`}</h1>
+                <h1 class="card-title text-2xl mb-4">${isNew ? `New Page` : `Edit "${page.title}"`}</h1>
                 <form method="post" action="${actionUrl}" class="space-y-4">
                   <fieldset class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <label class="grid gap-2">
-                      <span class="text-sm font-medium">Slug (filename without .md)</span>
-                      <input name="slug" placeholder="my-awesome-post" class="input input-bordered w-full" required value="${isNew ? '' : post.slug.replace('.md', '')}" ${isNew ? '' : 'disabled'} />
+                      <span class="text-sm font-medium">Slug (filename with .md or .html)</span>
+                      <input name="slug" placeholder="index.md" class="input input-bordered w-full" required value="${isNew ? '' : page.slug}" ${isNew ? '' : 'disabled'} />
                     </label>
                     <label class="grid gap-2">
                       <span class="text-sm font-medium">Title</span>
-                      <input name="title" placeholder="My Awesome Post" class="input input-bordered w-full" required value="${post.title || ''}" />
+                      <input name="title" placeholder="Page Title" class="input input-bordered w-full" required value="${page.title || ''}" />
                     </label>
-                    ${extraFields}
+                    <label class="grid gap-2">
+                      <span class="text-sm font-medium">Description</span>
+                      <input name="description" placeholder="Page description" class="input input-bordered w-full" value="${page.description || ''}" />
+                    </label>
+                    <label class="grid gap-2">
+                      <span class="text-sm font-medium">Keyword</span>
+                      <input name="keyword" placeholder="SEO keywords" class="input input-bordered w-full" value="${page.keyword || ''}" />
+                    </label>
+                    <label class="grid gap-2">
+                      <span class="text-sm font-medium">Author</span>
+                      <input name="author" placeholder="Author name" class="input input-bordered w-full" value="${page.author || ''}" />
+                    </label>
+                    <label class="grid gap-2">
+                      <span class="text-sm font-medium">Cover URL</span>
+                      <input name="cover" placeholder="/asset/index/cover.webp" class="input input-bordered w-full" value="${page.cover || ''}" />
+                    </label>
+                    <label class="grid gap-2">
+                      <span class="text-sm font-medium">Profile URL</span>
+                      <input name="profile" placeholder="/asset/index/profile.webp" class="input input-bordered w-full" value="${page.profile || ''}" />
+                    </label>
+                    <label class="grid gap-2">
+                      <span class="text-sm font-medium">Permalink</span>
+                      <input name="permalink" placeholder="/index.html" class="input input-bordered w-full" value="${page.permalink || ''}" />
+                    </label>
+                    <label class="grid gap-2">
+                      <span class="text-sm font-medium">Layout</span>
+                      <select name="layout" class="select select-bordered w-full" required>
+                        ${layouts.map(l => `<option value="main/${l}" ${page.layout === `main/${l}` ? 'selected' : ''}>main/${l}</option>`).join('')}
+                      </select>
+                    </label>
                   </fieldset>
-
                   <div class="form-control">
-                    <label class="label"><span class="label-text">Content (Markdown)</span></label>
-                    
+                    <label class="label"><span class="label-text">Content (Markdown/HTML)</span></label>
                     <div role="tablist" class="tabs tabs-box">
                       <a role="tab" class="tab tab-active" data-target="write-panel">Write</a>
                       <a role="tab" class="tab" data-target="preview-panel">Preview</a>
                     </div>
-                    
                     <div class="bg-base-100 border-base-300 border rounded-box relative">
                       <div id="write-panel">
-                        <textarea name="content" id="markdown-input" placeholder="# Your content here" class="textarea textarea-bordered w-full h-100 rounded-box">${post.body || ''}</textarea>
+                        <textarea name="content" id="markdown-input" placeholder="# Your content here" class="textarea textarea-bordered w-full h-100 rounded-box">${page.body || ''}</textarea>
                       </div>
                       <div id="preview-panel" class="p-6 prose max-w-none hidden h-100 overflow-y-auto"></div>
                     </div>
-
                   </div>
-                  <input type="hidden" name="date" value="${post.date || ''}" />
                   <div class="card-actions justify-end">
-                    <button type="submit" class="btn btn-primary">${isNew ? 'Save Post' : 'Update Post'}</button>
+                    <button type="submit" class="btn btn-primary">${isNew ? 'Save Page' : 'Update Page'}</button>
                   </div>
                 </form>
             </div>
@@ -688,61 +1066,33 @@ const renderForm = (type, post = {}) => {
   `;
 };
 
-app.get("/cms/:type/new", (req, res) => {
-  const { type } = req.params;
-  if (!postDirs[type]) return res.status(404).send("Invalid type");
-  res.send(createHtmlShell(`New ${type} Post`, renderForm(type)));
-});
+function createPageContent(body) {
+  const {
+    layout,
+    title,
+    description,
+    keyword,
+    author,
+    cover,
+    profile,
+    permalink,
+    content
+  } = body;
 
-app.get("/cms/:type/edit/:slug", (req, res) => {
-    const { type, slug } = req.params;
-    if (!postDirs[type]) return res.status(404).send("Invalid type");
-    
-    try {
-        const fileContent = readFileSync(join(postDirs[type], slug), "utf8");
-        const postData = parseFrontmatter(fileContent);
-        postData.slug = slug;
-        res.send(createHtmlShell(`Edit ${postData.title}`, renderForm(type, postData)));
-    } catch (error) {
-        console.error(error);
-        res.status(404).send("File not found");
-    }
-});
+  return `---
+layout: ${layout}
+title: ${title}
+description: ${description || ""}
+keyword: ${keyword || ""}
+author: ${author || ""}
+cover: ${cover || ""}
+profile: ${profile || ""}
+permalink: ${permalink || ""}
+---
 
-app.post("/cms/:type/save", (req, res) => {
-  const { type } = req.params;
-  if (!postDirs[type]) return res.status(404).send("Invalid type");
-  
-  const { slug } = req.body;
-  const filePath = join(postDirs[type], slug + ".md");
-  const markdownContent = createMarkdownContent(type, req.body);
-  
-  writeFileSync(filePath, markdownContent);
-  res.redirect(`/cms/${type}`);
-});
-
-app.post("/cms/:type/update/:slug", (req, res) => {
-    const { type, slug } = req.params;
-    if (!postDirs[type]) return res.status(404).send("Invalid type");
-    const updatedBody = { ...req.body, slug: slug.replace('.md', '') };
-    const filePath = join(postDirs[type], slug);
-    const markdownContent = createMarkdownContent(type, updatedBody);
-    writeFileSync(filePath, markdownContent);
-    res.redirect(`/cms/${type}`);
-});
-
-app.post("/cms/:type/delete/:slug", (req, res) => {
-  const { type, slug } = req.params;
-  if (!postDirs[type]) return res.status(404).send("Invalid type");
-  try {
-    const filePath = join(postDirs[type], slug);
-    unlinkSync(filePath);
-    res.redirect(`/cms/${type}`);
-  } catch (error) {
-    console.error(error);
-    res.status(500).send("Failed to delete file.");
-  }
-});
+${content || ""}
+`;
+};
 
 // Menjalankan server
 app.listen(PORT, () =>
