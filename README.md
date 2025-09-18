@@ -18,6 +18,7 @@ Powered by:
 - DaisyUI integration
 - Carousel post gallery
 - Simple comment system
+- Simple CMS
 
 ## [DOCUMENTATION](https://twcarty.netlify.app/blog)
 

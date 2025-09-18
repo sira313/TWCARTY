@@ -1,17 +1,27 @@
 ---
 layout: main/post-blog.html
-title: How to post in blog
+title: How to make a blog post
 description: A short description to use this starter to post your log to blog.
 keyword: eleventy, tutorial
 date: 2024-05-02
 tags:
-    - Tutorial
+  - Tutorial
 ---
 
-Create a new file in the `/blog` directory. Do not use blank spaces; use `-` instead. For example:
+<div role="alert" class="alert alert-success not-prose">
+  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="h-6 w-6 shrink-0 stroke-current">
+    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+  </svg>
+  <span>There is new way to post. We have a simple CMS run locally. <a class="link" href="/blog/simple-cms-dashboard/">READ HERE</a></span>
+</div>
+
+To create a blog post, simply run this command:
 ```
-how-to-create-post-in-blog.md
+pnpm mkpost -b Your Blog Title
 ```
+
+It will create a new markdown file in `/blog` directory
+
 Since we use markdown, refer to this [markdown cheat sheet](https://www.markdownguide.org/cheat-sheet/) as a guide. Do not forget our default frontmatter:
 ```
 ---

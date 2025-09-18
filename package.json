@@ -9,7 +9,8 @@
     "build": "eleventy",
     "build:css": "npx @tailwindcss/cli -i ./scripts/cms/styles.css -o ./scripts/cms/cms-assets/style.css --minify",
     "cms": "node scripts/cms/cms.mjs",
-    "cms:dev": "pnpm run build:css && pnpm run cms"
+    "cms:dev": "pnpm run build:css && pnpm run cms",
+    "all:dev": "concurrently \"pnpm run dev\" \"pnpm run cms:dev\""
   },
   "keywords": [],
   "author": "",
@@ -30,5 +31,8 @@
     "postcss": "^8.5.6",
     "tailwindcss": "^4.1.13",
     "terser": "^5.44.0"
+  },
+  "devDependencies": {
+    "concurrently": "^9.2.1"
   }
 }

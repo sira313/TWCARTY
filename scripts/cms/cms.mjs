@@ -30,7 +30,7 @@ app.use(express.static(resolve("public")));
 // Sajikan direktori aset secara statis di path /assets
 app.use('/assets', express.static(ASSET_DIR));
 app.use('/cms-assets', express.static(resolve('scripts/cms/cms-assets')));
-
+app.use('/asset', express.static(ASSET_DIR));
 
 // Konfigurasi direktori post
 const postDirs = {
@@ -142,11 +142,20 @@ function getPosts(type) {
     .map((f) => {
       const content = readFileSync(join(dir, f), "utf8");
       const titleMatch = content.match(/^title:\s*(.*)/m);
+      const dateMatch = content.match(/^date:\s*(.*)/m);
       return {
         slug: f,
-        title: titleMatch ? titleMatch[1].replace(/"/g, '') : f, // Menghapus quote jika ada
+        title: titleMatch ? titleMatch[1].replace(/"/g, '') : f,
+        date: dateMatch ? dateMatch[1].trim() : "",
       };
-    }).sort((a, b) => a.title.localeCompare(b.title));
+    })
+    .sort((a, b) => {
+      // Sort descending by date (newest first)
+      if (a.date && b.date) {
+        return new Date(b.date) - new Date(a.date);
+      }
+      return 0;
+    });
 }
 
 /**
@@ -294,7 +303,7 @@ app.get("/cms/explorer", (req, res) => {
     const fileList = files.map(f => `
       <tr>
         <td>
-          <a href="${f.isDirectory ? `/cms/explorer?path=${f.path}` : `/assets${f.path}`}" 
+          <a href="${f.isDirectory ? `/cms/explorer?path=${f.path}` : `/asset${f.path}`}" 
              ${f.isDirectory ? '' : `target="_blank" rel="noopener noreferrer"`} 
              class="flex items-center gap-2 link ${f.isDirectory ? 'link-primary' : 'link-hover'}">
             ${f.isDirectory ? '📁' : '📄'} ${f.name}
@@ -302,7 +311,7 @@ app.get("/cms/explorer", (req, res) => {
         </td>
         <td class="text-right flex gap-2 justify-end">
           <button onclick="confirmDelete('${f.path}', true)" class="btn btn-xs btn-outline text-error">Delete</button>
-          ${!f.isDirectory ? `<button onclick="copyLink('/assets${f.path}')" class="btn btn-xs btn-outline btn-info">Copy Link</button>` : ''}
+          ${!f.isDirectory ? `<button onclick="copyLink('/asset${f.path}')" class="btn btn-xs btn-outline btn-info">Copy Link</button>` : ''}
         </td>
       </tr>
     `).join('');
@@ -439,9 +448,17 @@ app.get("/cms/:type", (req, res) => {
 
 
   const posts = getPosts(type);
-  const tableRows = posts.map(p => `
+  const tableRows = posts.map(p => {
+  // Ambil slug tanpa .md
+  const slugNoExt = p.slug.replace(/\.md$/, '');
+  // Buat link ke eleventy
+  const publicUrl = `http://localhost:8080/${type}/${slugNoExt}/`;
+  return `
     <tr>
-      <td class="font-medium">${p.title}</td>
+      <td class="font-medium w-1/2">
+        <a href="${publicUrl}" target="_blank" rel="noopener noreferrer" class="link link-primary">${p.title}</a>
+      </td>
+      <td>${p.date || '-'}</td>
       <td class="text-right">
         <div class="flex justify-end gap-2">
           <a href="/cms/${type}/edit/${p.slug}" class="btn btn-sm btn-outline btn-info">Edit</a>
@@ -449,31 +466,33 @@ app.get("/cms/:type", (req, res) => {
         </div>
       </td>
     </tr>
-  `).join("");
-
-  const content = `
-    <div class="flex justify-between items-center mb-6">
-      <h1 class="text-3xl font-bold capitalize">${type} Posts</h1>
-      <a href="/cms/${type}/new" class="btn btn-primary">+ New ${type} Post</a>
-    </div>
-    <div class="card bg-base-200 shadow-lg">
-        <div class="card-body">
-            <div class="overflow-x-auto">
-              <table class="table">
-                <thead>
-                  <tr>
-                    <th>Title</th>
-                    <th class="text-right">Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  ${tableRows || `<tr><td colspan="2" class="text-center">No posts found.</td></tr>`}
-                </tbody>
-              </table>
-            </div>
-        </div>
-    </div>
   `;
+}).join("");
+
+const content = `
+  <div class="flex justify-between items-center mb-6">
+    <h1 class="text-3xl font-bold capitalize">${type} Posts</h1>
+    <a href="/cms/${type}/new" class="btn btn-primary">+ New ${type} Post</a>
+  </div>
+  <div class="card bg-base-200 shadow-lg">
+      <div class="card-body">
+          <div class="overflow-x-auto">
+            <table class="table min-w-[500]">
+              <thead>
+                <tr>
+                  <th class="w-2/3">Title</th>
+                  <th>Date</th>
+                  <th class="text-right">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${tableRows || `<tr><td colspan="3" class="text-center">No posts found.</td></tr>`}
+              </tbody>
+            </table>
+          </div>
+      </div>
+  </div>
+`;
   res.send(createHtmlShell(`${type.toUpperCase()} Posts`, content));
 });
 
