@@ -5,4 +5,4 @@ _site
 !.env.example
 dashboard.html
 !dashboard.html.example
-scripts/dashboard/dashboard-assets/style.css
+scripts/cms/cms-assets/style.css

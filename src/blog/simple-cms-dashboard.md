@@ -14,7 +14,7 @@ This starter project has a simple CMS (Content Management System) dashboard buil
 
 ### Purpose
 
-The dashboard lets you create, edit, and manage your website’s content from a user-friendly interface. It is suitable for personal blogs, small business sites, or any static site that needs easy content updates.
+The CMS lets you create, edit, and manage your website’s content from a user-friendly interface. It is suitable for personal blogs, small business sites, or any static site that needs easy content updates.
 
 ### Features
 
@@ -34,9 +34,9 @@ The dashboard lets you create, edit, and manage your website’s content from a 
 
 2. **Start the CMS**
    ```
-   pnpm run cms:dev
+   pnpm run all:dev
    ```
-   This will build the CSS and start the dashboard server.
+   This will run the CMS also eleventy starter.
 
 3. **Open the Dashboard**
    Visit [http://localhost:3000/cms](http://localhost:3000/cms) in your browser.
@@ -46,10 +46,6 @@ The dashboard lets you create, edit, and manage your website’s content from a 
 
 5. **Preview and Save**
    Preview your content in real-time and save changes when ready.
-6. **Open your website** Split terminal and run
-   ```
-   pnpm run dev
-   ```
 
 ### Summary
 
