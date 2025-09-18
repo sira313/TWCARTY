@@ -30,7 +30,7 @@ app.use(express.static(resolve("public")));
 // Sajikan direktori aset secara statis di path /assets
 app.use('/assets', express.static(ASSET_DIR));
 app.use('/cms-assets', express.static(resolve('scripts/cms/cms-assets')));
-
+app.use('/asset', express.static(ASSET_DIR));
 
 // Konfigurasi direktori post
 const postDirs = {
@@ -294,7 +294,7 @@ app.get("/cms/explorer", (req, res) => {
     const fileList = files.map(f => `
       <tr>
         <td>
-          <a href="${f.isDirectory ? `/cms/explorer?path=${f.path}` : `/assets${f.path}`}" 
+          <a href="${f.isDirectory ? `/cms/explorer?path=${f.path}` : `/asset${f.path}`}" 
              ${f.isDirectory ? '' : `target="_blank" rel="noopener noreferrer"`} 
              class="flex items-center gap-2 link ${f.isDirectory ? 'link-primary' : 'link-hover'}">
             ${f.isDirectory ? '📁' : '📄'} ${f.name}
@@ -302,7 +302,7 @@ app.get("/cms/explorer", (req, res) => {
         </td>
         <td class="text-right flex gap-2 justify-end">
           <button onclick="confirmDelete('${f.path}', true)" class="btn btn-xs btn-outline text-error">Delete</button>
-          ${!f.isDirectory ? `<button onclick="copyLink('/assets${f.path}')" class="btn btn-xs btn-outline btn-info">Copy Link</button>` : ''}
+          ${!f.isDirectory ? `<button onclick="copyLink('/asset${f.path}')" class="btn btn-xs btn-outline btn-info">Copy Link</button>` : ''}
         </td>
       </tr>
     `).join('');
