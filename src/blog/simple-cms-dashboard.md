@@ -14,7 +14,7 @@ This starter project has a simple CMS (Content Management System) dashboard buil
 
 ### Purpose
 
-The dashboard lets you create, edit, and manage your website’s content from a user-friendly interface. It is suitable for personal blogs, small business sites, or any static site that needs easy content updates.
+The CMS lets you create, edit, and manage your website’s content from a user-friendly interface. It is suitable for personal blogs, small business sites, or any static site that needs easy content updates.
 
 ### Features
 
