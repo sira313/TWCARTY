@@ -371,6 +371,325 @@ app.post("/cms/pages/delete/:slug", (req, res) => {
   }
 });
 
+// --- Route untuk Explorer ---
+app.get("/cms/explorer", (req, res) => {
+    const relativePath = req.query.path || "/";
+    const currentPath = resolve(ASSET_DIR, relativePath.substring(1));
+
+    // Security check: Pastikan path masih di dalam ASSET_DIR
+    if (!currentPath.startsWith(ASSET_DIR)) {
+        return res.status(400).send("Invalid path");
+    }
+
+    const breadcrumbs = relativePath.split('/').filter(Boolean);
+
+    const files = readdirSync(currentPath).map(file => {
+        const stats = statSync(join(currentPath, file));
+        return {
+            name: file,
+            isDirectory: stats.isDirectory(),
+            // FIX: Ganti backslash dengan forward slash untuk URL
+            path: join(relativePath, file).replace(/\\/g, '/')
+        };
+    }).sort((a, b) => { // Sort folders first, then by name
+        if (a.isDirectory !== b.isDirectory) {
+            return a.isDirectory ? -1 : 1;
+        }
+        return a.name.localeCompare(b.name);
+    });
+
+    const fileList = files.map(f => `
+      <tr>
+        <td>
+          <a href="${f.isDirectory ? `/cms/explorer?path=${f.path}` : `/asset${f.path}`}" 
+             ${f.isDirectory ? '' : `target="_blank" rel="noopener noreferrer"`} 
+             class="flex items-center gap-2 link ${f.isDirectory ? 'link-primary' : 'link-hover'}">
+            ${f.isDirectory ? '📁' : '📄'} ${f.name}
+          </a>
+        </td>
+        <td class="text-right flex gap-2 justify-end">
+          <button onclick="confirmDelete('${f.path}', true)" class="btn btn-xs btn-outline text-error">Delete</button>
+          ${!f.isDirectory ? `<button onclick="copyLink('/asset${f.path}')" class="btn btn-xs btn-outline btn-info">Copy Link</button>` : ''}
+        </td>
+      </tr>
+    `).join('');
+    
+    const breadcrumbLinks = breadcrumbs.map((part, index) => {
+        const path = '/' + breadcrumbs.slice(0, index + 1).join('/');
+        return `<li><a href="/cms/explorer?path=${path}">${part}</a></li>`;
+    }).join('');
+
+    const content = `
+        <div class="text-sm breadcrumbs">
+            <ul>
+                <li><a href="/cms/explorer?path=/">asset</a></li>
+                ${breadcrumbLinks}
+            </ul>
+        </div>
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-4">
+            <div class="lg:col-span-2 card bg-base-200 shadow-lg">
+                <div class="card-body">
+                    <h2 class="card-title">Files in ${relativePath === '/' ? '/asset' : `/asset${relativePath}`}</h2>
+                    <div class="overflow-x-auto">
+                        <table class="table">
+                            <tbody>${fileList.length > 0 ? fileList : '<tr><td class="text-center italic opacity-75">Folder is empty</td></tr>'}</tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="space-y-6">
+                <div class="card bg-base-200 shadow-lg">
+                    <div class="card-body">
+                        <h2 class="card-title">Upload File</h2>
+                        <form action="/cms/explorer/upload" method="post" enctype="multipart/form-data" class="space-y-4">
+                            <input type="hidden" name="path" value="${relativePath}" />
+                            <div class="form-control">
+                               <input type="file" name="file" class="file-input file-input-bordered w-full" required />
+                            </div>
+                            <button type="submit" class="btn btn-primary w-full">Upload</button>
+                        </form>
+                    </div>
+                </div>
+                <div class="card bg-base-200 shadow-lg">
+                    <div class="card-body">
+                        <h2 class="card-title">Create Folder</h2>
+                        <form action="/cms/explorer/new-folder" method="post" class="space-y-4">
+                            <input type="hidden" name="path" value="${relativePath}" />
+                            <div class="form-control">
+                                <input type="text" name="folderName" placeholder="New folder name" class="input input-bordered w-full" required />
+                            </div>
+                            <button type="submit" class="btn btn-secondary w-full">Create</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script>
+          function copyLink(link) {
+            navigator.clipboard.writeText(link).then(function() {
+              // Optional: show a toast or alert
+              alert('Copied: ' + link);
+            }, function(err) {
+              alert('Failed to copy link');
+            });
+          }
+        </script>
+    `;
+
+    res.send(createHtmlShell("File Explorer", content));
+});
+
+app.post('/cms/explorer/upload', upload.single('file'), (req, res) => {
+    // Redirect kembali ke path tempat file diupload
+    res.redirect(`/cms/explorer?path=${req.body.path || '/'}`);
+});
+
+app.post('/cms/explorer/new-folder', (req, res) => {
+    const { path, folderName } = req.body;
+    if (!folderName) return res.status(400).send("Folder name is required.");
+
+    const fullPath = join(ASSET_DIR, path || '/', folderName);
+    
+    // Security check
+    if (!fullPath.startsWith(ASSET_DIR)) {
+        return res.status(400).send("Invalid path.");
+    }
+
+    try {
+        mkdirSync(fullPath);
+        res.redirect(`/cms/explorer?path=${path || '/'}`);
+    } catch(err) {
+        console.error(err);
+        res.status(500).send("Failed to create directory.");
+    }
+});
+
+app.post('/cms/explorer/delete', (req, res) => {
+    const relativePath = req.body.path;
+    if (!relativePath) return res.status(400).send("Path is required.");
+
+    const fullPath = resolve(ASSET_DIR, relativePath.substring(1));
+
+    // Security check
+    if (!fullPath.startsWith(ASSET_DIR)) {
+        return res.status(400).send("Invalid path");
+    }
+
+    try {
+        const stats = statSync(fullPath);
+        if (stats.isDirectory()) {
+            // Hanya hapus folder jika kosong
+            if (readdirSync(fullPath).length === 0) {
+                rmdirSync(fullPath);
+            } else {
+                return res.status(400).send("Folder is not empty.");
+            }
+        } else {
+            unlinkSync(fullPath);
+        }
+        
+        // Redirect ke folder parent dari item yang dihapus
+        const parentDir = dirname(relativePath);
+        res.redirect(`/cms/explorer?path=${parentDir}`);
+    } catch(err) {
+        console.error(err);
+        res.status(500).send("Failed to delete item.");
+    }
+});
+
+// --- Route untuk Config ---
+app.get("/cms/config", (req, res) => {
+  const globalData = JSON.parse(readFileSync(resolve("src/_data/global.json"), "utf8"));
+  const content = `
+    <div class="max-w-5xl mx-auto">
+      <div class="card bg-base-200 p-4 md:p-6">
+        <h1 class="text-2xl font-bold mb-4">Site Config</h1>
+        <form method="post" action="/cms/config/save" class="space-y-4">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+            <label>
+              <span class="text-sm font-medium">Language</span>
+              <input name="lang" class="input input-bordered w-full" value="${globalData.lang}" />
+            </label>
+            <label>
+              <span class="text-sm font-medium">Site Title</span>
+              <input name="rootTitle" class="input input-bordered w-full" value="${globalData.rootTitle}" />
+            </label>
+          </div
+          <label class="grid gap-2">
+            <span class="text-sm font-medium">Site URL</span>
+            <input name="rootURL" class="input input-bordered w-full" value="${globalData.rootURL}" />
+          </label>
+          <label class="grid gap-2">
+            <span class="text-sm font-medium">Quotes</span>
+            <textarea name="quotes" class="textarea textarea-bordered w-full h-24">${globalData.quotes}</textarea>
+          </label>
+          <label class="grid gap-2">
+            <span class="text-sm font-medium">SUPABASE_URL</span>
+            <input name="SUPABASE_URL" class="input input-bordered w-full" value="${globalData.SUPABASE_URL}" />
+          </label>
+          <label class="grid gap-2">
+            <span class="text-sm font-medium">SUPABASE_KEY</span>
+            <input name="SUPABASE_KEY" class="input input-bordered w-full" value="${globalData.SUPABASE_KEY}" />
+          </label>
+          <div class="card-actions justify-end">
+            <button type="submit" class="btn btn-primary">Save Config</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  `;
+  res.send(createHtmlShell("Site Config", content));
+});
+
+app.post("/cms/config/save", (req, res) => {
+  const newConfig = {
+    lang: req.body.lang,
+    rootTitle: req.body.rootTitle,
+    rootURL: req.body.rootURL,
+    quotes: req.body.quotes,
+    SUPABASE_URL: req.body.SUPABASE_URL,
+    SUPABASE_KEY: req.body.SUPABASE_KEY
+  };
+  writeFileSync(resolve("src/_data/global.json"), JSON.stringify(newConfig, null, 2));
+  res.redirect("/cms/config");
+});
+
+
+// --- Route untuk Pages (Halaman Statis) ---
+app.get("/cms/pages", (req, res) => {
+  const pages = getPages();
+  const tableRows = pages.map(p => {
+    const slugNoExt = p.slug.replace(/\.(md|html)$/, '');
+    const publicUrl = `http://localhost:8080/${slugNoExt}/`;
+    return `
+      <tr>
+        <td class="font-medium w-1/2">
+          <a href="${publicUrl}" target="_blank" rel="noopener noreferrer" class="link link-primary">${p.title}</a>
+        </td>
+        <td>${p.date || '-'}</td>
+        <td class="text-right">
+          <div class="flex justify-end gap-2">
+            <a href="/cms/pages/edit/${p.slug}" class="btn btn-sm btn-outline btn-info">Edit</a>
+            <button onclick="confirmDelete('/cms/pages/delete/${p.slug}')" class="btn btn-sm btn-outline btn-error">Delete</button>
+          </div>
+        </td>
+      </tr>
+    `;
+  }).join("");
+
+  const content = `
+    <div class="flex justify-between items-center mb-6">
+      <h1 class="text-3xl font-bold">Pages</h1>
+      <a href="/cms/pages/new" class="btn btn-primary">+ New Page</a>
+    </div>
+    <div class="card bg-base-200 shadow-lg">
+        <div class="card-body">
+            <div class="overflow-x-auto">
+              <table class="table min-w-[500px]">
+                <thead>
+                  <tr>
+                    <th class="w-2/3">Title</th>
+                    <th>Date</th>
+                    <th class="text-right">Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  ${tableRows || `<tr><td colspan="3" class="text-center">No pages found.</td></tr>`}
+                </tbody>
+              </table>
+            </div>
+        </div>
+    </div>
+  `;
+  res.send(createHtmlShell("Pages", content));
+});
+
+app.get("/cms/pages/edit/:slug", (req, res) => {
+  const { slug } = req.params;
+  try {
+    const fileContent = readFileSync(join(pageDir, slug), "utf8");
+    const pageData = parseFrontmatter(fileContent);
+    pageData.slug = slug;
+    res.send(createHtmlShell(`Edit "${pageData.title}"`, renderPageForm(pageData)));
+  } catch (error) {
+    console.error(error);
+    res.status(404).send("File not found");
+  }
+});
+
+app.get("/cms/pages/new", (req, res) => {
+  res.send(createHtmlShell("New Page", renderPageForm()));
+});
+
+app.post("/cms/pages/save", (req, res) => {
+  const { slug } = req.body;
+  const filePath = join(pageDir, slug);
+  const pageContent = createPageContent(req.body);
+  writeFileSync(filePath, pageContent);
+  res.redirect(`/cms/pages`);
+});
+
+app.post("/cms/pages/update/:slug", (req, res) => {
+  const { slug } = req.params;
+  const updatedBody = { ...req.body, slug };
+  const filePath = join(pageDir, slug);
+  const pageContent = createPageContent(updatedBody);
+  writeFileSync(filePath, pageContent);
+  res.redirect(`/cms/pages`);
+});
+
+app.post("/cms/pages/delete/:slug", (req, res) => {
+  const { slug } = req.params;
+  try {
+    const filePath = join(pageDir, slug);
+    unlinkSync(filePath);
+    res.redirect(`/cms/pages`);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Failed to delete page.");
+  }
+});
+
 // --- Daftar post ---
 app.get("/cms/:type", (req, res) => {
   const { type } = req.params;
@@ -612,325 +931,6 @@ app.post("/cms/:type/delete/:slug", (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).send("Failed to delete file.");
-  }
-});
-
-// --- Konfigurasi Halaman (pindahkan ke atas) ---
-app.get("/cms/config", (req, res) => {
-  const globalData = JSON.parse(readFileSync(resolve("src/_data/global.json"), "utf8"));
-  const content = `
-    <div class="max-w-5xl mx-auto">
-      <div class="card bg-base-200 p-4 md:p-6">
-        <h1 class="text-2xl font-bold mb-4">Site Config</h1>
-        <form method="post" action="/cms/config/save" class="space-y-4">
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
-            <label>
-              <span class="text-sm font-medium">Language</span>
-              <input name="lang" class="input input-bordered w-full" value="${globalData.lang}" />
-            </label>
-            <label>
-              <span class="text-sm font-medium">Site Title</span>
-              <input name="rootTitle" class="input input-bordered w-full" value="${globalData.rootTitle}" />
-            </label>
-          </div
-          <label class="grid gap-2">
-            <span class="text-sm font-medium">Site URL</span>
-            <input name="rootURL" class="input input-bordered w-full" value="${globalData.rootURL}" />
-          </label>
-          <label class="grid gap-2">
-            <span class="text-sm font-medium">Quotes</span>
-            <textarea name="quotes" class="textarea textarea-bordered w-full h-24">${globalData.quotes}</textarea>
-          </label>
-          <label class="grid gap-2">
-            <span class="text-sm font-medium">SUPABASE_URL</span>
-            <input name="SUPABASE_URL" class="input input-bordered w-full" value="${globalData.SUPABASE_URL}" />
-          </label>
-          <label class="grid gap-2">
-            <span class="text-sm font-medium">SUPABASE_KEY</span>
-            <input name="SUPABASE_KEY" class="input input-bordered w-full" value="${globalData.SUPABASE_KEY}" />
-          </label>
-          <div class="card-actions justify-end">
-            <button type="submit" class="btn btn-primary">Save Config</button>
-          </div>
-        </form>
-      </div>
-    </div>
-  `;
-  res.send(createHtmlShell("Site Config", content));
-});
-
-app.post("/cms/config/save", (req, res) => {
-  const newConfig = {
-    lang: req.body.lang,
-    rootTitle: req.body.rootTitle,
-    rootURL: req.body.rootURL,
-    quotes: req.body.quotes,
-    SUPABASE_URL: req.body.SUPABASE_URL,
-    SUPABASE_KEY: req.body.SUPABASE_KEY
-  };
-  writeFileSync(resolve("src/_data/global.json"), JSON.stringify(newConfig, null, 2));
-  res.redirect("/cms/config");
-});
-
-// --- Route untuk Explorer ---
-app.get("/cms/explorer", (req, res) => {
-    const relativePath = req.query.path || "/";
-    const currentPath = resolve(ASSET_DIR, relativePath.substring(1));
-
-    // Security check: Pastikan path masih di dalam ASSET_DIR
-    if (!currentPath.startsWith(ASSET_DIR)) {
-        return res.status(400).send("Invalid path");
-    }
-
-    const breadcrumbs = relativePath.split('/').filter(Boolean);
-
-    const files = readdirSync(currentPath).map(file => {
-        const stats = statSync(join(currentPath, file));
-        return {
-            name: file,
-            isDirectory: stats.isDirectory(),
-            // FIX: Ganti backslash dengan forward slash untuk URL
-            path: join(relativePath, file).replace(/\\/g, '/')
-        };
-    }).sort((a, b) => { // Sort folders first, then by name
-        if (a.isDirectory !== b.isDirectory) {
-            return a.isDirectory ? -1 : 1;
-        }
-        return a.name.localeCompare(b.name);
-    });
-
-    const fileList = files.map(f => `
-      <tr>
-        <td>
-          <a href="${f.isDirectory ? `/cms/explorer?path=${f.path}` : `/asset${f.path}`}" 
-             ${f.isDirectory ? '' : `target="_blank" rel="noopener noreferrer"`} 
-             class="flex items-center gap-2 link ${f.isDirectory ? 'link-primary' : 'link-hover'}">
-            ${f.isDirectory ? '📁' : '📄'} ${f.name}
-          </a>
-        </td>
-        <td class="text-right flex gap-2 justify-end">
-          <button onclick="confirmDelete('${f.path}', true)" class="btn btn-xs btn-outline text-error">Delete</button>
-          ${!f.isDirectory ? `<button onclick="copyLink('/asset${f.path}')" class="btn btn-xs btn-outline btn-info">Copy Link</button>` : ''}
-        </td>
-      </tr>
-    `).join('');
-    
-    const breadcrumbLinks = breadcrumbs.map((part, index) => {
-        const path = '/' + breadcrumbs.slice(0, index + 1).join('/');
-        return `<li><a href="/cms/explorer?path=${path}">${part}</a></li>`;
-    }).join('');
-
-    const content = `
-        <div class="text-sm breadcrumbs">
-            <ul>
-                <li><a href="/cms/explorer?path=/">asset</a></li>
-                ${breadcrumbLinks}
-            </ul>
-        </div>
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-4">
-            <div class="lg:col-span-2 card bg-base-200 shadow-lg">
-                <div class="card-body">
-                    <h2 class="card-title">Files in ${relativePath === '/' ? '/asset' : `/asset${relativePath}`}</h2>
-                    <div class="overflow-x-auto">
-                        <table class="table">
-                            <tbody>${fileList.length > 0 ? fileList : '<tr><td class="text-center italic opacity-75">Folder is empty</td></tr>'}</tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-            <div class="space-y-6">
-                <div class="card bg-base-200 shadow-lg">
-                    <div class="card-body">
-                        <h2 class="card-title">Upload File</h2>
-                        <form action="/cms/explorer/upload" method="post" enctype="multipart/form-data" class="space-y-4">
-                            <input type="hidden" name="path" value="${relativePath}" />
-                            <div class="form-control">
-                               <input type="file" name="file" class="file-input file-input-bordered w-full" required />
-                            </div>
-                            <button type="submit" class="btn btn-primary w-full">Upload</button>
-                        </form>
-                    </div>
-                </div>
-                <div class="card bg-base-200 shadow-lg">
-                    <div class="card-body">
-                        <h2 class="card-title">Create Folder</h2>
-                        <form action="/cms/explorer/new-folder" method="post" class="space-y-4">
-                            <input type="hidden" name="path" value="${relativePath}" />
-                            <div class="form-control">
-                                <input type="text" name="folderName" placeholder="New folder name" class="input input-bordered w-full" required />
-                            </div>
-                            <button type="submit" class="btn btn-secondary w-full">Create</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <script>
-          function copyLink(link) {
-            navigator.clipboard.writeText(link).then(function() {
-              // Optional: show a toast or alert
-              alert('Copied: ' + link);
-            }, function(err) {
-              alert('Failed to copy link');
-            });
-          }
-        </script>
-    `;
-
-    res.send(createHtmlShell("File Explorer", content));
-});
-
-app.post('/cms/explorer/upload', upload.single('file'), (req, res) => {
-    // Redirect kembali ke path tempat file diupload
-    res.redirect(`/cms/explorer?path=${req.body.path || '/'}`);
-});
-
-app.post('/cms/explorer/new-folder', (req, res) => {
-    const { path, folderName } = req.body;
-    if (!folderName) return res.status(400).send("Folder name is required.");
-
-    const fullPath = join(ASSET_DIR, path || '/', folderName);
-    
-    // Security check
-    if (!fullPath.startsWith(ASSET_DIR)) {
-        return res.status(400).send("Invalid path.");
-    }
-
-    try {
-        mkdirSync(fullPath);
-        res.redirect(`/cms/explorer?path=${path || '/'}`);
-    } catch(err) {
-        console.error(err);
-        res.status(500).send("Failed to create directory.");
-    }
-});
-
-app.post('/cms/explorer/delete', (req, res) => {
-    const relativePath = req.body.path;
-    if (!relativePath) return res.status(400).send("Path is required.");
-
-    const fullPath = resolve(ASSET_DIR, relativePath.substring(1));
-
-    // Security check
-    if (!fullPath.startsWith(ASSET_DIR)) {
-        return res.status(400).send("Invalid path");
-    }
-
-    try {
-        const stats = statSync(fullPath);
-        if (stats.isDirectory()) {
-            // Hanya hapus folder jika kosong
-            if (readdirSync(fullPath).length === 0) {
-                rmdirSync(fullPath);
-            } else {
-                return res.status(400).send("Folder is not empty.");
-            }
-        } else {
-            unlinkSync(fullPath);
-        }
-        
-        // Redirect ke folder parent dari item yang dihapus
-        const parentDir = dirname(relativePath);
-        res.redirect(`/cms/explorer?path=${parentDir}`);
-    } catch(err) {
-        console.error(err);
-        res.status(500).send("Failed to delete item.");
-    }
-});
-
-
-// --- Daftar Halaman Statis
-app.get("/cms/pages", (req, res) => {
-  const pages = getPages();
-  const tableRows = pages.map(p => {
-    const slugNoExt = p.slug.replace(/\.(md|html)$/, '');
-    const publicUrl = `http://localhost:8080/${slugNoExt}/`;
-    return `
-      <tr>
-        <td class="font-medium w-1/2">
-          <a href="${publicUrl}" target="_blank" rel="noopener noreferrer" class="link link-primary">${p.title}</a>
-        </td>
-        <td>${p.date || '-'}</td>
-        <td class="text-right">
-          <div class="flex justify-end gap-2">
-            <a href="/cms/pages/edit/${p.slug}" class="btn btn-sm btn-outline btn-info">Edit</a>
-            <button onclick="confirmDelete('/cms/pages/delete/${p.slug}')" class="btn btn-sm btn-outline btn-error">Delete</button>
-          </div>
-        </td>
-      </tr>
-    `;
-  }).join("");
-
-  const content = `
-    <div class="flex justify-between items-center mb-6">
-      <h1 class="text-3xl font-bold">Pages</h1>
-      <a href="/cms/pages/new" class="btn btn-primary">+ New Page</a>
-    </div>
-    <div class="card bg-base-200 shadow-lg">
-        <div class="card-body">
-            <div class="overflow-x-auto">
-              <table class="table min-w-[500px]">
-                <thead>
-                  <tr>
-                    <th class="w-2/3">Title</th>
-                    <th>Date</th>
-                    <th class="text-right">Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  ${tableRows || `<tr><td colspan="3" class="text-center">No pages found.</td></tr>`}
-                </tbody>
-              </table>
-            </div>
-        </div>
-    </div>
-  `;
-  res.send(createHtmlShell("Pages", content));
-});
-
-app.get("/cms/pages/edit/:slug", (req, res) => {
-  const { slug } = req.params;
-  try {
-    const fileContent = readFileSync(join(pageDir, slug), "utf8");
-    const pageData = parseFrontmatter(fileContent);
-    pageData.slug = slug;
-    res.send(createHtmlShell(`Edit "${pageData.title}"`, renderPageForm(pageData)));
-  } catch (error) {
-    console.error(error);
-    res.status(404).send("File not found");
-  }
-});
-
-app.get("/cms/pages/new", (req, res) => {
-  res.send(createHtmlShell("New Page", renderPageForm()));
-});
-
-app.post("/cms/pages/save", (req, res) => {
-  const { slug } = req.body;
-  const filePath = join(pageDir, slug);
-  const pageContent = createPageContent(req.body);
-  writeFileSync(filePath, pageContent);
-  res.redirect(`/cms/pages`);
-});
-
-app.post("/cms/pages/update/:slug", (req, res) => {
-  const { slug } = req.params;
-  const updatedBody = { ...req.body, slug };
-  const filePath = join(pageDir, slug);
-  const pageContent = createPageContent(updatedBody);
-  writeFileSync(filePath, pageContent);
-  res.redirect(`/cms/pages`);
-});
-
-app.post("/cms/pages/delete/:slug", (req, res) => {
-  const { slug } = req.params;
-  try {
-    const filePath = join(pageDir, slug);
-    unlinkSync(filePath);
-    res.redirect(`/cms/pages`);
-  } catch (error) {
-    console.error(error);
-    res.status(500).send("Failed to delete page.");
   }
 });
 
