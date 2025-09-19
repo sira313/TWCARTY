@@ -30,9 +30,15 @@ const upload = multer({ storage: storage });
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(resolve("public")));
 // Sajikan direktori aset secara statis di path /assets
-app.use('/assets', express.static(ASSET_DIR));
-app.use('/cms-assets', express.static(resolve('scripts/cms/cms-assets')));
-app.use('/asset', express.static(ASSET_DIR));
+app.use('/cms-assets', express.static(resolve('scripts/cms/cms-assets'), {
+  maxAge: '30d' // cache selama 30 hari
+}));
+app.use('/assets', express.static(ASSET_DIR, {
+  maxAge: '30d'
+}));
+app.use('/asset', express.static(ASSET_DIR, {
+  maxAge: '30d'
+}));
 
 // Konfigurasi direktori post
 const postDirs = {
