@@ -4,6 +4,7 @@ import bodyParser from "body-parser";
 import { readdirSync, readFileSync, writeFileSync, unlinkSync, statSync, mkdirSync, rmdirSync, existsSync } from "fs";
 import { resolve, join, dirname } from "path";
 import multer from "multer";
+import { exec } from "child_process";
 
 const app = express();
 const PORT = 3000;
@@ -275,9 +276,20 @@ app.get("/cms", (req, res) => {
           <h1 class="text-5xl font-bold">Welcome Back!</h1>
           <p class="py-6">Manage your content with ease. Use the menu to navigate between your blog posts, photo galleries, and the file explorer.</p>
           <label for="my-drawer" class="btn btn-primary drawer-button xl:hidden">Open Menu</label>
+          <button class="btn btn-success mt-4" onclick="document.getElementById('commit_modal').showModal()">Commit</button>
         </div>
       </div>
     </div>
+    <dialog id="commit_modal" class="modal">
+      <form method="post" action="/cms/commit" class="modal-box">
+        <h3 class="font-bold text-lg mb-2">Commit Changes</h3>
+        <input name="message" class="input input-bordered w-full mb-4" placeholder="Commit message" required />
+        <div class="modal-action">
+          <button type="submit" class="btn btn-success">Commit</button>
+          <button type="button" class="btn" onclick="document.getElementById('commit_modal').close()">Cancel</button>
+        </div>
+      </form>
+    </dialog>
   `;
   res.send(createHtmlShell("Dashboard", content));
 });
@@ -1099,6 +1111,25 @@ permalink: ${permalink || ""}
 ${content || ""}
 `;
 };
+
+app.post("/cms/commit", (req, res) => {
+  const message = req.body.message || "Update via CMS";
+  exec(`git add . && git commit -m "${message.replace(/"/g, '\\"')}"`, (err, stdout, stderr) => {
+    let result;
+    if (err) {
+      result = `<div class="alert alert-error">Commit failed:<br><pre>${stderr}</pre></div>`;
+    } else {
+      result = `<div class="alert alert-success">Commit success:<br><pre>${stdout}</pre></div>`;
+    }
+    const content = `
+      <div class="max-w-2xl mx-auto mt-8">
+        <a href="/cms" class="btn btn-link mb-4">← Back to Dashboard</a>
+        ${result}
+      </div>
+    `;
+    res.send(createHtmlShell("Commit Result", content));
+  });
+});
 
 // Menjalankan server
 app.listen(PORT, () =>
