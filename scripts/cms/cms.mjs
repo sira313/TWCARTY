@@ -4,10 +4,13 @@ import bodyParser from "body-parser";
 import { readdirSync, readFileSync, writeFileSync, unlinkSync, statSync, mkdirSync, rmdirSync, existsSync } from "fs";
 import { resolve, join, dirname } from "path";
 import multer from "multer";
+import { exec } from "child_process";
 
 const app = express();
 const PORT = 3000;
 const ASSET_DIR = resolve("src/asset"); // Direktori root baru untuk explorer
+const pageDir = resolve("src/_pages/main");
+const layoutDir = resolve("src/_includes/main");
 
 // Konfigurasi Multer untuk file upload ke ASSET_DIR
 const storage = multer.diskStorage({
@@ -28,9 +31,15 @@ const upload = multer({ storage: storage });
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(resolve("public")));
 // Sajikan direktori aset secara statis di path /assets
-app.use('/assets', express.static(ASSET_DIR));
-app.use('/cms-assets', express.static(resolve('scripts/cms/cms-assets')));
-app.use('/asset', express.static(ASSET_DIR));
+app.use('/cms-assets', express.static(resolve('scripts/cms/cms-assets'), {
+  maxAge: '30d' // cache selama 30 hari
+}));
+app.use('/assets', express.static(ASSET_DIR, {
+  maxAge: '30d'
+}));
+app.use('/asset', express.static(ASSET_DIR, {
+  maxAge: '30d'
+}));
 
 // Konfigurasi direktori post
 const postDirs = {
@@ -53,7 +62,7 @@ function createHtmlShell(title, content) {
     <head>
       <meta charset="UTF-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <title>${title} | Dashboard</title>
+      <title>${title} | Simple CMS</title>
       <link href="/cms-assets/style.css" rel="stylesheet" type="text/css" />
     </head>
     <body class="bg-base-100 min-h-screen">
@@ -84,6 +93,8 @@ function createHtmlShell(title, content) {
             <li><a href="/cms/photos">🖼️ Photo Galleries</a></li>
             <li class="menu-title"><span>Utilities</span></li>
             <li><a href="/cms/explorer">🗂️ File Explorer</a></li>
+            <li><a href="/cms/config">⚙️ Site Config</a></li>
+            <li><a href="/cms/pages">📄 Pages</a></li>
           </ul>
         </div>
       </div>
@@ -265,15 +276,120 @@ app.get("/cms", (req, res) => {
           <h1 class="text-5xl font-bold">Welcome Back!</h1>
           <p class="py-6">Manage your content with ease. Use the menu to navigate between your blog posts, photo galleries, and the file explorer.</p>
           <label for="my-drawer" class="btn btn-primary drawer-button xl:hidden">Open Menu</label>
+          <button class="btn btn-success mt-4" onclick="document.getElementById('commit_modal').showModal()">Commit</button>
         </div>
       </div>
     </div>
+    <dialog id="commit_modal" class="modal">
+      <form method="post" action="/cms/commit" class="modal-box">
+        <h3 class="font-bold text-lg mb-2">Commit Changes</h3>
+        <input name="message" class="input input-bordered w-full mb-4" placeholder="Commit message" required />
+        <div class="modal-action">
+          <button type="submit" class="btn btn-success">Commit</button>
+          <button type="button" class="btn" onclick="document.getElementById('commit_modal').close()">Cancel</button>
+        </div>
+      </form>
+    </dialog>
   `;
   res.send(createHtmlShell("Dashboard", content));
 });
 
+// --- Daftar Halaman Statis (Pages) ---
+app.get("/cms/pages", (req, res) => {
+  const pages = getPages();
+  const tableRows = pages.map(p => {
+    const slugNoExt = p.slug.replace(/\.(md|html)$/, '');
+    const publicUrl = `http://localhost:8080/${slugNoExt}/`;
+    return `
+      <tr>
+        <td class="font-medium w-1/2">
+          <a href="${publicUrl}" target="_blank" rel="noopener noreferrer" class="link link-primary">${p.title}</a>
+        </td>
+        <td>${p.date || '-'}</td>
+        <td class="text-right">
+          <div class="flex justify-end gap-2">
+            <a href="/cms/pages/edit/${p.slug}" class="btn btn-sm btn-outline btn-info">Edit</a>
+            <button onclick="confirmDelete('/cms/pages/delete/${p.slug}')" class="btn btn-sm btn-outline btn-error">Delete</button>
+          </div>
+        </td>
+      </tr>
+    `;
+  }).join("");
 
-// --- File Explorer Routes (MOVED UP) ---
+  const content = `
+    <div class="flex justify-between items-center mb-6">
+      <h1 class="text-3xl font-bold">Pages</h1>
+      <a href="/cms/pages/new" class="btn btn-primary">+ New Page</a>
+    </div>
+    <div class="card bg-base-200 shadow-lg">
+        <div class="card-body">
+            <div class="overflow-x-auto">
+              <table class="table min-w-[500px]">
+                <thead>
+                  <tr>
+                    <th class="w-2/3">Title</th>
+                    <th>Date</th>
+                    <th class="text-right">Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  ${tableRows || `<tr><td colspan="3" class="text-center">No pages found.</td></tr>`}
+                </tbody>
+              </table>
+            </div>
+        </div>
+    </div>
+  `;
+  res.send(createHtmlShell("Pages", content));
+});
+
+app.get("/cms/pages/edit/:slug", (req, res) => {
+  const { slug } = req.params;
+  try {
+    const fileContent = readFileSync(join(pageDir, slug), "utf8");
+    const pageData = parseFrontmatter(fileContent);
+    pageData.slug = slug;
+    res.send(createHtmlShell(`Edit "${pageData.title}"`, renderPageForm(pageData)));
+  } catch (error) {
+    console.error(error);
+    res.status(404).send("File not found");
+  }
+});
+
+app.get("/cms/pages/new", (req, res) => {
+  res.send(createHtmlShell("New Page", renderPageForm()));
+});
+
+app.post("/cms/pages/save", (req, res) => {
+  const { slug } = req.body;
+  const filePath = join(pageDir, slug);
+  const pageContent = createPageContent(req.body);
+  writeFileSync(filePath, pageContent);
+  res.redirect(`/cms/pages`);
+});
+
+app.post("/cms/pages/update/:slug", (req, res) => {
+  const { slug } = req.params;
+  const updatedBody = { ...req.body, slug };
+  const filePath = join(pageDir, slug);
+  const pageContent = createPageContent(updatedBody);
+  writeFileSync(filePath, pageContent);
+  res.redirect(`/cms/pages`);
+});
+
+app.post("/cms/pages/delete/:slug", (req, res) => {
+  const { slug } = req.params;
+  try {
+    const filePath = join(pageDir, slug);
+    unlinkSync(filePath);
+    res.redirect(`/cms/pages`);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Failed to delete page.");
+  }
+});
+
+// --- Route untuk Explorer ---
 app.get("/cms/explorer", (req, res) => {
     const relativePath = req.query.path || "/";
     const currentPath = resolve(ASSET_DIR, relativePath.substring(1));
@@ -439,8 +555,233 @@ app.post('/cms/explorer/delete', (req, res) => {
     }
 });
 
+// --- Route untuk Config ---
+app.get("/cms/config", (req, res) => {
+  const globalData = JSON.parse(readFileSync(resolve("src/_data/global.json"), "utf8"));
+  const sosmedData = JSON.parse(readFileSync(resolve("src/_data/sosmed.json"), "utf8"));
 
-// 🟢 Menampilkan daftar post dalam tabel
+  const sosmedList = sosmedData.items.map((item, idx) => `
+    <div class="flex items-center gap-2 mb-2">
+      <span>${item.name || ''}</span>
+      <input type="text" name="sosmed_url_${idx}" class="input input-bordered w-48" value="${item.url || ''}" />
+      <input type="text" name="sosmed_label_${idx}" class="input input-bordered w-32" value="${item['aria-label'] || ''}" />
+      <form method="post" action="/cms/config/sosmed/delete" style="display:inline;">
+        <input type="hidden" name="idx" value="${idx}" />
+        <button type="submit" class="btn btn-error btn-xs ml-2" onclick="return confirm('Delete this sosmed?')">Delete</button>
+      </form>
+    </div>
+  `).join('');
+
+  const content = `
+    <div class="max-w-5xl mx-auto">
+      <div class="card bg-base-200 p-4 md:p-6">
+        <h1 class="text-2xl font-bold mb-4">Site Config</h1>
+        <form method="post" action="/cms/config/save" class="space-y-4">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+            <label>
+              <span class="text-sm font-medium">Language</span>
+              <input name="lang" class="input input-bordered w-full" value="${globalData.lang}" />
+            </label>
+            <label>
+              <span class="text-sm font-medium">Site Title</span>
+              <input name="rootTitle" class="input input-bordered w-full" value="${globalData.rootTitle}" />
+            </label>
+          </div
+          <label class="grid gap-2">
+            <span class="text-sm font-medium">Site URL</span>
+            <input name="rootURL" class="input input-bordered w-full" value="${globalData.rootURL}" />
+          </label>
+          <label class="grid gap-2">
+            <span class="text-sm font-medium">Quotes</span>
+            <textarea name="quotes" class="textarea textarea-bordered w-full h-24">${globalData.quotes}</textarea>
+          </label>
+          <label class="grid gap-2">
+            <span class="text-sm font-medium">SUPABASE_URL</span>
+            <input name="SUPABASE_URL" class="input input-bordered w-full" value="${globalData.SUPABASE_URL}" />
+          </label>
+          <label class="grid gap-2">
+            <span class="text-sm font-medium">SUPABASE_KEY</span>
+            <input name="SUPABASE_KEY" class="input input-bordered w-full" value="${globalData.SUPABASE_KEY}" />
+          </label>
+          <div class="card bg-base-100 p-4 mt-6">
+            <div class="flex justify-between items-center mb-2">
+              <h2 class="text-lg font-bold">Social Media Links</h2>
+              <button type="button" class="btn btn-success btn-sm" onclick="document.getElementById('add_sosmed_modal').showModal()">+ Add Sosmed</button>
+            </div>
+            ${sosmedList}
+          </div>
+          <div class="card-actions justify-end mt-4">
+            <button type="submit" class="btn btn-primary">Save Config</button>
+          </div>
+        </form>
+      </div>
+    </div>
+    <dialog id="add_sosmed_modal" class="modal">
+      <form method="post" action="/cms/config/sosmed/add" class="modal-box">
+        <h3 class="font-bold text-lg mb-2">Add Social Media</h3>
+        <div class="form-control mb-2">
+          <label class="label">Icon SVG</label>
+          <textarea name="name" class="textarea textarea-bordered w-full" placeholder="Paste SVG code here" required></textarea>
+        </div>
+        <div class="form-control mb-2">
+          <label class="label">URL</label>
+          <input name="url" class="input input-bordered w-full" placeholder="https://..." required />
+        </div>
+        <div class="form-control mb-4">
+          <label class="label">Aria Label</label>
+          <input name="aria-label" class="input input-bordered w-full" placeholder="Instagram, Github, etc." required />
+        </div>
+        <div class="modal-action">
+          <button type="submit" class="btn btn-success">Add</button>
+          <button type="button" class="btn" onclick="document.getElementById('add_sosmed_modal').close()">Cancel</button>
+        </div>
+      </form>
+    </dialog>
+  `;
+  res.send(createHtmlShell("Site Config", content));
+});
+
+app.post("/cms/config/save", (req, res) => {
+  // ...existing global config...
+  const newConfig = {
+    lang: req.body.lang,
+    rootTitle: req.body.rootTitle,
+    rootURL: req.body.rootURL,
+    quotes: req.body.quotes,
+    SUPABASE_URL: req.body.SUPABASE_URL,
+    SUPABASE_KEY: req.body.SUPABASE_KEY
+  };
+  writeFileSync(resolve("src/_data/global.json"), JSON.stringify(newConfig, null, 2));
+
+  // Update sosmed.json
+  const sosmedData = JSON.parse(readFileSync(resolve("src/_data/sosmed.json"), "utf8"));
+  const updatedItems = sosmedData.items.map((item, idx) => ({
+    name: item.name,
+    url: req.body[`sosmed_url_${idx}`] || item.url,
+    "aria-label": req.body[`sosmed_label_${idx}`] || item["aria-label"]
+  }));
+  writeFileSync(resolve("src/_data/sosmed.json"), JSON.stringify({ items: updatedItems }, null, 2));
+
+  res.redirect("/cms/config");
+});
+
+app.post("/cms/config/sosmed/add", (req, res) => {
+  const sosmedData = JSON.parse(readFileSync(resolve("src/_data/sosmed.json"), "utf8"));
+  sosmedData.items.push({
+    name: req.body.name,
+    url: req.body.url,
+    "aria-label": req.body["aria-label"]
+  });
+  writeFileSync(resolve("src/_data/sosmed.json"), JSON.stringify(sosmedData, null, 2));
+  res.redirect("/cms/config");
+});
+
+app.post("/cms/config/sosmed/delete", (req, res) => {
+  const idx = parseInt(req.body.idx, 10);
+  const sosmedData = JSON.parse(readFileSync(resolve("src/_data/sosmed.json"), "utf8"));
+  if (!isNaN(idx) && sosmedData.items[idx]) {
+    sosmedData.items.splice(idx, 1);
+    writeFileSync(resolve("src/_data/sosmed.json"), JSON.stringify(sosmedData, null, 2));
+  }
+  res.redirect("/cms/config");
+});
+
+// --- Route untuk Pages (Halaman Statis) ---
+app.get("/cms/pages", (req, res) => {
+  const pages = getPages();
+  const tableRows = pages.map(p => {
+    const slugNoExt = p.slug.replace(/\.(md|html)$/, '');
+    const publicUrl = `http://localhost:8080/${slugNoExt}/`;
+    return `
+      <tr>
+        <td class="font-medium w-1/2">
+          <a href="${publicUrl}" target="_blank" rel="noopener noreferrer" class="link link-primary">${p.title}</a>
+        </td>
+        <td>${p.date || '-'}</td>
+        <td class="text-right">
+          <div class="flex justify-end gap-2">
+            <a href="/cms/pages/edit/${p.slug}" class="btn btn-sm btn-outline btn-info">Edit</a>
+            <button onclick="confirmDelete('/cms/pages/delete/${p.slug}')" class="btn btn-sm btn-outline btn-error">Delete</button>
+          </div>
+        </td>
+      </tr>
+    `;
+  }).join("");
+
+  const content = `
+    <div class="flex justify-between items-center mb-6">
+      <h1 class="text-3xl font-bold">Pages</h1>
+      <a href="/cms/pages/new" class="btn btn-primary">+ New Page</a>
+    </div>
+    <div class="card bg-base-200 shadow-lg">
+        <div class="card-body">
+            <div class="overflow-x-auto">
+              <table class="table min-w-[500px]">
+                <thead>
+                  <tr>
+                    <th class="w-2/3">Title</th>
+                    <th>Date</th>
+                    <th class="text-right">Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  ${tableRows || `<tr><td colspan="3" class="text-center">No pages found.</td></tr>`}
+                </tbody>
+              </table>
+            </div>
+        </div>
+    </div>
+  `;
+  res.send(createHtmlShell("Pages", content));
+});
+
+app.get("/cms/pages/edit/:slug", (req, res) => {
+  const { slug } = req.params;
+  try {
+    const fileContent = readFileSync(join(pageDir, slug), "utf8");
+    const pageData = parseFrontmatter(fileContent);
+    pageData.slug = slug;
+    res.send(createHtmlShell(`Edit "${pageData.title}"`, renderPageForm(pageData)));
+  } catch (error) {
+    console.error(error);
+    res.status(404).send("File not found");
+  }
+});
+
+app.get("/cms/pages/new", (req, res) => {
+  res.send(createHtmlShell("New Page", renderPageForm()));
+});
+
+app.post("/cms/pages/save", (req, res) => {
+  const { slug } = req.body;
+  const filePath = join(pageDir, slug);
+  const pageContent = createPageContent(req.body);
+  writeFileSync(filePath, pageContent);
+  res.redirect(`/cms/pages`);
+});
+
+app.post("/cms/pages/update/:slug", (req, res) => {
+  const { slug } = req.params;
+  const updatedBody = { ...req.body, slug };
+  const filePath = join(pageDir, slug);
+  const pageContent = createPageContent(updatedBody);
+  writeFileSync(filePath, pageContent);
+  res.redirect(`/cms/pages`);
+});
+
+app.post("/cms/pages/delete/:slug", (req, res) => {
+  const { slug } = req.params;
+  try {
+    const filePath = join(pageDir, slug);
+    unlinkSync(filePath);
+    res.redirect(`/cms/pages`);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Failed to delete page.");
+  }
+});
+
+// --- Daftar post ---
 app.get("/cms/:type", (req, res) => {
   const { type } = req.params;
   // This check now correctly ignores 'explorer' because that route is handled above
@@ -565,9 +906,8 @@ const renderForm = (type, post = {}) => {
                     </label>
                     ${extraFields}
                   </fieldset>
-
                   <div class="form-control">
-                    <label class="label"><span class="label-text">Content (Markdown)</span></label>
+                    <label class="label"><span class="label-text">Content (Markdown/HTML)</span></label>
                     
                     <div role="tablist" class="tabs tabs-box">
                       <a role="tab" class="tab tab-active" data-target="write-panel">Write</a>
@@ -582,7 +922,6 @@ const renderForm = (type, post = {}) => {
                     </div>
 
                   </div>
-                  <input type="hidden" name="date" value="${post.date || ''}" />
                   <div class="card-actions justify-end">
                     <button type="submit" class="btn btn-primary">${isNew ? 'Save Post' : 'Update Post'}</button>
                   </div>
@@ -684,6 +1023,189 @@ app.post("/cms/:type/delete/:slug", (req, res) => {
     console.error(error);
     res.status(500).send("Failed to delete file.");
   }
+});
+
+function getPages() {
+  return readdirSync(pageDir)
+    .filter(f => f.endsWith(".md") || f.endsWith(".html"))
+    .map(f => {
+      const content = readFileSync(join(pageDir, f), "utf8");
+      const titleMatch = content.match(/^title:\s*(.*)/m);
+      const dateMatch = content.match(/^date:\s*(.*)/m);
+      return {
+        slug: f,
+        title: titleMatch ? titleMatch[1].replace(/"/g, '') : f,
+        date: dateMatch ? dateMatch[1].trim() : "",
+      };
+    });
+}
+
+function getLayouts() {
+  return readdirSync(layoutDir)
+    .filter(f => f.endsWith(".html"))
+    .map(f => f);
+}
+
+function renderPageForm(page = {}) {
+  const isNew = !page.slug;
+  const actionUrl = isNew ? `/cms/pages/save` : `/cms/pages/update/${page.slug}`;
+  const layouts = getLayouts();
+  return `
+    <div class="max-w-5xl mx-auto">
+        <a href="/cms/pages" class="btn btn-link mb-4">← Back to pages list</a>
+        <div class="card bg-base-200 shadow-lg">
+            <div class="card-body">
+                <h1 class="card-title text-2xl mb-4">${isNew ? `New Page` : `Edit "${page.title}"`}</h1>
+                <form method="post" action="${actionUrl}" class="space-y-4">
+                  <fieldset class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <label class="grid gap-2">
+                      <span class="text-sm font-medium">Slug (filename with .md or .html)</span>
+                      <input name="slug" placeholder="index.md" class="input input-bordered w-full" required value="${isNew ? '' : page.slug}" ${isNew ? '' : 'disabled'} />
+                    </label>
+                    <label class="grid gap-2">
+                      <span class="text-sm font-medium">Title</span>
+                      <input name="title" placeholder="Page Title" class="input input-bordered w-full" required value="${page.title || ''}" />
+                    </label>
+                    <label class="grid gap-2">
+                      <span class="text-sm font-medium">Description</span>
+                      <input name="description" placeholder="Page description" class="input input-bordered w-full" value="${page.description || ''}" />
+                    </label>
+                    <label class="grid gap-2">
+                      <span class="text-sm font-medium">Keyword</span>
+                      <input name="keyword" placeholder="SEO keywords" class="input input-bordered w-full" value="${page.keyword || ''}" />
+                    </label>
+                    <label class="grid gap-2">
+                      <span class="text-sm font-medium">Author</span>
+                      <input name="author" placeholder="Author name" class="input input-bordered w-full" value="${page.author || ''}" />
+                    </label>
+                    <label class="grid gap-2">
+                      <span class="text-sm font-medium">Cover URL</span>
+                      <input name="cover" placeholder="/asset/index/cover.webp" class="input input-bordered w-full" value="${page.cover || ''}" />
+                    </label>
+                    <label class="grid gap-2">
+                      <span class="text-sm font-medium">Profile URL</span>
+                      <input name="profile" placeholder="/asset/index/profile.webp" class="input input-bordered w-full" value="${page.profile || ''}" />
+                    </label>
+                    <label class="grid gap-2">
+                      <span class="text-sm font-medium">Permalink</span>
+                      <input name="permalink" placeholder="/index.html" class="input input-bordered w-full" value="${page.permalink || ''}" />
+                    </label>
+                    <label class="grid gap-2">
+                      <span class="text-sm font-medium">Layout</span>
+                      <select name="layout" class="select select-bordered w-full" required>
+                        ${layouts.map(l => `<option value="main/${l}" ${page.layout === `main/${l}` ? 'selected' : ''}>main/${l}</option>`).join('')}
+                      </select>
+                    </label>
+                  </fieldset>
+                  <div class="form-control">
+                    <label class="label"><span class="label-text">Content (Markdown/HTML)</span></label>
+                    <div role="tablist" class="tabs tabs-box">
+                      <a role="tab" class="tab tab-active" data-target="write-panel">Write</a>
+                      <a role="tab" class="tab" data-target="preview-panel">Preview</a>
+                    </div>
+                    <div class="bg-base-100 border-base-300 border rounded-box relative">
+                      <div id="write-panel">
+                        <textarea name="content" id="markdown-input" placeholder="# Your content here" class="textarea textarea-bordered w-full h-100 rounded-box">${page.body || ''}</textarea>
+                      </div>
+                      <div id="preview-panel" class="p-6 prose max-w-none hidden h-100 overflow-y-auto"></div>
+                    </div>
+                  </div>
+                  <div class="card-actions justify-end">
+                    <button type="submit" class="btn btn-primary">${isNew ? 'Save Page' : 'Update Page'}</button>
+                  </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script src="/cms-assets/marked.min.js"></script>
+    <script src="/cms-assets/purify.min.js"></script>
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        const markdownInput = document.getElementById('markdown-input');
+        const markdownPreview = document.getElementById('preview-panel');
+        const tabs = document.querySelectorAll('[role="tablist"] [role="tab"]');
+        const writePanel = document.getElementById('write-panel');
+
+        function updatePreview() {
+          const rawHTML = marked.parse(markdownInput.value);
+          markdownPreview.innerHTML = DOMPurify.sanitize(rawHTML);
+        }
+
+        markdownInput.addEventListener('input', updatePreview);
+
+        tabs.forEach(tab => {
+          tab.addEventListener('click', (e) => {
+            e.preventDefault();
+            tabs.forEach(t => t.classList.remove('tab-active'));
+            tab.classList.add('tab-active');
+
+            if (tab.dataset.target === 'write-panel') {
+              writePanel.classList.remove('hidden');
+              markdownPreview.classList.add('hidden');
+            } else {
+              writePanel.classList.add('hidden');
+              markdownPreview.classList.remove('hidden');
+              updatePreview();
+            }
+          });
+        });
+
+        // Initial preview
+        updatePreview();
+      });
+    </script>
+  `;
+};
+
+function createPageContent(body) {
+  const {
+    layout,
+    title,
+    description,
+    keyword,
+    author,
+    cover,
+    profile,
+    permalink,
+    content
+  } = body;
+
+  return `---
+layout: ${layout}
+title: ${title}
+description: ${description || ""}
+keyword: ${keyword || ""}
+author: ${author || ""}
+cover: ${cover || ""}
+profile: ${profile || ""}
+permalink: ${permalink || ""}
+---
+
+${content || ""}
+`;
+};
+
+app.post("/cms/commit", (req, res) => {
+  const message = req.body.message || "Update via CMS";
+  exec(`git add . && git commit -m "${message.replace(/"/g, '\\"')}"`, (err, stdout, stderr) => {
+    let result;
+    if (err) {
+      result = `<div class="alert alert-error">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 shrink-0 stroke-current" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+      <span>${stderr}</span></div>`;
+    } else {
+      result = `<div class="alert alert-success">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 shrink-0 stroke-current" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+      <span>${stdout}</span></div>`;
+    }
+    const content = `
+      <div class="max-w-5xl mx-auto mt-8">
+        <a href="/cms" class="btn btn-link mb-4">← Back to Dashboard</a>
+        ${result}
+      </div>
+    `;
+    res.send(createHtmlShell("Commit Result", content));
+  });
 });
 
 // Menjalankan server

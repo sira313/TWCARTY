@@ -6,6 +6,9 @@ import tailwindcss from "@tailwindcss/postcss";
 import eleventyPluginFilesMinifier from "@sherby/eleventy-plugin-files-minifier";
 import lazyImagesPlugin from "eleventy-plugin-lazyimages";
 
+import { readFileSync } from "fs";
+const globalData = JSON.parse(readFileSync("./src/_data/global.json", "utf8"));
+
 if (process.env.NODE_ENV?.toLocaleLowerCase() !== "production") {
   import("dotenv").then((dotenv) => dotenv.config());
 }
@@ -30,15 +33,12 @@ export default function (eleventyConfig) {
   eleventyConfig.addPlugin(eleventyPluginFilesMinifier);
 
   // Global data for root
-  eleventyConfig.addGlobalData("lang", "en"); // your lang attribute
-  eleventyConfig.addGlobalData("rootTitle", "Apoxicam");
-  eleventyConfig.addGlobalData("rootURL", "https://twcarty.netlify.app");
-  eleventyConfig.addGlobalData(
-    "quotes",
-    "<i>No one comes to your website to be entertained. They have questions they think you can answer. Content answers questions.</i><br /><b>― Jay Baer</b>"
-  );
-  eleventyConfig.addGlobalData("SUPABASE_URL", process.env.SUPABASE_URL);
-  eleventyConfig.addGlobalData("SUPABASE_KEY", process.env.SUPABASE_KEY);
+  eleventyConfig.addGlobalData("lang", globalData.lang);
+  eleventyConfig.addGlobalData("rootTitle", globalData.rootTitle);
+  eleventyConfig.addGlobalData("rootURL", globalData.rootURL);
+  eleventyConfig.addGlobalData("quotes", globalData.quotes);
+  eleventyConfig.addGlobalData("SUPABASE_URL", globalData.SUPABASE_URL);
+  eleventyConfig.addGlobalData("SUPABASE_KEY", globalData.SUPABASE_KEY);
 
   // Bypass dir
   const passthroughCopies = ["src/robots.txt", "src/asset/", "src/CNAME"];
