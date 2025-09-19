@@ -22,10 +22,10 @@ permalink: /blog/
 						<p id="no-results" class="col-span-3 text-center text-error hidden">Did not found any.</p>
 						{% for post in collections.posts reversed %}
 						<li class="result-item cursor-pointer">
-							<p class="text-md sm:text-lg font-bold mb-2 text-primary">
+							<p class="text-lg sm:text-lg font-bold mb-2 text-primary">
 								<a class="link link-hover" href="{{ post.url }}">{{ post.data.title }}</a>
 							</p>
-							<p class="text-sm sm:text-md mb-2">{{ post.data.description | limitWords: 30 }}</p>
+							<p class="text-sm sm:text-md mb-2">{{ post.data.description | limitWords: 25 }}</p>
 							<p class="text-sm">{{ post.data.date | date: "%a, %d %b %Y" }}</p>
 						</li>
 						{% endfor %}
