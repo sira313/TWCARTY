@@ -1117,12 +1117,16 @@ app.post("/cms/commit", (req, res) => {
   exec(`git add . && git commit -m "${message.replace(/"/g, '\\"')}"`, (err, stdout, stderr) => {
     let result;
     if (err) {
-      result = `<div class="alert alert-error">Commit failed:<br><pre>${stderr}</pre></div>`;
+      result = `<div class="alert alert-error">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 shrink-0 stroke-current" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+      <span>${stderr}</span></div>`;
     } else {
-      result = `<div class="alert alert-success">Commit success:<br><pre>${stdout}</pre></div>`;
+      result = `<div class="alert alert-success">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 shrink-0 stroke-current" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+      <span>${stdout}</span></div>`;
     }
     const content = `
-      <div class="max-w-2xl mx-auto mt-8">
+      <div class="max-w-5xl mx-auto mt-8">
         <a href="/cms" class="btn btn-link mb-4">← Back to Dashboard</a>
         ${result}
       </div>
