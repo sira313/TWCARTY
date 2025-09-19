@@ -3,7 +3,7 @@ layout: main/post-blog.html
 title: Simple CMS
 description: A simple CMS for static sites. Edit, preview, and manage content easily with a modern UI powered by Tailwind CSS and DaisyUI.
 keyword: CMS, Dashboard, eleventy, ssg
-date: 2025-09-17
+date: 2025-09-19
 tags:
   - Tutorial
 ---
@@ -34,9 +34,9 @@ The dashboard lets you create, edit, and manage your website’s content from a 
 
 2. **Start the CMS**
    ```
-   pnpm run cms:dev
+   pnpm run all:dev
    ```
-   This will build the CSS and start the dashboard server.
+   This will build the CSS and start the dashboard server also run the starter website.
 
 3. **Open the Dashboard**
    Visit [http://localhost:3000/cms](http://localhost:3000/cms) in your browser.
@@ -46,10 +46,6 @@ The dashboard lets you create, edit, and manage your website’s content from a 
 
 5. **Preview and Save**
    Preview your content in real-time and save changes when ready.
-6. **Open your website** Split terminal and run
-   ```
-   pnpm run dev
-   ```
 
 ### Summary
 

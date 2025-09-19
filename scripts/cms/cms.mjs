@@ -558,6 +558,20 @@ app.post('/cms/explorer/delete', (req, res) => {
 // --- Route untuk Config ---
 app.get("/cms/config", (req, res) => {
   const globalData = JSON.parse(readFileSync(resolve("src/_data/global.json"), "utf8"));
+  const sosmedData = JSON.parse(readFileSync(resolve("src/_data/sosmed.json"), "utf8"));
+
+  const sosmedList = sosmedData.items.map((item, idx) => `
+    <div class="flex items-center gap-2 mb-2">
+      <span>${item.name || ''}</span>
+      <input type="text" name="sosmed_url_${idx}" class="input input-bordered w-48" value="${item.url || ''}" />
+      <input type="text" name="sosmed_label_${idx}" class="input input-bordered w-32" value="${item['aria-label'] || ''}" />
+      <form method="post" action="/cms/config/sosmed/delete" style="display:inline;">
+        <input type="hidden" name="idx" value="${idx}" />
+        <button type="submit" class="btn btn-error btn-xs ml-2" onclick="return confirm('Delete this sosmed?')">Delete</button>
+      </form>
+    </div>
+  `).join('');
+
   const content = `
     <div class="max-w-5xl mx-auto">
       <div class="card bg-base-200 p-4 md:p-6">
@@ -589,17 +603,46 @@ app.get("/cms/config", (req, res) => {
             <span class="text-sm font-medium">SUPABASE_KEY</span>
             <input name="SUPABASE_KEY" class="input input-bordered w-full" value="${globalData.SUPABASE_KEY}" />
           </label>
-          <div class="card-actions justify-end">
+          <div class="card bg-base-100 p-4 mt-6">
+            <div class="flex justify-between items-center mb-2">
+              <h2 class="text-lg font-bold">Social Media Links</h2>
+              <button type="button" class="btn btn-success btn-sm" onclick="document.getElementById('add_sosmed_modal').showModal()">+ Add Sosmed</button>
+            </div>
+            ${sosmedList}
+          </div>
+          <div class="card-actions justify-end mt-4">
             <button type="submit" class="btn btn-primary">Save Config</button>
           </div>
         </form>
       </div>
     </div>
+    <dialog id="add_sosmed_modal" class="modal">
+      <form method="post" action="/cms/config/sosmed/add" class="modal-box">
+        <h3 class="font-bold text-lg mb-2">Add Social Media</h3>
+        <div class="form-control mb-2">
+          <label class="label">Icon SVG</label>
+          <textarea name="name" class="textarea textarea-bordered w-full" placeholder="Paste SVG code here" required></textarea>
+        </div>
+        <div class="form-control mb-2">
+          <label class="label">URL</label>
+          <input name="url" class="input input-bordered w-full" placeholder="https://..." required />
+        </div>
+        <div class="form-control mb-4">
+          <label class="label">Aria Label</label>
+          <input name="aria-label" class="input input-bordered w-full" placeholder="Instagram, Github, etc." required />
+        </div>
+        <div class="modal-action">
+          <button type="submit" class="btn btn-success">Add</button>
+          <button type="button" class="btn" onclick="document.getElementById('add_sosmed_modal').close()">Cancel</button>
+        </div>
+      </form>
+    </dialog>
   `;
   res.send(createHtmlShell("Site Config", content));
 });
 
 app.post("/cms/config/save", (req, res) => {
+  // ...existing global config...
   const newConfig = {
     lang: req.body.lang,
     rootTitle: req.body.rootTitle,
@@ -609,9 +652,39 @@ app.post("/cms/config/save", (req, res) => {
     SUPABASE_KEY: req.body.SUPABASE_KEY
   };
   writeFileSync(resolve("src/_data/global.json"), JSON.stringify(newConfig, null, 2));
+
+  // Update sosmed.json
+  const sosmedData = JSON.parse(readFileSync(resolve("src/_data/sosmed.json"), "utf8"));
+  const updatedItems = sosmedData.items.map((item, idx) => ({
+    name: item.name,
+    url: req.body[`sosmed_url_${idx}`] || item.url,
+    "aria-label": req.body[`sosmed_label_${idx}`] || item["aria-label"]
+  }));
+  writeFileSync(resolve("src/_data/sosmed.json"), JSON.stringify({ items: updatedItems }, null, 2));
+
   res.redirect("/cms/config");
 });
 
+app.post("/cms/config/sosmed/add", (req, res) => {
+  const sosmedData = JSON.parse(readFileSync(resolve("src/_data/sosmed.json"), "utf8"));
+  sosmedData.items.push({
+    name: req.body.name,
+    url: req.body.url,
+    "aria-label": req.body["aria-label"]
+  });
+  writeFileSync(resolve("src/_data/sosmed.json"), JSON.stringify(sosmedData, null, 2));
+  res.redirect("/cms/config");
+});
+
+app.post("/cms/config/sosmed/delete", (req, res) => {
+  const idx = parseInt(req.body.idx, 10);
+  const sosmedData = JSON.parse(readFileSync(resolve("src/_data/sosmed.json"), "utf8"));
+  if (!isNaN(idx) && sosmedData.items[idx]) {
+    sosmedData.items.splice(idx, 1);
+    writeFileSync(resolve("src/_data/sosmed.json"), JSON.stringify(sosmedData, null, 2));
+  }
+  res.redirect("/cms/config");
+});
 
 // --- Route untuk Pages (Halaman Statis) ---
 app.get("/cms/pages", (req, res) => {
