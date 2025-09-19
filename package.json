@@ -5,12 +5,19 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "eleventy --serve",
+    "dev": "eleventy --serve --quiet",
+    "dev:fast": "eleventy --serve --quiet --incremental",
     "build": "eleventy",
-    "build:css": "npx @tailwindcss/cli -i ./scripts/cms/styles.css -o ./scripts/cms/cms-assets/style.css --minify",
+    "build:prod": "NODE_ENV=production eleventy",
+    "build:css": "tailwindcss -i ./scripts/cms/styles.css -o ./scripts/cms/cms-assets/style.css --minify",
+    "build:css:watch": "tailwindcss -i ./scripts/cms/styles.css -o ./scripts/cms/cms-assets/style.css --watch",
     "cms": "node scripts/cms/cms.mjs",
     "cms:dev": "pnpm run build:css && pnpm run cms",
-    "all:dev": "concurrently \"pnpm run dev\" \"pnpm run cms:dev\""
+    "cms:watch": "concurrently \"pnpm run build:css:watch\" \"pnpm run cms\"",
+    "all:dev": "concurrently --kill-others-on-fail \"pnpm run dev:fast\" \"pnpm run cms:watch\"",
+    "all:dev:quiet": "concurrently --kill-others-on-fail --prefix=none \"pnpm run dev:fast\" \"pnpm run cms:watch\"",
+    "clean": "rm -rf _site && rm -rf scripts/cms/cms-assets/style.css",
+    "start": "pnpm run build && pnpm run cms"
   },
   "keywords": [],
   "author": "",
@@ -19,20 +26,29 @@
   "dependencies": {
     "@11ty/eleventy": "^3.1.2",
     "@sherby/eleventy-plugin-files-minifier": "^1.1.1",
-    "@tailwindcss/cli": "4.1.13",
-    "@tailwindcss/postcss": "^4.1.13",
-    "@tailwindcss/typography": "^0.5.16",
+    "@tailwindcss/typography": "^0.5.18",
     "body-parser": "^2.2.0",
-    "daisyui": "^5.1.12",
+    "daisyui": "^5.1.13",
     "dotenv": "^17.2.2",
     "eleventy-plugin-lazyimages": "^2.1.2",
     "express": "^5.1.0",
     "multer": "^2.0.2",
-    "postcss": "^8.5.6",
-    "tailwindcss": "^4.1.13",
-    "terser": "^5.44.0"
+    "tailwindcss": "^4.1.13"
   },
   "devDependencies": {
-    "concurrently": "^9.2.1"
+    "@tailwindcss/cli": "4.1.13",
+    "@tailwindcss/postcss": "^4.1.13",
+    "concurrently": "^9.2.1",
+    "postcss": "^8.5.6",
+    "terser": "^5.44.0"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "pnpm": ">=8.0.0"
+  },
+  "pnpm": {
+    "overrides": {
+      "sharp": "^0.33.0"
+    }
   }
 }
